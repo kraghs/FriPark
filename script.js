@@ -390,3 +390,58 @@ document.addEventListener('keydown', (e) => {
 initGeolocationAndNearby();
 
 });
+
+// Hent ALLE gratis parkeringer i Danmark fra OSM
+async function loadAllFreeParkingDK() {
+  const bbox = "54.56,8.07,57.75,15.19"; // Danmark
+  const query = `
+    [out:json][timeout:60];
+    (
+      node["amenity"="parking"]["fee"="no"](${bbox});
+      way["amenity"="parking"]["fee"="no"](${bbox});
+      relation["amenity"="parking"]["fee"="no"](${bbox});
+    );
+    out center tags;
+  `;
+  try {
+    const res = await axios.post("https://overpass-api.de/api/interpreter", query, {
+      headers: { 'Content-Type':'text/plain' }
+    });
+    const data = res.data;
+
+    if (data && data.elements) {
+      data.elements.forEach(el => {
+        const lat = el.lat || (el.center && el.center.lat);
+        const lon = el.lon || (el.center && el.center.lon);
+        if (!lat || !lon) return;
+
+        const tags = el.tags || {};
+        const name = tags.name || "Offentlig parkering";
+        const addrParts = [
+          tags["addr:street"],
+          tags["addr:housenumber"],
+          tags["addr:postcode"],
+          tags["addr:city"]
+        ].filter(Boolean);
+        const address = addrParts.join(", ") || "Ukendt adresse";
+
+        const spot = {
+          name,
+          address,
+          lat,
+          lng: lon,
+          note: "Gratis parkering (OSM)"
+        };
+
+        parkingSpots.push(spot);
+        addSpotToMap(spot);
+      });
+    }
+
+    // Opdater listen
+    renderNearbyAll(userLat, userLng);
+    console.log("Alle gratis p-pladser i DK er hentet fra OSM");
+  } catch (err) {
+    console.error("Kunne ikke hente OSM-data:", err);
+  }
+}
