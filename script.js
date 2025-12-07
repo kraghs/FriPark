@@ -310,3 +310,38 @@ async function loadOSMFreeParking(){
 loadOSMFreeParking();
 
 });
+/* =========================
+   Slick søgefunktion
+   ========================= */
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', ()=>{
+  const query = searchInput.value.trim().toLowerCase();
+  const list = document.getElementById('parkingList');
+  list.innerHTML = '';
+
+  // filtrer spots
+  const filtered = parkingSpots.filter(spot =>
+    spot.name.toLowerCase().includes(query) ||
+    spot.address.toLowerCase().includes(query)
+  );
+
+  // vis matches (eller alle hvis query er tom)
+  const results = query ? filtered : parkingSpots;
+
+  results.forEach(spot=>{
+    const li=document.createElement('li');
+    li.textContent=`${spot.name} - ${spot.address}`;
+    li.addEventListener('click',()=>{
+      map.setView([spot.lat,spot.lng],14);
+      spot.marker && spot.marker.openPopup();
+    });
+    list.appendChild(li);
+  });
+
+  // hvis der er matches, zoom kortet til dem alle
+  if(results.length>0){
+    const group = L.featureGroup(results.map(s=>s.marker));
+    map.fitBounds(group.getBounds().pad(0.2));
+  }
+});
