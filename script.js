@@ -175,16 +175,73 @@ if(navigator.geolocation){
 /* =========================
    Brugertilføjelse (modal)
    ========================= */
-const toggleAddBtn = document.getElementById('toggleAddBtn');
-const addSpotBox = document.getElementById('addSpotBox');
-const useMyLocationAddBtn = document.getElementById('useMyLocationAddBtn');
-const addSpotBtn = document.getElementById('addSpotBtn');
-const cancelAddBtn = document.getElementById('cancelAddBtn');
-const addCoordsInfo = document.getElementById('addCoordsInfo');
+/* =========================
+   Ny Tilføj parkering flow
+   ========================= */
+const addFab = document.getElementById('addFab');
+const addModal = document.getElementById('addModal');
+const addCloseBtn = document.getElementById('addCloseBtn');
+const addName = document.getElementById('addName');
+const addAddress = document.getElementById('addAddress');
+const addUseLocation = document.getElementById('addUseLocation');
+const addStatus = document.getElementById('addStatus');
+const addSaveBtn = document.getElementById('addSaveBtn');
 
-toggleAddBtn.addEventListener('click', ()=>{
-  addSpotBox.classList.toggle('hidden');
+let addLat = null;
+let addLng = null;
+
+function openAddModal(){
+  addModal.classList.remove('hidden');
+  addName.value = "";
+  addAddress.value = "";
+  addStatus.textContent = "Koordinater: ikke valgt";
+  addLat = null; addLng = null;
+}
+function closeAddModal(){
+  addModal.classList.add('hidden');
+}
+
+addFab.addEventListener('click', openAddModal);
+addCloseBtn.addEventListener('click', closeAddModal);
+document.addEventListener('keydown', (e)=>{ if(e.key==="Escape") closeAddModal(); });
+addModal.addEventListener('click',(e)=>{ if(e.target===addModal) closeAddModal(); });
+
+/* Reverse geocode */
+async function reverseGeocode(lat,lng){
+  const url=`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+  const res=await axios.get(url,{headers:{'User-Agent':'FreeParkApp/1.0'}});
+  if(res.data&&res.data.display_name){return res.data.display_name;}
+  return "Adresse ukendt";
+}
+
+addUseLocation.addEventListener('click', async ()=>{
+  addStatus.textContent="Finder lokation...";
+  if(!navigator.geolocation){ addStatus.textContent="Geolocation ikke understøttet"; return; }
+  navigator.geolocation.getCurrentPosition(async (pos)=>{
+    addLat=pos.coords.latitude; addLng=pos.coords.longitude;
+    addStatus.textContent=`Koordinater: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`;
+    try {
+      const addr=await reverseGeocode(addLat,addLng);
+      addAddress.value=addr||"";
+    } catch{ addStatus.textContent="Kunne ikke finde adresse"; }
+  },()=>{ addStatus.textContent="Kunne ikke hente koordinater"; });
 });
+
+addSaveBtn.addEventListener('click', ()=>{
+  const name=addName.value.trim();
+  const address=addAddress.value.trim();
+  if(!name||!address){ alert("Udfyld mindst navn og adresse."); return; }
+  if(addLat==null||addLng==null){ alert("Brug 'Brug min lokation' først."); return; }
+
+  const newSpot={name,address,lat:addLat,lng:addLng,note:"Tilføjet af bruger",timeLimit:"",freeHours:""};
+  if(parkingSpots.some(s=>isDuplicate(s,newSpot))){ alert("Denne placering findes allerede."); return; }
+
+  parkingSpots.push(newSpot);
+  addSpotToMap(newSpot);
+  renderSpots(userLat,userLng);
+  closeAddModal();
+});
+
 
 useMyLocationAddBtn.addEventListener('click', ()=>{
   if(navigator.geolocation){
