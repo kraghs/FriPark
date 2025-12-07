@@ -92,7 +92,7 @@ parkingSpots.forEach(spot=>{
     <strong>${escapeHtml(spot.name)}</strong><br>
     <small>${escapeHtml(spot.address)}</small><br>
     <div style="margin-top:8px;">
-      <button onclick="window.openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button>
+      <button onclick="openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button>
     </div>`);
 
   // store marker on spot
