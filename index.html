@@ -8,9 +8,8 @@
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Styles + manifest -->
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
@@ -22,15 +21,13 @@
     <p class="warning">⚠️ Tjek altid lokale skilte – regler kan ændre sig</p>
   </header>
 
-<!-- Ny søgefunktion -->
-<section id="search-section">
-  <div class="search-wrapper">
-    <input id="searchInput" type="text" placeholder="🔍 Søg område eller adresse..." autocomplete="off" />
-  </div>
-</section>
-
-
-
+  <!-- Slick search -->
+  <section id="search-section">
+    <div class="search-wrapper">
+      <input id="searchInput" type="text" placeholder="🔍 Søg område eller adresse..." autocomplete="off" />
+      <button id="clearSearch" title="Ryd søgning" aria-label="Ryd">✕</button>
+    </div>
+  </section>
 
   <!-- Map -->
   <div id="map"></div>
@@ -41,10 +38,10 @@
     <ul id="parkingList"></ul>
   </section>
 
-  <!-- Plus-knap (FAB) -->
+  <!-- Add button (FAB) -->
   <button id="addFab" title="Tilføj parkering">+</button>
 
-  <!-- Ny tilføj-modal (overlays er altid skjult ved load) -->
+  <!-- Add modal -->
   <div id="addModal" class="hidden">
     <div class="add-modal-content">
       <div class="add-modal-header">
@@ -61,6 +58,13 @@
           <button id="addUseLocation" class="secondary">Brug min lokation</button>
         </div>
         <p id="addStatus" class="add-status">Koordinater: ikke valgt</p>
+
+        <label class="add-label">Note (valgfri)</label>
+        <input id="addNote" type="text" placeholder="Kort beskrivelse (fx: tæt på stadion, ofte ledig)" />
+        <div class="add-row">
+          <input id="addTimeLimit" type="text" placeholder="Tidsbegrænsning (fx: 2 timer)" />
+          <input id="addFreeHours" type="text" placeholder="Gratisperioder (fx: efter kl. 18)" />
+        </div>
       </div>
       <div class="add-modal-footer">
         <button id="addSaveBtn" class="primary">Gem</button>
