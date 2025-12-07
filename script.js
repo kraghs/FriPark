@@ -66,7 +66,8 @@ function distance(lat1,lng1,lat2,lng2){
 /* =========================
    Ensure openInfoFromMarker exists early (stability)
    ========================= */
-window.openInfoFromMarker = function(name){
+function openInfoFromMarker(name){
+
   const spot = parkingSpots.find(s => s.name === name);
   if(spot) openInfoModal(spot);
 };
