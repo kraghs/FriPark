@@ -18,8 +18,8 @@
 <body class="dark">
   <header>
     <h1>FreePark</h1>
-    <p>Find gratis parkering her</p>
-    <p class="warning">⚠️ Husk at tjekke skilte – regler kan ændre sig</p>
+    <p class="tagline">Din guide til gratis parkering i Danmark</p>
+    <p class="warning">⚠️ Tjek altid lokale skilte – regler kan ændre sig</p>
   </header>
 
   <!-- Search (above map) -->
@@ -28,8 +28,6 @@
       <input id="searchInput" type="text" placeholder="Søg adresse eller område (fx: Amager)..." autocomplete="off" />
       <button id="useMyLocationBtn" title="Brug min lokation">📍</button>
     </div>
-
-    <!-- HERE: search results appear under the search field -->
     <div id="searchResults" class="results hidden"></div>
   </section>
 
@@ -68,7 +66,7 @@
     </div>
   </div>
 
-  <!-- Leaflet + Axios for geocoding -->
+  <!-- Leaflet + Axios -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
