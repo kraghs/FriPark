@@ -115,4 +115,8 @@ if(navigator.geolocation){
     map.setView([userLat,userLng],12);
     renderSpots();
   },()=>{renderSpots();});
-}else{render
+}else{
+  renderSpots();
+}
+
+});
