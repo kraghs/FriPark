@@ -445,3 +445,10 @@ async function loadAllFreeParkingDK() {
     console.error("Kunne ikke hente OSM-data:", err);
   }
 }
+
+// Når appen starter
+initGeolocationAndNearby();
+
+// Hent ALLE gratis p-pladser i DK
+loadAllFreeParkingDK();
+
