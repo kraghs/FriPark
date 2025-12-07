@@ -16,9 +16,21 @@ header h1 { margin: 0; font-size: 2rem; font-weight: 600; }
 header p { margin: 5px 0 0 0; font-size: 1rem; font-weight: 400; }
 .warning { color: #d9534f; font-weight: 600; font-size: 0.9rem; margin-top:5px; }
 
-#search-section { padding: 15px 20px; }
+.search-wrapper {
+  position: relative;
+  padding: 10px 20px;
+}
+
 #searchInput {
-  width: 100%; padding: 10px; border-radius: 8px; border:1px solid #ccc; font-size:1rem;
+  width: 100%; padding: 10px 40px 10px 10px; border-radius: 8px; border:1px solid #ccc; font-size:1rem;
+  box-sizing:border-box;
+}
+
+#useMyLocationBtn {
+  position: absolute;
+  right: 30px;
+  top: 12px;
+  border:none; background:none; font-size:1.2rem; cursor:pointer;
 }
 
 #map { height: 300px; width: 100%; margin-bottom: 15px; border-radius: 10px; }
@@ -51,4 +63,8 @@ ul li button { padding:5px 10px; border-radius:5px; background:#00aa00; color:wh
 .modal button { margin-top:5px; width:100%; padding:10px; border-radius:5px; border:none; background:#00aa00; color:white; font-weight:600; cursor:pointer; }
 .modal button#cancelAddBtn, .modal button#closeInfoBtn { background:#d9534f; }
 
-.leaflet-marker-icon.userMarker { background-color:#ff0000 !important; border-radius:50%; border:3px solid #fff; }
+.leaflet-marker-icon.userMarker {
+  background-color:#ff0000 !important;
+  border-radius:50%;
+  border:3px solid #fff;
+}
