@@ -1,79 +1,130 @@
-/* Font */
 body {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f5;
+  font-family: 'Poppins', sans-serif;
+  margin: 0; padding: 0;
+  background-color: #f7f7f8;
+  color: #222;
 }
 
 header {
-  background-color: #00aa00;
-  color: white;
   padding: 20px;
   text-align: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
 }
 
 header h1 {
   margin: 0;
   font-size: 2rem;
+  font-weight: 600;
 }
 
 header p {
   margin: 5px 0 0 0;
   font-size: 1rem;
+  font-weight: 400;
+}
+
+.warning {
+  color: #d9534f;
+  font-weight: 600;
+  margin-top: 5px;
+  font-size: 0.9rem;
 }
 
 #map {
   height: 300px;
   width: 100%;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+  border-radius: 10px;
 }
 
-section {
-  padding: 15px 20px;
+#list-section {
+  padding: 0 20px 20px 20px;
 }
 
 input[type="text"] {
   display: block;
+  width: 100%;
   margin: 10px 0;
   padding: 10px;
-  width: 95%;
   border-radius: 8px;
   border: 1px solid #ccc;
-  box-sizing: border-box;
   font-size: 1rem;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  background-color: white;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+
+ul li:hover {
+  background-color: #f0f0f0;
 }
 
 button {
   cursor: pointer;
   border: none;
   border-radius: 8px;
-  padding: 10px 15px;
-  font-weight: 600;
+}
+
+#toggleAddBtn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 50px;
+  height: 50px;
   background-color: #00aa00;
   color: white;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #008800;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-ul li {
-  padding: 10px;
-  margin-bottom: 8px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  font-size: 2rem;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 #addSpotBox.hidden {
+  display: none;
+}
+
+#addSpotBox .modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+#addSpotBox .modal h2 {
+  margin-top: 0;
+}
+
+#addSpotBox .modal input {
+  margin-bottom: 10px;
+}
+
+#addSpotBox .modal button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.hidden {
   display: none;
 }
