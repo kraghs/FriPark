@@ -89,12 +89,27 @@ parkingSpots.forEach(spot=>{
 
   // bind popup with Se info button that calls global function
   // Use double-escaped name with escapeJs to avoid quote breaks
-  circle.bindPopup(`
-    <strong>${escapeHtml(spot.name)}</strong><br>
-    <small>${escapeHtml(spot.address)}</small><br>
-    <div style="margin-top:8px;">
-      <button onclick="openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button>
-    </div>`);
+  const popupContent = document.createElement('div');
+
+const title = document.createElement('strong');
+title.textContent = spot.name;
+popupContent.appendChild(title);
+
+const addr = document.createElement('div');
+addr.innerHTML = `<small>${spot.address}</small>`;
+popupContent.appendChild(addr);
+
+const btnDiv = document.createElement('div');
+btnDiv.style.marginTop = '8px';
+const infoBtn = document.createElement('button');
+infoBtn.textContent = 'Se info';
+infoBtn.style.cssText = 'background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600';
+infoBtn.addEventListener('click', ()=> openInfoModal(spot)); // ✅ Her binder vi direkte
+btnDiv.appendChild(infoBtn);
+popupContent.appendChild(btnDiv);
+
+circle.bindPopup(popupContent);
+
 
   // store marker on spot
   spot.marker = circle;
