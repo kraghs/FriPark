@@ -15,31 +15,47 @@ let userLng = 12.6136;
 
 /* =========================
    Seed spots (DK-only) – shown immediately
+   NOTE: Expanded data to ensure the list is long and covers DK widely.
    ========================= */
 let parkingSpots = [
-  // Nordsjælland / Helsingør
+  // Nordsjælland / Helsingør-området
   { name:"Helsingør Nordhavn", address:"Nordhavnsvej, 3000 Helsingør", lat:56.0390, lng:12.6130, note:"Gratis på udvalgte tider" },
   { name:"Kronborg Område", address:"Kronborg 2 C, 3000 Helsingør", lat:56.0385, lng:12.6201, note:"Gratis zoner tæt på slottet (tjek skiltning)" },
+  { name:"Helsingør Station Nord", address:"Banegårdspladsen, 3000 Helsingør", lat:56.0367, lng:12.6139, note:"Gratis aften, tjek skiltning" },
+  { name:"Snekkersten Strand", address:"Strandvejen, 3070 Snekkersten", lat:56.0115, lng:12.5790, note:"Offentlig strandparkering" },
+  { name:"Espergærde Havn", address:"Havnen, 3060 Espergærde", lat:55.9892, lng:12.5557, note:"Gratis uden for sæson" },
   { name:"Humlebæk Strand", address:"Strandvejen, 3050 Humlebæk", lat:55.9690, lng:12.5330, note:"Gratis strandparkering uden for sæson" },
   { name:"Nivå Havn", address:"Havnen 1, 2990 Nivå", lat:55.9434, lng:12.5050, note:"Ofte gratis efter 18" },
   { name:"Hørsholm Parkvej", address:"Parkvej, 2970 Hørsholm", lat:55.8750, lng:12.4980, note:"Offentlige p-pladser" },
 
-  // København og omegn (Amager, Brøndby, Roskilde)
+  // København og omegn (Amager, Brøndby, Roskilde, m.fl.)
   { name:"Amager Strandpark", address:"Amager Strandvej, 2300 København S", lat:55.6469, lng:12.5950, note:"Stor p‑plads ved stranden" },
   { name:"Amagerbro Syd", address:"Amagerbrogade, 2300 København S", lat:55.6565, lng:12.6120, note:"Gratis på udvalgte tider (tjek skiltning)" },
+  { name:"Ørestad Nord", address:"Ørestad Boulevard, 2300 København S", lat:55.6295, lng:12.5765, note:"Gratis zoner på bestemte tidspunkter" },
+  { name:"København NV Offentlig", address:"Frederikssundsvej, 2400 København NV", lat:55.7048, lng:12.5282, note:"Gratis i sidegader (tjek skiltning)" },
+  { name:"København SV Havnepark", address:"Sluseholmen, 2450 København SV", lat:55.6460, lng:12.5510, note:"Gratis aftener og weekend" },
   { name:"Brøndby Stadion", address:"Brøndby Stadion 1, 2605 Brøndby", lat:55.6480, lng:12.4180, note:"Gratis ved kampdage" },
   { name:"Roskilde Havn", address:"Strandgade, 4000 Roskilde", lat:55.6420, lng:12.0830, note:"Stor p‑plads nær havnen" },
   { name:"Roskilde Nord", address:"Hyrdehøj, 4000 Roskilde", lat:55.6610, lng:12.0690, note:"Gratis zoner — tjek skiltning" },
+  { name:"Hillerød Slotssø", address:"Slotsgade, 3400 Hillerød", lat:55.9270, lng:12.3130, note:"Gratis uden for zonetider" },
+  { name:"Frederikssund Havnevej", address:"Havnevej, 3600 Frederikssund", lat:55.8365, lng:12.0680, note:"Offentlig p‑plads ved havnen" },
 
   // Fyn
   { name:"Odense Havn", address:"Havnegade, 5000 Odense", lat:55.4038, lng:10.3883, note:"Gratis efter kl. 18" },
+  { name:"Odense Zoo Nord", address:"Søndre Boulevard, 5000 Odense", lat:55.3825, lng:10.3860, note:"Gratis zoner nær parken" },
+  { name:"Nyborg Strand", address:"Strandvænget, 5800 Nyborg", lat:55.3090, lng:10.7900, note:"Offentlig strandparkering" },
 
-  // Jylland
+  // Jylland (Østjylland, Midt, Nord, Vest, Syd)
   { name:"Tangkrogen", address:"Marselisborg Havnevej 4, 8000 Aarhus", lat:56.1520, lng:10.2030, note:"Stor p‑plads ved havnen" },
   { name:"Ceres Park", address:"Stadion Allé 70, 8000 Aarhus", lat:56.1515, lng:10.2050, note:"Gratis i weekenden" },
+  { name:"Aarhus Ø Havne", address:"Aarhus Ø, 8000 Aarhus", lat:56.1710, lng:10.2280, note:"Gratis aften i udvalgte zoner" },
+  { name:"Randers Havn", address:"Havnevej, 8900 Randers", lat:56.4600, lng:10.0400, note:"Offentlig havneparkering" },
+  { name:"Vejle Fjordpark", address:"Fjordparken, 7100 Vejle", lat:55.7080, lng:9.5430, note:"Gratis efter 18" },
   { name:"Esbjerg Strand", address:"Strandpromenaden, 6700 Esbjerg", lat:55.4737, lng:8.4200, note:"Offentlig p‑plads, ofte ledig" },
   { name:"Aalborg Vestby", address:"Nørresundby nær Broen, 9000 Aalborg", lat:57.0500, lng:9.9210, note:"Gratis zoner – tjek skiltning" },
-  { name:"Kolding Marina", address:"Marinavej, 6000 Kolding", lat:55.4900, lng:9.4800, note:"Gratis efter 18" }
+  { name:"Kolding Marina", address:"Marinavej, 6000 Kolding", lat:55.4900, lng:9.4800, note:"Gratis efter 18" },
+  { name:"Silkeborg Søfront", address:"Sejsvej, 8600 Silkeborg", lat:56.1720, lng:9.5680, note:"Gratis zoner nær søerne" },
+  { name:"Horsens Havn", address:"Havnegade, 8700 Horsens", lat:55.8580, lng:9.8460, note:"Offentlig p‑plads ved havnen" }
 ].filter(s => isInDenmark(s.lat, s.lng));
 
 /* =========================
@@ -47,25 +63,32 @@ let parkingSpots = [
    ========================= */
 const AREA_INDEX = [
   // København-områder
-  { key:["københavn","copenhagen","kbh"], center:[55.6761,12.5683], radiusKm:20 },
-  { key:["amager","københavn s","2300"], center:[55.64,12.60], radiusKm:8 },
-  { key:["brøndby","2605"], center:[55.648,12.418], radiusKm:8 },
-  { key:["roskilde","4000"], center:[55.6419,12.0870], radiusKm:12 },
+  { key:["københavn","copenhagen","kbh"], center:[55.6761,12.5683], radiusKm:25 },
+  { key:["amager","københavn s","2300"], center:[55.64,12.60], radiusKm:10 },
+  { key:["brøndby","2605"], center:[55.648,12.418], radiusKm:10 },
+  { key:["roskilde","4000"], center:[55.6419,12.0870], radiusKm:14 },
+  { key:["hillerød","3400"], center:[55.927,12.313], radiusKm:12 },
+  { key:["frederikssund","3600"], center:[55.8365,12.068], radiusKm:12 },
 
   // Nordsjælland
-  { key:["helsingør","3000"], center:[56.036,12.611], radiusKm:10 },
-  { key:["humlebæk","3050"], center:[55.969,12.533], radiusKm:8 },
-  { key:["nivå","2990"], center:[55.943,12.505], radiusKm:8 },
-  { key:["hørsholm","2970"], center:[55.875,12.498], radiusKm:8 },
+  { key:["helsingør","3000"], center:[56.036,12.611], radiusKm:12 },
+  { key:["humlebæk","3050"], center:[55.969,12.533], radiusKm:10 },
+  { key:["nivå","2990"], center:[55.943,12.505], radiusKm:10 },
+  { key:["hørsholm","2970"], center:[55.875,12.498], radiusKm:10 },
 
   // Fyn
-  { key:["odense","5000"], center:[55.403,10.388], radiusKm:12 },
+  { key:["odense","5000"], center:[55.403,10.388], radiusKm:14 },
+  { key:["nyborg","5800"], center:[55.311,10.799], radiusKm:12 },
 
   // Jylland
-  { key:["aarhus","århus","8000"], center:[56.1629,10.2039], radiusKm:12 },
-  { key:["esbjerg","6700"], center:[55.476,8.459], radiusKm:12 },
-  { key:["aalborg","9000"], center:[57.0488,9.9217], radiusKm:12 },
-  { key:["kolding","6000"], center:[55.491,9.472], radiusKm:12 }
+  { key:["aarhus","århus","8000"], center:[56.1629,10.2039], radiusKm:14 },
+  { key:["randers","8900"], center:[56.46,10.04], radiusKm:12 },
+  { key:["vejle","7100"], center:[55.71,9.53], radiusKm:12 },
+  { key:["esbjerg","6700"], center:[55.476,8.459], radiusKm:14 },
+  { key:["aalborg","9000"], center:[57.0488,9.9217], radiusKm:14 },
+  { key:["kolding","6000"], center:[55.491,9.472], radiusKm:14 },
+  { key:["silkeborg","8600"], center:[56.1697,9.5451], radiusKm:12 },
+  { key:["horsens","8700"], center:[55.860,9.85], radiusKm:12 }
 ];
 
 function findArea(query) {
@@ -163,7 +186,7 @@ parkingSpots.forEach(addSpotToMap);
 })();
 
 /* =========================
-   User geolocation (optional, for nearby)
+   User geolocation (optional, for sorting)
    ========================= */
 let userMarker = null;
 function setUserMarker(lat, lng) {
@@ -173,26 +196,25 @@ function setUserMarker(lat, lng) {
   }).addTo(map).bindPopup('Din position');
 }
 function initGeolocationAndNearby() {
+  // Do not move the map; just set user marker and render nearby list (ALL spots sorted).
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
       userLat = pos.coords.latitude;
       userLng = pos.coords.longitude;
-      if (isInDenmark(userLat, userLng)) {
-        setUserMarker(userLat, userLng);
-      }
-      renderNearbySpotsTop5(userLat, userLng);
+      if (isInDenmark(userLat, userLng)) setUserMarker(userLat, userLng);
+      renderNearbyAll(userLat, userLng);
     }, () => {
-      renderNearbySpotsTop5(userLat, userLng);
+      renderNearbyAll(userLat, userLng);
     }, { enableHighAccuracy: true, timeout: 12000 });
   } else {
-    renderNearbySpotsTop5(userLat, userLng);
+    renderNearbyAll(userLat, userLng);
   }
 }
 
 /* =========================
-   Nearby spots list – TOP 5, sorted by distance
+   Nearby spots list – ALL spots, sorted by distance
    ========================= */
-function renderNearbySpotsTop5(lat, lng) {
+function renderNearbyAll(lat, lng) {
   const ul = document.getElementById('parkingList');
   const meta = document.getElementById('nearbyMeta');
   ul.innerHTML = '';
@@ -202,10 +224,9 @@ function renderNearbySpotsTop5(lat, lng) {
     .map(s => ({ ...s, distKm: distanceKm(lat, lng, s.lat, s.lng) }))
     .sort((a, b) => a.distKm - b.distKm);
 
-  const top5 = sortedAll.slice(0, 5);
-  meta.textContent = `Afstand fra din position — viser top 5 af ${sortedAll.length} spots`;
+  meta.textContent = `Afstand fra din position — viser alle ${sortedAll.length} spots i Danmark`;
 
-  top5.forEach(spot => {
+  sortedAll.forEach(spot => {
     const li = document.createElement('li');
 
     const left = document.createElement('div');
@@ -266,7 +287,7 @@ document.addEventListener('keydown', (e) => {
 
 /* =========================
    Slick search with AREA matching
-   - Tries area radius first (Amager, København, Roskilde, ...)
+   - Tries area radius first (Amager, København, Roskilde, Helsingør, ...)
    - Falls back to name/address contains
    - Does not move the map while typing
    - Moves only when a result is clicked
@@ -293,7 +314,7 @@ function renderSearchResults(items) {
       spot.marker && spot.marker.openPopup();
       searchInput.value = '';
       hideSearchResults();
-      renderNearbySpotsTop5(userLat, userLng);
+      renderNearbyAll(userLat, userLng);
     });
     ul.appendChild(li);
   });
@@ -308,7 +329,7 @@ searchInput.addEventListener('input', () => {
 
   if (!qLower) {
     hideSearchResults();
-    renderNearbySpotsTop5(userLat, userLng);
+    renderNearbyAll(userLat, userLng);
     return;
   }
 
@@ -339,7 +360,7 @@ searchInput.addEventListener('input', () => {
 clearSearch.addEventListener('click', () => {
   searchInput.value = '';
   hideSearchResults();
-  renderNearbySpotsTop5(userLat, userLng);
+  renderNearbyAll(userLat, userLng);
 });
 
 // Close dropdown when clicking outside
