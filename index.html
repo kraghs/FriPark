@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FreePark</title>
+
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles + manifest -->
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body class="dark">
@@ -16,43 +22,57 @@
     <p class="warning">⚠️ Husk at tjekke skilte – regler kan ændre sig</p>
   </header>
 
+  <!-- Search (above map) -->
   <section id="search-section">
     <div class="search-wrapper">
-      <input type="text" id="searchInput" placeholder="Søg adresse eller område...">
+      <input id="searchInput" type="text" placeholder="Søg adresse eller område (fx: Amager)..." autocomplete="off" />
       <button id="useMyLocationBtn" title="Brug min lokation">📍</button>
     </div>
+
+    <!-- HERE: search results appear under the search field -->
+    <div id="searchResults" class="results hidden"></div>
   </section>
 
+  <!-- Map -->
   <div id="map"></div>
 
+  <!-- Nearby list -->
   <section id="list-section">
     <h2>Spots i nærheden</h2>
     <ul id="parkingList"></ul>
   </section>
 
+  <!-- Add button and modal -->
   <button id="toggleAddBtn" title="Tilføj parkering">+</button>
 
   <div id="addSpotBox" class="hidden">
     <div class="modal">
       <h2>Tilføj gratis parkering</h2>
-      <input type="text" id="spotName" placeholder="Navn / vejnavn">
-      <input type="text" id="spotAddress" placeholder="Adresse">
+      <input id="spotName" type="text" placeholder="Navn / vejnavn" />
+      <input id="spotAddress" type="text" placeholder="Adresse (gadenavn, by)" />
+      <div class="small-row">
+        <button id="useMyLocationAddBtn" class="secondary">Brug min lokation</button>
+      </div>
       <button id="addSpotBtn">Gem</button>
-      <button id="cancelAddBtn">Annuller</button>
+      <button id="cancelAddBtn" class="danger">Annuller</button>
     </div>
   </div>
 
+  <!-- Info modal -->
   <div id="infoModal" class="hidden">
     <div class="modal">
       <h3 id="infoTitle"></h3>
       <p id="infoAddress"></p>
       <p id="infoNote"></p>
-      <button id="closeInfoBtn">Luk</button>
+      <button id="closeInfoBtn" class="danger">Luk</button>
     </div>
   </div>
 
+  <!-- Leaflet + Axios for geocoding -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- App code -->
   <script src="script.js"></script>
 </body>
 </html>
