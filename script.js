@@ -9,24 +9,27 @@ function isInDenmark(lat, lng) {
          lng >= DK_BOUNDS.minLng && lng <= DK_BOUNDS.maxLng;
 }
 
-let userLat = 56.0308; // fallback near Helsingør
+// Fallback near Helsingør to reflect your location
+let userLat = 56.0308;
 let userLng = 12.6136;
 
 /* =========================
    Seed spots (DK-only) – shown immediately
    ========================= */
 let parkingSpots = [
-  // Sjælland/Nordsjælland
+  // Nordsjælland / Helsingør
   { name:"Helsingør Nordhavn", address:"Nordhavnsvej, 3000 Helsingør", lat:56.0390, lng:12.6130, note:"Gratis på udvalgte tider" },
   { name:"Kronborg Område", address:"Kronborg 2 C, 3000 Helsingør", lat:56.0385, lng:12.6201, note:"Gratis zoner tæt på slottet (tjek skiltning)" },
+  { name:"Humlebæk Strand", address:"Strandvejen, 3050 Humlebæk", lat:55.9690, lng:12.5330, note:"Gratis strandparkering uden for sæson" },
   { name:"Nivå Havn", address:"Havnen 1, 2990 Nivå", lat:55.9434, lng:12.5050, note:"Ofte gratis efter 18" },
   { name:"Hørsholm Parkvej", address:"Parkvej, 2970 Hørsholm", lat:55.8750, lng:12.4980, note:"Offentlige p-pladser" },
-  { name:"Humlebæk Strand", address:"Strandvejen, 3050 Humlebæk", lat:55.9690, lng:12.5330, note:"Gratis strandparkering uden for sæson" },
 
-  // København og omegn
+  // København og omegn (Amager, Brøndby, Roskilde)
   { name:"Amager Strandpark", address:"Amager Strandvej, 2300 København S", lat:55.6469, lng:12.5950, note:"Stor p‑plads ved stranden" },
+  { name:"Amagerbro Syd", address:"Amagerbrogade, 2300 København S", lat:55.6565, lng:12.6120, note:"Gratis på udvalgte tider (tjek skiltning)" },
   { name:"Brøndby Stadion", address:"Brøndby Stadion 1, 2605 Brøndby", lat:55.6480, lng:12.4180, note:"Gratis ved kampdage" },
   { name:"Roskilde Havn", address:"Strandgade, 4000 Roskilde", lat:55.6420, lng:12.0830, note:"Stor p‑plads nær havnen" },
+  { name:"Roskilde Nord", address:"Hyrdehøj, 4000 Roskilde", lat:55.6610, lng:12.0690, note:"Gratis zoner — tjek skiltning" },
 
   // Fyn
   { name:"Odense Havn", address:"Havnegade, 5000 Odense", lat:55.4038, lng:10.3883, note:"Gratis efter kl. 18" },
@@ -38,6 +41,41 @@ let parkingSpots = [
   { name:"Aalborg Vestby", address:"Nørresundby nær Broen, 9000 Aalborg", lat:57.0500, lng:9.9210, note:"Gratis zoner – tjek skiltning" },
   { name:"Kolding Marina", address:"Marinavej, 6000 Kolding", lat:55.4900, lng:9.4800, note:"Gratis efter 18" }
 ].filter(s => isInDenmark(s.lat, s.lng));
+
+/* =========================
+   Area index for search (centers + radius in km)
+   ========================= */
+const AREA_INDEX = [
+  // København-områder
+  { key:["københavn","copenhagen","kbh"], center:[55.6761,12.5683], radiusKm:20 },
+  { key:["amager","københavn s","2300"], center:[55.64,12.60], radiusKm:8 },
+  { key:["brøndby","2605"], center:[55.648,12.418], radiusKm:8 },
+  { key:["roskilde","4000"], center:[55.6419,12.0870], radiusKm:12 },
+
+  // Nordsjælland
+  { key:["helsingør","3000"], center:[56.036,12.611], radiusKm:10 },
+  { key:["humlebæk","3050"], center:[55.969,12.533], radiusKm:8 },
+  { key:["nivå","2990"], center:[55.943,12.505], radiusKm:8 },
+  { key:["hørsholm","2970"], center:[55.875,12.498], radiusKm:8 },
+
+  // Fyn
+  { key:["odense","5000"], center:[55.403,10.388], radiusKm:12 },
+
+  // Jylland
+  { key:["aarhus","århus","8000"], center:[56.1629,10.2039], radiusKm:12 },
+  { key:["esbjerg","6700"], center:[55.476,8.459], radiusKm:12 },
+  { key:["aalborg","9000"], center:[57.0488,9.9217], radiusKm:12 },
+  { key:["kolding","6000"], center:[55.491,9.472], radiusKm:12 }
+];
+
+function findArea(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return null;
+  for (const area of AREA_INDEX) {
+    if (area.key.some(k => q.includes(k))) return area;
+  }
+  return null;
+}
 
 /* =========================
    Map setup with clean Apple-like style
@@ -66,7 +104,7 @@ function fmt(text){ return (text||"").trim(); }
 function isDuplicate(a,b){
   const nameMatch = fmt(a.name).toLowerCase() === fmt(b.name).toLowerCase();
   const addrMatch = fmt(a.address).toLowerCase() === fmt(b.address).toLowerCase();
-  const close = distanceKm(a.lat,a.lng,b.lat,b.lng) < 0.05; // 50 meter
+  const close = distanceKm(a.lat,a.lng,b.lat,b.lng) < 0.05; // ~50 m
   return (nameMatch && addrMatch) || close;
 }
 
@@ -135,7 +173,6 @@ function setUserMarker(lat, lng) {
   }).addTo(map).bindPopup('Din position');
 }
 function initGeolocationAndNearby() {
-  // Do not move the map; just set user marker and render nearby
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
       userLat = pos.coords.latitude;
@@ -228,7 +265,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* =========================
-   Slick search with dropdown
+   Slick search with AREA matching
+   - Tries area radius first (Amager, København, Roskilde, ...)
+   - Falls back to name/address contains
    - Does not move the map while typing
    - Moves only when a result is clicked
    ========================= */
@@ -250,10 +289,8 @@ function renderSearchResults(items) {
     const li = document.createElement('li');
     li.textContent = `${spot.name} — ${spot.address || 'Ukendt adresse'}`;
     li.addEventListener('click', () => {
-      // Only on click: move the map and open popup
       map.setView([spot.lat, spot.lng], 14);
       spot.marker && spot.marker.openPopup();
-      // Clear dropdown and input, restore nearby list
       searchInput.value = '';
       hideSearchResults();
       renderNearbySpotsTop5(userLat, userLng);
@@ -264,118 +301,71 @@ function renderSearchResults(items) {
   searchResultsBox.appendChild(ul);
   searchResultsBox.classList.remove('hidden');
 }
+
 searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLowerCase();
-  if (!q) {
+  const q = searchInput.value.trim();
+  const qLower = q.toLowerCase();
+
+  if (!qLower) {
     hideSearchResults();
     renderNearbySpotsTop5(userLat, userLng);
     return;
   }
-  const matches = parkingSpots.filter(s =>
-    (s.name || '').toLowerCase().includes(q) ||
-    (s.address || '').toLowerCase().includes(q)
-  );
+
+  // 1) Try area match first
+  const area = findArea(qLower);
+  let matches = [];
+  if (area) {
+    const [clat, clng] = area.center;
+    matches = parkingSpots.filter(s => {
+      if (!isInDenmark(s.lat, s.lng)) return false;
+      const d = distanceKm(clat, clng, s.lat, s.lng);
+      return d <= area.radiusKm;
+    });
+  }
+
+  // 2) If no area result, fall back to name/address contains
+  if (matches.length === 0) {
+    matches = parkingSpots.filter(s =>
+      (s.name || '').toLowerCase().includes(qLower) ||
+      (s.address || '').toLowerCase().includes(qLower)
+    );
+  }
+
   if (matches.length > 0) renderSearchResults(matches);
   else showNoResults();
 });
+
 clearSearch.addEventListener('click', () => {
   searchInput.value = '';
   hideSearchResults();
   renderNearbySpotsTop5(userLat, userLng);
 });
+
+// Close dropdown when clicking outside
 document.addEventListener('click', (e) => {
   const wrapper = document.querySelector('.search-wrapper');
   if (!wrapper.contains(e.target) && !searchResultsBox.contains(e.target)) {
     hideSearchResults();
   }
 });
+// Close dropdown with ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') hideSearchResults();
 });
 
 /* =========================
-   Optional: Overpass import for DK-only free parking
-   - Loads amenity=parking with fee=no inside DK bounds
-   - Dedupes and adds markers without moving the map
-   ========================= */
-async function loadOSMFreeParkingDK() {
-  try {
-    const bbox = `${DK_BOUNDS.minLat},${DK_BOUNDS.minLng},${DK_BOUNDS.maxLat},${DK_BOUNDS.maxLng}`;
-    const q = `
-      [out:json][timeout:30];
-      (
-        node["amenity"="parking"]["fee"="no"](${bbox});
-        way["amenity"="parking"]["fee"="no"](${bbox});
-        relation["amenity"="parking"]["fee"="no"](${bbox});
-      );
-      out center tags;
-    `;
-    const url = "https://overpass-api.de/api/interpreter";
-    const res = await axios.post(url, q, { headers: { 'Content-Type':'text/plain' } });
-    const data = res.data;
-    const imported = [];
-
-    if (data && data.elements) {
-      data.elements.forEach(el => {
-        const lat = el.lat || (el.center && el.center.lat);
-        const lon = el.lon || (el.center && el.center.lon);
-        if (!lat || !lon) return;
-        if (!isInDenmark(lat, lon)) return;
-
-        const tags = el.tags || {};
-        const name = tags.name || "Offentlig parkering";
-        const addrParts = [
-          tags["addr:street"],
-          tags["addr:housenumber"],
-          tags["addr:postcode"],
-          tags["addr:city"]
-        ].filter(Boolean);
-        const address = addrParts.join(", ") || "Ukendt adresse";
-
-        const maxstay = tags.maxstay || "";
-        const opening = tags.opening_hours || "";
-        const access = tags.access || "";
-        const parkingType = tags.parking || "";
-
-        const notePieces = [];
-        if (access) notePieces.push(`Adgang: ${access}`);
-        notePieces.push("Gratis parkering");
-        if (parkingType) notePieces.push(`Type: ${parkingType}`);
-
-        const spot = {
-          name,
-          address,
-          lat,
-          lng: lon,
-          note: notePieces.join(" • "),
-          timeLimit: maxstay,
-          freeHours: opening
-        };
-
-        const exists = parkingSpots.some(s => isDuplicate(s, spot));
-        if (!exists) {
-          parkingSpots.push(spot);
-          addSpotToMap(spot);
-          imported.push(spot);
-        }
-      });
-    }
-
-    // Do not move map; just refresh nearby list with top 5
-    renderNearbySpotsTop5(userLat, userLng);
-    console.log(`OSM import: indlæst ${imported.length} gratis p-pladser i DK.`);
-  } catch (err) {
-    console.warn("Kunne ikke hente OSM-data:", err);
-  }
-}
-
-/* =========================
    Initial render
    ========================= */
-// Geolocation + nearby top 5
+(function fitAllDKSpotsInitially() {
+  const layers = parkingSpots.map(s => s.marker).filter(Boolean);
+  if (layers.length > 0) {
+    const group = L.featureGroup(layers);
+    map.fitBounds(group.getBounds().pad(0.12));
+  } else {
+    map.setView([55.8, 11.0], 6);
+  }
+})();
 initGeolocationAndNearby();
-
-// Optionally load DK-only free parking from OSM (comment out if you prefer only seed)
-loadOSMFreeParkingDK();
 
 });
