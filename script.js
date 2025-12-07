@@ -156,7 +156,6 @@ if(navigator.geolocation){
 /* =========================
    Søgning (brug min lokation knap)
    ========================= */
-document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
       userLat=pos.coords.latitude;
