@@ -1,5 +1,5 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0; padding: 0;
   background-color: #f7f7f8;
   color: #222;
@@ -8,123 +8,47 @@ body {
 header {
   padding: 20px;
   text-align: center;
-  background-color: #ffffff;
+  background-color: #fff;
   border-bottom: 1px solid #ddd;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
+header h1 { margin: 0; font-size: 2rem; font-weight: 600; }
+header p { margin: 5px 0 0 0; font-size: 1rem; font-weight: 400; }
+.warning { color: #d9534f; font-weight: 600; font-size: 0.9rem; margin-top:5px; }
+
+#search-section { padding: 15px 20px; }
+#searchInput {
+  width: 100%; padding: 10px; border-radius: 8px; border:1px solid #ccc; font-size:1rem;
 }
 
-header p {
-  margin: 5px 0 0 0;
-  font-size: 1rem;
-  font-weight: 400;
-}
+#map { height: 300px; width: 100%; margin-bottom: 15px; border-radius: 10px; }
 
-.warning {
-  color: #d9534f;
-  font-weight: 600;
-  margin-top: 5px;
-  font-size: 0.9rem;
-}
+#list-section { padding: 0 20px 20px 20px; }
+#list-section h2 { font-size: 1.2rem; font-weight:600; margin-bottom:10px; }
 
-#map {
-  height: 300px;
-  width: 100%;
-  margin-bottom: 15px;
-  border-radius: 10px;
-}
-
-#list-section {
-  padding: 0 20px 20px 20px;
-}
-
-input[type="text"] {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
+ul { list-style: none; padding:0; margin:0; }
 ul li {
-  background-color: white;
-  padding: 12px 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  cursor: pointer;
+  background:#fff; padding:12px 15px; margin-bottom:10px; border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center;
 }
-
-ul li:hover {
-  background-color: #f0f0f0;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-}
+ul li button { padding:5px 10px; border-radius:5px; background:#00aa00; color:white; border:none; font-weight:600; cursor:pointer; }
 
 #toggleAddBtn {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  width: 50px;
-  height: 50px;
-  background-color: #00aa00;
-  color: white;
-  font-size: 2rem;
-  text-align: center;
-  line-height: 50px;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: fixed; bottom:25px; right:25px; width:50px; height:50px;
+  background-color:#00aa00; color:white; font-size:2rem; text-align:center; line-height:50px;
+  border-radius:50%; box-shadow:0 4px 8px rgba(0,0,0,0.2); cursor:pointer;
 }
 
-#addSpotBox.hidden {
-  display: none;
-}
+.hidden { display:none; }
 
-#addSpotBox .modal {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  border-radius: 10px;
-  z-index: 1000;
+.modal {
+  position: fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:white; padding:20px; width:90%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  border-radius:10px; z-index:1000;
 }
+.modal h2, .modal h3 { margin-top:0; }
+.modal input { margin-bottom:10px; width:100%; padding:10px; border-radius:5px; border:1px solid #ccc; }
+.modal button { margin-top:5px; width:100%; padding:10px; border-radius:5px; border:none; background:#00aa00; color:white; font-weight:600; cursor:pointer; }
+.modal button#cancelAddBtn, .modal button#closeInfoBtn { background:#d9534f; }
 
-#addSpotBox .modal h2 {
-  margin-top: 0;
-}
-
-#addSpotBox .modal input {
-  margin-bottom: 10px;
-}
-
-#addSpotBox .modal button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  font-size: 1rem;
-}
-
-.hidden {
-  display: none;
-}
+.leaflet-marker-icon.userMarker { background-color:#ff0000 !important; border-radius:50%; border:3px solid #fff; }
