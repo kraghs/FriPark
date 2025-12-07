@@ -1,20 +1,20 @@
 body {
   font-family: 'Inter', sans-serif;
   margin: 0; padding: 0;
-  background-color: #f7f7f8;
-  color: #222;
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
 header {
   padding: 20px;
   text-align: center;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #333;
 }
 
 header h1 { margin: 0; font-size: 2rem; font-weight: 600; }
 header p { margin: 5px 0 0 0; font-size: 1rem; font-weight: 400; }
-.warning { color: #d9534f; font-weight: 600; font-size: 0.9rem; margin-top:5px; }
+.warning { color: #ff5555; font-weight: 600; font-size: 0.9rem; margin-top:5px; }
 
 .search-wrapper {
   position: relative;
@@ -22,49 +22,47 @@ header p { margin: 5px 0 0 0; font-size: 1rem; font-weight: 400; }
 }
 
 #searchInput {
-  width: 100%; padding: 10px 40px 10px 10px; border-radius: 8px; border:1px solid #ccc; font-size:1rem;
+  width: 100%; padding: 10px 40px 10px 10px; border-radius: 8px; border:1px solid #444; background: #2a2a2a; color: #e0e0e0;
   box-sizing:border-box;
 }
 
 #useMyLocationBtn {
   position: absolute;
   right: 30px;
-  top: 12px;
-  border:none; background:none; font-size:1.2rem; cursor:pointer;
+  top: 14px;
+  border:none; background:none; font-size:1.2rem; cursor:pointer; color:#e0e0e0;
 }
 
-#map { height: 300px; width: 100%; margin-bottom: 15px; border-radius: 10px; }
+#map { height: 350px; width: 100%; margin-bottom: 15px; border-radius: 10px; }
 
 #list-section { padding: 0 20px 20px 20px; }
-#list-section h2 { font-size: 1.2rem; font-weight:600; margin-bottom:10px; }
+#list-section h2 { font-size: 1.2rem; font-weight:600; margin-bottom:10px; color:#ddd; }
 
 ul { list-style: none; padding:0; margin:0; }
 ul li {
-  background:#fff; padding:12px 15px; margin-bottom:10px; border-radius:8px;
-  box-shadow:0 2px 5px rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center;
+  background:#1e1e1e; padding:12px 15px; margin-bottom:10px; border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.5); display:flex; justify-content:space-between; align-items:center;
+  color: #e0e0e0;
 }
 ul li button { padding:5px 10px; border-radius:5px; background:#00aa00; color:white; border:none; font-weight:600; cursor:pointer; }
 
 #toggleAddBtn {
   position: fixed; bottom:25px; right:25px; width:50px; height:50px;
   background-color:#00aa00; color:white; font-size:2rem; text-align:center; line-height:50px;
-  border-radius:50%; box-shadow:0 4px 8px rgba(0,0,0,0.2); cursor:pointer;
+  border-radius:50%; box-shadow:0 4px 8px rgba(0,0,0,0.5); cursor:pointer;
 }
 
 .hidden { display:none; }
 
 .modal {
   position: fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  background:white; padding:20px; width:90%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  background:#222; padding:20px; width:90%; max-width:400px; box-shadow:0 4px 12px rgba(0,0,0,0.8);
   border-radius:10px; z-index:1000;
+  color: #e0e0e0;
 }
 .modal h2, .modal h3 { margin-top:0; }
-.modal input { margin-bottom:10px; width:100%; padding:10px; border-radius:5px; border:1px solid #ccc; }
+.modal input { margin-bottom:10px; width:100%; padding:10px; border-radius:5px; border:1px solid #444; background:#2a2a2a; color:#e0e0e0; }
 .modal button { margin-top:5px; width:100%; padding:10px; border-radius:5px; border:none; background:#00aa00; color:white; font-weight:600; cursor:pointer; }
 .modal button#cancelAddBtn, .modal button#closeInfoBtn { background:#d9534f; }
 
-.leaflet-marker-icon.userMarker {
-  background-color:#ff0000 !important;
-  border-radius:50%;
-  border:3px solid #fff;
-}
+.leaflet-container { background: #1e1e1e; }
