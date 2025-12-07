@@ -347,3 +347,86 @@ async function loadOSMFreeParking(){
 loadOSMFreeParking();
 
 });
+
+/* =========================
+   Ny søgning: dropdown under feltet
+   - Filtrerer spots efter navn/adresse
+   - Flytter IKKE kortet automatisk
+   - Klik på resultat centrerer kortet og åbner popup
+   ========================= */
+const searchInput = document.getElementById('searchInput');
+const clearSearch = document.getElementById('clearSearch');
+const searchResultsBox = document.getElementById('searchResults');
+
+function renderSearchResults(items){
+  const ul = document.createElement('ul');
+  items.forEach(spot => {
+    const li = document.createElement('li');
+    li.textContent = `${spot.name} — ${spot.address}`;
+    li.addEventListener('click', () => {
+      // Når man klikker: centrer kortet og åbn popup
+      map.setView([spot.lat, spot.lng], 14);
+      spot.marker && spot.marker.openPopup();
+      // Ryd og skjul dropdown
+      searchInput.value = '';
+      hideSearchResults();
+      // Gendan standard listen (nærmeste)
+      renderSpots(userLat, userLng);
+    });
+    ul.appendChild(li);
+  });
+  searchResultsBox.innerHTML = '';
+  searchResultsBox.appendChild(ul);
+}
+
+function showNoResults(){
+  searchResultsBox.innerHTML = '<div class="no-results">Ingen resultater</div>';
+  searchResultsBox.classList.remove('hidden');
+}
+
+function hideSearchResults(){
+  searchResultsBox.classList.add('hidden');
+  searchResultsBox.innerHTML = '';
+}
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if(!q){
+    hideSearchResults();
+    // Gendan standard listen uden at flytte kortet
+    renderSpots(userLat, userLng);
+    return;
+  }
+  const matches = parkingSpots.filter(s =>
+    s.name.toLowerCase().includes(q) ||
+    s.address.toLowerCase().includes(q)
+  );
+  if(matches.length > 0){
+    renderSearchResults(matches);
+    searchResultsBox.classList.remove('hidden');
+  }else{
+    showNoResults();
+  }
+});
+
+clearSearch.addEventListener('click', () => {
+  searchInput.value = '';
+  hideSearchResults();
+  renderSpots(userLat, userLng);
+});
+
+// Luk dropdown ved ESC
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){
+    hideSearchResults();
+  }
+});
+
+// Luk dropdown hvis man klikker udenfor
+document.addEventListener('click', (e) => {
+  const wrapper = document.querySelector('.search-wrapper');
+  const inside = wrapper.contains(e.target) || searchResultsBox.contains(e.target);
+  if(!inside){
+    hideSearchResults();
+  }
+});
