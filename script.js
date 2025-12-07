@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
    Seed-data (kan udvides manuelt)
    ========================= */
 let parkingSpots = [
-  // Eksempler i større byer
   {name: "Tangkrogen", address: "Marselisborg Havnevej 4, 8000 Aarhus", lat: 56.1520, lng: 10.2030, note: "Stor p-plads ved havnen, ofte ledig om aftenen", timeLimit: "Ingen tidsbegrænsning", freeHours: "Hele dagen"},
   {name: "Ceres Park", address: "Stadion Allé 70, 8000 Aarhus", lat: 56.1515, lng: 10.2050, note: "Gratis i weekenden (typisk events afhænger af skiltning)", timeLimit: "Ingen tidsbegrænsning i weekenden", freeHours: "Lørdag-søndag"},
   {name: "Amager Strandpark", address: "Amager Strandvej, 2300 København S", lat: 55.6469, lng: 12.5950, note: "Stor p-plads ved stranden", timeLimit: "Varierer efter zone", freeHours: "Ofte efter kl. 18 (tjek skilte)"}
@@ -15,8 +14,6 @@ let parkingSpots = [
    ========================= */
 let userLat = 55.6761;
 let userLng = 12.5683;
-let addLat = null;
-let addLng = null;
 
 const map = L.map('map', { preferCanvas: true }).setView([userLat, userLng], 6);
 
@@ -37,11 +34,8 @@ function distance(lat1,lng1,lat2,lng2){
   const a=Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
   return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-function fmt(text){
-  return (text || "").trim();
-}
+function fmt(text){ return (text || "").trim(); }
 function isDuplicate(a, b){
-  // Duplikat hvis navn og adresse matcher, eller hvis koordinater er meget tæt på
   const nameMatch = fmt(a.name).toLowerCase() === fmt(b.name).toLowerCase();
   const addrMatch = fmt(a.address).toLowerCase() === fmt(b.address).toLowerCase();
   const close = distance(a.lat, a.lng, b.lat, b.lng) < 0.05; // 50 meter
@@ -173,76 +167,7 @@ if(navigator.geolocation){
 }
 
 /* =========================
-   Brugertilføjelse (modal)
-   ========================= */
-const toggleAddBtn = document.getElementById('toggleAddBtn');
-const addSpotBox = document.getElementById('addSpotBox');
-const useMyLocationAddBtn = document.getElementById('useMyLocationAddBtn');
-const addSpotBtn = document.getElementById('addSpotBtn');
-const cancelAddBtn = document.getElementById('cancelAddBtn');
-const addCoordsInfo = document.getElementById('addCoordsInfo');
-
-toggleAddBtn.addEventListener('click', ()=>{
-  addSpotBox.classList.toggle('hidden');
-});
-
-useMyLocationAddBtn.addEventListener('click', ()=>{
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      addLat = pos.coords.latitude;
-      addLng = pos.coords.longitude;
-      addCoordsInfo.textContent = `Valgte koordinater: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`;
-    }, ()=> {
-      addCoordsInfo.textContent = "Kunne ikke hente koordinater";
-    });
-  } else {
-    addCoordsInfo.textContent = "Geolocation understøttes ikke";
-  }
-});
-
-addSpotBtn.addEventListener('click', ()=>{
-  const name = document.getElementById('spotName').value.trim();
-  const address = document.getElementById('spotAddress').value.trim();
-  const note = document.getElementById('spotNote').value.trim();
-  const timeLimit = document.getElementById('spotTimeLimit').value.trim();
-  const freeHours = document.getElementById('spotFreeHours').value.trim();
-
-  if(!name || !address){
-    alert("Udfyld mindst navn og adresse.");
-    return;
-  }
-  if(addLat == null || addLng == null){
-    alert("Vælg koordinater med 'Brug min lokation' før du gemmer.");
-    return;
-  }
-
-  const newSpot = { name, address, lat:addLat, lng:addLng, note, timeLimit, freeHours };
-  const dup = parkingSpots.some(s => isDuplicate(s, newSpot));
-  if(dup){
-    alert("Ser ud til at denne placering allerede findes tæt på her.");
-    return;
-  }
-
-  parkingSpots.push(newSpot);
-  addSpotToMap(newSpot);
-  renderSpots(userLat, userLng);
-  addSpotBox.classList.add('hidden');
-
-  // Reset
-  document.getElementById('spotName').value="";
-  document.getElementById('spotAddress').value="";
-  document.getElementById('spotNote').value="";
-  document.getElementById('spotTimeLimit').value="";
-  document.getElementById('spotFreeHours').value="";
-  addLat=null; addLng=null; addCoordsInfo.textContent="Ingen koordinater valgt endnu";
-});
-
-cancelAddBtn.addEventListener('click', ()=>{
-  addSpotBox.classList.add('hidden');
-});
-
-/* =========================
-   Søgning (dummy placering)
+   Søgning (brug min lokation)
    ========================= */
 document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
   if(navigator.geolocation){
@@ -257,6 +182,142 @@ document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
 });
 
 /* =========================
+   Ny tilføj-flow
+   ========================= */
+const addFab = document.getElementById('addFab');
+const addModal = document.getElementById('addModal');
+const addCloseBtn = document.getElementById('addCloseBtn');
+const addName = document.getElementById('addName');
+const addAddress = document.getElementById('addAddress');
+const addUseLocation = document.getElementById('addUseLocation');
+const addStatus = document.getElementById('addStatus');
+const addSaveBtn = document.getElementById('addSaveBtn');
+
+let addLat = null;
+let addLng = null;
+
+function openAddModal(){
+  addModal.classList.remove('hidden');
+  addName.value = "";
+  addAddress.value = "";
+  addStatus.textContent = "Koordinater: ikke valgt";
+  addLat = null; addLng = null;
+}
+function closeAddModal(){
+  addModal.classList.add('hidden');
+}
+
+addFab.addEventListener('click', openAddModal);
+addCloseBtn.addEventListener('click', closeAddModal);
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeAddModal();
+});
+addModal.addEventListener('click', (e)=>{
+  // klik på overlay lukker modal (men ikke klik inde i boksen)
+  if(e.target === addModal) closeAddModal();
+});
+
+/* Reverse-geocoding med Nominatim */
+async function reverseGeocode(lat, lng){
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+  const res = await axios.get(url, {
+    headers: {
+      // En simpel identifikation; Nominatim kræver høflig brug
+      'Accept': 'application/json'
+    }
+  });
+  const data = res.data;
+  // Byg adresse-streng
+  if(data && data.address){
+    const a = data.address;
+    const parts = [
+      a.road || a.footway || a.pedestrian || a.cycleway,
+      a.house_number,
+      a.postcode,
+      a.city || a.town || a.village
+    ].filter(Boolean);
+    return parts.join(", ");
+  }
+  return data && data.display_name ? data.display_name : "Adresse ukendt";
+}
+
+addUseLocation.addEventListener('click', async ()=>{
+  addUseLocation.disabled = true;
+  addUseLocation.textContent = "Finder lokation...";
+  try {
+    if(!navigator.geolocation) {
+      addStatus.textContent = "Geolocation ikke understøttet";
+      return;
+    }
+    await new Promise((resolve, reject)=>{
+      navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000 });
+    }).then(async (pos)=>{
+      addLat = pos.coords.latitude;
+      addLng = pos.coords.longitude;
+      addStatus.textContent = `Koordinater: ${addLat.toFixed(5)}, ${addLng.toFixed(5)}`;
+      const addr = await reverseGeocode(addLat, addLng);
+      addAddress.value = addr || "";
+    }).catch(()=>{
+      addStatus.textContent = "Kunne ikke hente koordinater";
+    });
+  } finally {
+    addUseLocation.disabled = false;
+    addUseLocation.textContent = "Brug min lokation";
+  }
+});
+
+addSaveBtn.addEventListener('click', ()=>{
+  const name = fmt(addName.value);
+  const address = fmt(addAddress.value);
+  if(!name || !address){
+    alert("Udfyld mindst navn og adresse.");
+    return;
+  }
+
+  // Hvis bruger ikke brugte lokation, prøver vi at geocode adressen til koordinater (Nominatim forward)
+  async function forwardGeocode(query){
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=1`;
+    const res = await axios.get(url);
+    const arr = res.data;
+    if(arr && arr.length){
+      return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon) };
+    }
+    return null;
+  }
+
+  const finalizeSave = (coords) => {
+    if(!coords){
+      alert("Kunne ikke finde koordinater for adressen. Prøv 'Brug min lokation'.");
+      return;
+    }
+    const newSpot = {
+      name,
+      address,
+      lat: coords.lat,
+      lng: coords.lng,
+      note: "Tilføjet af bruger",
+      timeLimit: "",
+      freeHours: ""
+    };
+    const dup = parkingSpots.some(s => isDuplicate(s, newSpot));
+    if(dup){
+      alert("Ser ud til at denne placering allerede findes tæt på her.");
+      return;
+    }
+    parkingSpots.push(newSpot);
+    addSpotToMap(newSpot);
+    renderSpots(userLat, userLng);
+    closeAddModal();
+  };
+
+  if(addLat != null && addLng != null){
+    finalizeSave({lat:addLat, lng:addLng});
+  } else {
+    forwardGeocode(address).then(finalizeSave);
+  }
+});
+
+/* =========================
    OpenStreetMap import (Overpass)
    =========================
    Henter offentlige parkeringspladser i DK med fee=no (gratis),
@@ -264,14 +325,11 @@ document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
 */
 async function loadOSMFreeParking(){
   try{
-    // DK-bounding box (ca.): syd-vest [54.56, 8.07], nord-øst [57.75, 15.19]
     const bbox = "54.56,8.07,57.75,15.19";
     const q = `
       [out:json][timeout:25];
       (
-        // Noder (punkter) med amenity=parking og gratis (fee=no)
         node["amenity"="parking"]["fee"="no"](${bbox});
-        // Ways/relations, tagget uden betaling (fee=no)
         way["amenity"="parking"]["fee"="no"](${bbox});
         relation["amenity"="parking"]["fee"="no"](${bbox});
       );
@@ -297,13 +355,11 @@ async function loadOSMFreeParking(){
         ].filter(Boolean);
         const address = addrParts.join(", ") || "Adresse ukendt";
 
-        // Infofelter fra OSM tags
         const fee = tags.fee;
         const maxstay = tags.maxstay;
         const opening = tags.opening_hours;
-        const access = tags.access; // public/private
+        const access = tags.access;
         const notePieces = [];
-
         if(access) notePieces.push(`Adgang: ${access}`);
         if(fee === "no") notePieces.push("Gratis parkering");
         if(tags.parking) notePieces.push(`Type: ${tags.parking}`);
@@ -318,7 +374,6 @@ async function loadOSMFreeParking(){
           freeHours: opening ? opening : ""
         };
 
-        // Dedup: undgå overlap med eksisterende spots
         const exists = parkingSpots.some(s => isDuplicate(s, spot));
         if(!exists){
           parkingSpots.push(spot);
@@ -327,16 +382,12 @@ async function loadOSMFreeParking(){
         }
       });
     }
-
-    // Opdater nærmeste-liste efter import
     renderSpots(userLat, userLng);
     console.log(`OSM import: ${imported.length} gratis parkeringssteder indlæst.`);
   }catch(err){
     console.warn("Kunne ikke hente OSM-data:", err);
   }
 }
-
-// Kør import når kortet er klar
 loadOSMFreeParking();
 
 });
