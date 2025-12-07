@@ -96,37 +96,7 @@ function setUserMarker(lat,lng){
   }).addTo(map).bindPopup("Din position");
 }
 
-/* =========================
-   Ny "Spots i nærheden"
-   ========================= */
-function renderNearbySpots(lat=userLat, lng=userLng){
-  const list = document.getElementById('parkingList');
-  list.innerHTML = '';
 
-  // lav en kopi med afstand
-  const withDist = parkingSpots
-    .map(s => {
-      const dist = distance(lat, lng, s.lat, s.lng);
-      return {...s, dist};
-    })
-    .sort((a,b) => a.dist - b.dist); // sorter nærmest først
-
-  withDist.forEach(spot => {
-    const li = document.createElement('li');
-
-    // altid vis adresse – hvis mangler, brug "Ukendt adresse"
-    const addr = spot.address && spot.address.trim() ? spot.address : "Ukendt adresse";
-
-    li.textContent = `${spot.name} — ${addr} (${spot.dist.toFixed(1)} km)`;
-
-    li.addEventListener('click', () => {
-      map.setView([spot.lat, spot.lng], 15);
-      spot.marker && spot.marker.openPopup();
-    });
-
-    list.appendChild(li);
-  });
-}
 
 
 /* =========================
@@ -154,7 +124,8 @@ if(navigator.geolocation){
     userLng=pos.coords.longitude;
     setUserMarker(userLat,userLng);
     map.setView([userLat,userLng],12);
-    initialRender();
+    renderNearbySpots(userLat, userLng);
+
   },()=>{ initialRender(); });
 }else{ initialRender(); }
 
@@ -199,7 +170,7 @@ searchInput.addEventListener('input', applySearch);
 clearSearch.addEventListener('click', ()=>{
   searchInput.value = '';
   map.setView([userLat,userLng],12);
-  renderSpots(userLat,userLng);
+  renderNearbySpots(userLat, userLng);
 });
 
 /* =========================
@@ -434,3 +405,32 @@ document.addEventListener('click', (e) => {
 });
 
 renderNearbySpots(userLat, userLng);
+
+/* =========================
+   Ny "Spots i nærheden"
+   ========================= */
+function renderNearbySpots(lat=userLat, lng=userLng){
+  const list = document.getElementById('parkingList');
+  list.innerHTML = '';
+
+  const withDist = parkingSpots
+    .map(s => {
+      const dist = distance(lat, lng, s.lat, s.lng);
+      return {...s, dist};
+    })
+    .sort((a,b) => a.dist - b.dist); // nærmest først
+
+  withDist.forEach(spot => {
+    const li = document.createElement('li');
+    const addr = spot.address && spot.address.trim() ? spot.address : "Ukendt adresse";
+    li.textContent = `${spot.name} — ${addr} (${spot.dist.toFixed(1)} km)`;
+
+    li.addEventListener('click', () => {
+      map.setView([spot.lat, spot.lng], 15);
+      spot.marker && spot.marker.openPopup();
+    });
+
+    list.appendChild(li);
+  });
+}
+
