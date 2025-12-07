@@ -2,96 +2,71 @@
 <html lang="da">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FreePark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreePark Danmark</title>
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>FreePark</h1>
-    <p class="tagline">Din guide til gratis parkering i Danmark</p>
-    <p class="warning">⚠️ Tjek altid lokale skilte – regler kan ændre sig</p>
+  <header class="app-header">
+    <div class="header-inner">
+      <h1 class="app-title">FreePark</h1>
+      <p class="app-subtitle">Gratis parkering i Danmark • tjek altid lokale skilte</p>
+    </div>
   </header>
 
- <!-- Ny søgefunktion -->
-<section id="search-section">
-  <div class="search-wrapper">
-    <input id="searchInput" type="text" placeholder="🔍 Søg område eller adresse..." autocomplete="off" />
-    <button id="clearSearch" title="Ryd søgning" aria-label="Ryd">✕</button>
-  </div>
-
-  <!-- Tilføj denne nye linje lige under .search-wrapper -->
-  <div id="searchResults" class="search-results hidden"></div>
-</section>
-
+  <!-- Search section -->
+  <section id="search-section" aria-label="Søg efter parkering">
+    <div class="search-wrapper">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="🔍 Søg område, by eller adresse (fx: Amager, Brøndby, Odense...)"
+        autocomplete="off"
+        aria-label="Søg efter parkeringsplads"
+      />
+      <button id="clearSearch" class="search-clear" title="Ryd søgning" aria-label="Ryd søgning">✕</button>
+    </div>
+    <div id="searchResults" class="search-results hidden" role="listbox" aria-label="Søgeresultater"></div>
+  </section>
 
   <!-- Map -->
-  <div id="map"></div>
+  <main>
+    <div id="map" role="region" aria-label="Danmarkskort: gratis parkering"></div>
 
-  <!-- Nearby list -->
-<section id="list-section">
-  <h2>Spots i nærheden</h2>
-  <ul id="parkingList"></ul>
-</section>
-
-
-  <!-- Add button (FAB) -->
-  <button id="addFab" title="Tilføj parkering">+</button>
-
-  <!-- Add modal -->
-  <div id="addModal" class="hidden">
-    <div class="add-modal-content">
-      <div class="add-modal-header">
-        <h3>Tilføj gratis parkering</h3>
-        <button id="addCloseBtn" aria-label="Luk">✕</button>
+    <!-- Nearby list -->
+    <section id="list-section" aria-label="Spots i nærheden">
+      <div class="list-header">
+        <h2>Spots i nærheden</h2>
+        <p id="nearbyMeta" class="nearby-meta">Afstand fra din nuværende position</p>
       </div>
-      <div class="add-modal-body">
-        <label class="add-label">Navn</label>
-        <input id="addName" type="text" placeholder="Navn / vejnavn" />
-
-        <label class="add-label">Adresse</label>
-        <div class="add-address-row">
-          <input id="addAddress" type="text" placeholder="Adresse (gadenavn, by)" />
-          <button id="addUseLocation" class="secondary">Brug min lokation</button>
-        </div>
-        <p id="addStatus" class="add-status">Koordinater: ikke valgt</p>
-
-        <label class="add-label">Note (valgfri)</label>
-        <input id="addNote" type="text" placeholder="Kort beskrivelse (fx: tæt på stadion, ofte ledig)" />
-        <div class="add-row">
-          <input id="addTimeLimit" type="text" placeholder="Tidsbegrænsning (fx: 2 timer)" />
-          <input id="addFreeHours" type="text" placeholder="Gratisperioder (fx: efter kl. 18)" />
-        </div>
-      </div>
-      <div class="add-modal-footer">
-        <button id="addSaveBtn" class="primary">Gem</button>
-      </div>
-    </div>
-  </div>
+      <ul id="parkingList" class="parking-list" role="list"></ul>
+    </section>
+  </main>
 
   <!-- Info modal -->
-  <div id="infoModal" class="hidden">
-    <div class="modal">
-      <h3 id="infoTitle"></h3>
-      <p id="infoAddress"></p>
-      <div id="infoDetails"></div>
-      <button id="closeInfoBtn" class="danger">Luk</button>
+  <div id="infoModal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <div class="modal-header">
+        <h3 id="infoTitle"></h3>
+        <button id="closeInfoBtn" class="modal-close" aria-label="Luk">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="infoAddress"></p>
+        <div id="infoDetails"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Leaflet + Axios -->
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-  <!-- App code -->
   <script src="script.js"></script>
 </body>
 </html>
