@@ -22,11 +22,11 @@
     <p class="warning">⚠️ Tjek altid lokale skilte – regler kan ændre sig</p>
   </header>
 
-  <!-- Search (above map) -->
+  <!-- Search -->
   <section id="search-section">
-    <div class="search-wrapper" style="max-width:600px;margin:0 auto;display:flex;gap:8px;">
-      <input id="searchInput" type="text" placeholder="Søg adresse eller område (fx: Amager)..." autocomplete="off" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:6px;" />
-      <button id="useMyLocationBtn" title="Brug min lokation" style="padding:10px 12px;border:none;background:#007AFF;color:#fff;border-radius:6px;cursor:pointer;">📍</button>
+    <div class="search-wrapper">
+      <input id="searchInput" type="text" placeholder="Søg adresse eller område..." autocomplete="off" />
+      <button id="useMyLocationBtn" title="Brug min lokation">📍</button>
     </div>
     <div id="searchResults" class="results hidden"></div>
   </section>
@@ -35,45 +35,44 @@
   <div id="map"></div>
 
   <!-- Nearby list -->
-  <section id="list-section" style="max-width:900px;margin:0 auto;padding:10px;">
+  <section id="list-section">
     <h2>Spots i nærheden</h2>
     <ul id="parkingList"></ul>
   </section>
-<!-- Ny Add button og modal -->
-<button id="addFab" title="Tilføj parkering">+</button>
 
-<div id="addModal" class="hidden">
-  <div class="add-modal-content">
-    <div class="add-modal-header">
-      <h3>Tilføj gratis parkering</h3>
-      <button id="addCloseBtn" aria-label="Luk">✕</button>
-    </div>
-    <div class="add-modal-body">
-      <label>Navn</label>
-      <input id="addName" type="text" placeholder="Navn / vejnavn" />
+  <!-- Plus-knap -->
+  <button id="addFab" title="Tilføj parkering">+</button>
 
-      <label>Adresse</label>
-      <div style="display:flex;gap:8px;">
-        <input id="addAddress" type="text" placeholder="Adresse (gadenavn, by)" style="flex:1;" />
-        <button id="addUseLocation" class="secondary">Brug min lokation</button>
+  <!-- Tilføj-modal -->
+  <div id="addModal" class="hidden">
+    <div class="add-modal-content">
+      <div class="add-modal-header">
+        <h3>Tilføj gratis parkering</h3>
+        <button id="addCloseBtn" aria-label="Luk">✕</button>
       </div>
-      <p id="addStatus" style="font-size:0.9rem;color:#666;">Koordinater: ikke valgt</p>
-    </div>
-    <div class="add-modal-footer">
-      <button id="addSaveBtn" class="primary">Gem</button>
+      <div class="add-modal-body">
+        <label>Navn</label>
+        <input id="addName" type="text" placeholder="Navn / vejnavn" />
+
+        <label>Adresse</label>
+        <div class="add-address-row">
+          <input id="addAddress" type="text" placeholder="Adresse (gadenavn, by)" />
+          <button id="addUseLocation" class="secondary">Brug min lokation</button>
+        </div>
+        <p id="addStatus" class="add-status">Koordinater: ikke valgt</p>
+      </div>
+      <div class="add-modal-footer">
+        <button id="addSaveBtn" class="primary">Gem</button>
+      </div>
     </div>
   </div>
-</div>
-
- 
-  
 
   <!-- Info modal -->
   <div id="infoModal" class="hidden">
     <div class="modal">
       <h3 id="infoTitle"></h3>
       <p id="infoAddress"></p>
-      <div id="infoDetails" style="margin:8px 0;"></div>
+      <div id="infoDetails"></div>
       <button id="closeInfoBtn" class="danger">Luk</button>
     </div>
   </div>
