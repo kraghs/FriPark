@@ -16,16 +16,14 @@ let userLat = 55.6761;
 let userLng = 12.5683;
 
 /* =========================
-   Map init (kritisk: kør først)
+   Map (Carto Voyager = clean look)
    ========================= */
 const map = L.map('map', { preferCanvas: true }).setView([userLat, userLng], 6);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap & CARTO',
   subdomains: 'abcd',
   maxZoom: 20
 }).addTo(map);
-
-   
 
 /* =========================
    Utils
@@ -99,26 +97,29 @@ function setUserMarker(lat,lng){
 }
 
 /* =========================
-   Render 5 nearest
+   Nearest list
    ========================= */
 function renderSpots(lat=userLat,lng=userLng){
   const list=document.getElementById('parkingList');
   list.innerHTML='';
-  const nearby=parkingSpots
+  const sorted=parkingSpots
     .map(s=>({...s,dist:distance(lat,lng,s.lat,s.lng)}))
     .sort((a,b)=>a.dist-b.dist)
-    .slice(0,5);
+    .slice(0,10);
 
-  nearby.forEach(spot=>{
+  sorted.forEach(spot=>{
     const li=document.createElement('li');
+
     const left=document.createElement('div');
     left.textContent=`${spot.name} - ${spot.address} (${spot.dist.toFixed(1)} km)`;
+
     const infoBtn=document.createElement('button');
     infoBtn.textContent="Se info";
     infoBtn.addEventListener('click', (e)=>{
       e.stopPropagation();
       openInfoModal(spot);
     });
+
     li.appendChild(left);
     li.appendChild(infoBtn);
     li.addEventListener('click',()=>{map.setView([spot.lat,spot.lng],15); spot.marker && spot.marker.openPopup();});
@@ -142,7 +143,7 @@ function openInfoModal(spot){
 document.getElementById('closeInfoBtn').addEventListener('click',()=>document.getElementById('infoModal').classList.add('hidden'));
 
 /* =========================
-   Geolocation + render
+   Geolocation + initial render
    ========================= */
 function initialRender(){ renderSpots(); }
 if(navigator.geolocation){
@@ -156,22 +157,51 @@ if(navigator.geolocation){
 }else{ initialRender(); }
 
 /* =========================
-   Søgning (brug min lokation knap)
+   Slick search: filter + fit bounds
    ========================= */
-document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      userLat=pos.coords.latitude;
-      userLng=pos.coords.longitude;
-      setUserMarker(userLat,userLng);
-      map.setView([userLat,userLng],12);
-      renderSpots(userLat,userLng);
-    }, ()=>{ /* ignore */ });
+const searchInput = document.getElementById('searchInput');
+const clearSearch = document.getElementById('clearSearch');
+
+function applySearch(){
+  const query = searchInput.value.trim().toLowerCase();
+  const list = document.getElementById('parkingList');
+  list.innerHTML = '';
+
+  const results = query
+    ? parkingSpots.filter(spot =>
+        spot.name.toLowerCase().includes(query) ||
+        spot.address.toLowerCase().includes(query))
+    : parkingSpots
+        .map(s=>({...s,dist:distance(userLat,userLng,s.lat,s.lng)}))
+        .sort((a,b)=>a.dist-b.dist)
+        .slice(0,10);
+
+  results.forEach(spot=>{
+    const li=document.createElement('li');
+    li.textContent=`${spot.name} - ${spot.address}`;
+    li.addEventListener('click',()=>{
+      map.setView([spot.lat,spot.lng],14);
+      spot.marker && spot.marker.openPopup();
+    });
+    list.appendChild(li);
+  });
+
+  if(results.length>0){
+    const group = L.featureGroup(results.map(s=>s.marker).filter(Boolean));
+    if(group.getLayers().length>0){
+      map.fitBounds(group.getBounds().pad(0.2));
+    }
   }
+}
+searchInput.addEventListener('input', applySearch);
+clearSearch.addEventListener('click', ()=>{
+  searchInput.value = '';
+  map.setView([userLat,userLng],12);
+  renderSpots(userLat,userLng);
 });
 
 /* =========================
-   Ny Tilføj parkering flow (FAB + modal)
+   Add parking modal
    ========================= */
 const addFab = document.getElementById('addFab');
 const addModal = document.getElementById('addModal');
@@ -180,6 +210,9 @@ const addName = document.getElementById('addName');
 const addAddress = document.getElementById('addAddress');
 const addUseLocation = document.getElementById('addUseLocation');
 const addStatus = document.getElementById('addStatus');
+const addNote = document.getElementById('addNote');
+const addTimeLimit = document.getElementById('addTimeLimit');
+const addFreeHours = document.getElementById('addFreeHours');
 const addSaveBtn = document.getElementById('addSaveBtn');
 
 let addLat = null;
@@ -188,6 +221,7 @@ let addLng = null;
 function openAddModal(){
   addModal.classList.remove('hidden');
   addName.value=""; addAddress.value="";
+  addNote.value=""; addTimeLimit.value=""; addFreeHours.value="";
   addStatus.textContent="Koordinater: ikke valgt";
   addLat=null; addLng=null;
 }
@@ -234,10 +268,13 @@ addUseLocation.addEventListener('click', ()=>{
 addSaveBtn.addEventListener('click', ()=>{
   const name = fmt(addName.value);
   const address = fmt(addAddress.value);
+  const note = fmt(addNote.value);
+  const timeLimit = fmt(addTimeLimit.value);
+  const freeHours = fmt(addFreeHours.value);
   if(!name || !address){ alert("Udfyld mindst navn og adresse."); return; }
   if(addLat == null || addLng == null){ alert("Brug 'Brug min lokation' først."); return; }
 
-  const newSpot = { name, address, lat:addLat, lng:addLng, note:"Tilføjet af bruger", timeLimit:"", freeHours:"" };
+  const newSpot = { name, address, lat:addLat, lng:addLng, note, timeLimit, freeHours };
   if(parkingSpots.some(s=>isDuplicate(s,newSpot))){ alert("Denne placering findes allerede tæt på her."); return; }
 
   parkingSpots.push(newSpot);
@@ -247,11 +284,11 @@ addSaveBtn.addEventListener('click', ()=>{
 });
 
 /* =========================
-   OpenStreetMap import (Overpass)
+   OSM import (Overpass) – fee=no
    ========================= */
 async function loadOSMFreeParking(){
   try{
-    const bbox = "54.56,8.07,57.75,15.19"; // DK ca. bounding box
+    const bbox = "54.56,8.07,57.75,15.19"; // DK approx
     const q = `
       [out:json][timeout:30];
       (
@@ -310,43 +347,3 @@ async function loadOSMFreeParking(){
 loadOSMFreeParking();
 
 });
-/* =========================
-   Slick søgefunktion (fix)
-   ========================= */
-const searchInput = document.getElementById('searchInput');
-
-searchInput.addEventListener('input', ()=>{
-  const query = searchInput.value.trim().toLowerCase();
-  const list = document.getElementById('parkingList');
-  list.innerHTML = '';
-
-  // filtrer spots
-  const filtered = parkingSpots.filter(spot =>
-    spot.name.toLowerCase().includes(query) ||
-    spot.address.toLowerCase().includes(query)
-  );
-
-  // hvis der er en søgning, vis kun matches i listen
-  // ellers vis de nærmeste som normalt
-  const results = query ? filtered : parkingSpots;
-
-  results.forEach(spot=>{
-    const li=document.createElement('li');
-    li.textContent=`${spot.name} - ${spot.address}`;
-    li.addEventListener('click',()=>{
-      map.setView([spot.lat,spot.lng],14);
-      spot.marker && spot.marker.openPopup();
-    });
-    list.appendChild(li);
-  });
-
-  // zoom kortet til alle matches, men behold markører
-  if(query && results.length>0){
-    const group = L.featureGroup(results.map(s=>s.marker));
-    map.fitBounds(group.getBounds().pad(0.2));
-  } else {
-    // hvis feltet er tomt, vis standardlisten igen
-    renderSpots(userLat,userLng);
-  }
-});
-
