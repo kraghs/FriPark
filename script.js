@@ -311,7 +311,7 @@ loadOSMFreeParking();
 
 });
 /* =========================
-   Slick søgefunktion
+   Slick søgefunktion (fix)
    ========================= */
 const searchInput = document.getElementById('searchInput');
 
@@ -326,7 +326,8 @@ searchInput.addEventListener('input', ()=>{
     spot.address.toLowerCase().includes(query)
   );
 
-  // vis matches (eller alle hvis query er tom)
+  // hvis der er en søgning, vis kun matches i listen
+  // ellers vis de nærmeste som normalt
   const results = query ? filtered : parkingSpots;
 
   results.forEach(spot=>{
@@ -339,9 +340,13 @@ searchInput.addEventListener('input', ()=>{
     list.appendChild(li);
   });
 
-  // hvis der er matches, zoom kortet til dem alle
-  if(results.length>0){
+  // zoom kortet til alle matches, men behold markører
+  if(query && results.length>0){
     const group = L.featureGroup(results.map(s=>s.marker));
     map.fitBounds(group.getBounds().pad(0.2));
+  } else {
+    // hvis feltet er tomt, vis standardlisten igen
+    renderSpots(userLat,userLng);
   }
 });
+
