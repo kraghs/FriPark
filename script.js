@@ -22,11 +22,12 @@ let userLng = 12.5683;
 let map = L.map('map').setView([userLat, userLng], 6);
 
 // Brug et mørkt tilelayer (dark mode)
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
   subdomains: 'abcd',
-  maxZoom: 20
+  maxZoom: 19
 }).addTo(map);
+
 
 let userMarker;
 
