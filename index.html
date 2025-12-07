@@ -15,7 +15,7 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
-<body class="dark">
+<body>
   <header>
     <h1>FreePark</h1>
     <p class="tagline">Din guide til gratis parkering i Danmark</p>
@@ -24,9 +24,9 @@
 
   <!-- Search (above map) -->
   <section id="search-section">
-    <div class="search-wrapper">
-      <input id="searchInput" type="text" placeholder="Søg adresse eller område (fx: Amager)..." autocomplete="off" />
-      <button id="useMyLocationBtn" title="Brug min lokation">📍</button>
+    <div class="search-wrapper" style="max-width:600px;margin:0 auto;display:flex;gap:8px;">
+      <input id="searchInput" type="text" placeholder="Søg adresse eller område (fx: Amager)..." autocomplete="off" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:6px;" />
+      <button id="useMyLocationBtn" title="Brug min lokation" style="padding:10px 12px;border:none;background:#007AFF;color:#fff;border-radius:6px;cursor:pointer;">📍</button>
     </div>
     <div id="searchResults" class="results hidden"></div>
   </section>
@@ -35,7 +35,7 @@
   <div id="map"></div>
 
   <!-- Nearby list -->
-  <section id="list-section">
+  <section id="list-section" style="max-width:900px;margin:0 auto;padding:10px;">
     <h2>Spots i nærheden</h2>
     <ul id="parkingList"></ul>
   </section>
@@ -43,16 +43,24 @@
   <!-- Add button and modal -->
   <button id="toggleAddBtn" title="Tilføj parkering">+</button>
 
-  <div id="addSpotBox" class="hidden">
-    <div class="modal">
+  <div id="addSpotBox" class="hidden" style="position:fixed;bottom:80px;right:20px;left:20px;">
+    <div class="modal" style="background:#fff;padding:16px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
       <h2>Tilføj gratis parkering</h2>
-      <input id="spotName" type="text" placeholder="Navn / vejnavn" />
-      <input id="spotAddress" type="text" placeholder="Adresse (gadenavn, by)" />
-      <div class="small-row">
-        <button id="useMyLocationAddBtn" class="secondary">Brug min lokation</button>
+      <input id="spotName" type="text" placeholder="Navn / vejnavn" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:6px;" />
+      <input id="spotAddress" type="text" placeholder="Adresse (gadenavn, by)" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:6px;" />
+      <textarea id="spotNote" placeholder="Kort beskrivelse (fx: tæt på stadion, ofte ledig)" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:6px;"></textarea>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="spotTimeLimit" type="text" placeholder="Tidsbegrænsning (fx: 2 timer)" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:6px;" />
+        <input id="spotFreeHours" type="text" placeholder="Gratisperioder (fx: efter kl. 18)" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:6px;" />
       </div>
-      <button id="addSpotBtn">Gem</button>
-      <button id="cancelAddBtn" class="danger">Annuller</button>
+      <div class="small-row" style="display:flex;gap:8px;margin-bottom:8px;">
+        <button id="useMyLocationAddBtn" class="secondary" style="padding:8px 10px;border:none;background:#eee;border-radius:6px;cursor:pointer;">Brug min lokation</button>
+        <span id="addCoordsInfo" style="align-self:center;color:#666;font-size:0.9rem;">Ingen koordinater valgt endnu</span>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button id="addSpotBtn" style="padding:8px 12px;border:none;background:#007AFF;color:#fff;border-radius:6px;cursor:pointer;">Gem</button>
+        <button id="cancelAddBtn" class="danger" style="padding:8px 12px;border:none;background:#d9534f;color:#fff;border-radius:6px;cursor:pointer;">Annuller</button>
+      </div>
     </div>
   </div>
 
@@ -61,7 +69,7 @@
     <div class="modal">
       <h3 id="infoTitle"></h3>
       <p id="infoAddress"></p>
-      <p id="infoNote"></p>
+      <div id="infoDetails" style="margin:8px 0;"></div>
       <button id="closeInfoBtn" class="danger">Luk</button>
     </div>
   </div>
