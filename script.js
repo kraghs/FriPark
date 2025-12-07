@@ -28,6 +28,7 @@ let userLat = 55.6761;
 let userLng = 12.5683;
 let map, userMarker;
 
+// Init map
 map = L.map('map', { preferCanvas: true }).setView([userLat, userLng], 6);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap & CARTO',
@@ -35,6 +36,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
   maxZoom: 20
 }).addTo(map);
 
+// Distance utility
 function toRad(x){ return x*Math.PI/180; }
 function distance(lat1,lng1,lat2,lng2){
   const R=6371;
@@ -44,124 +46,80 @@ function distance(lat1,lng1,lat2,lng2){
   return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-parkingSpots.forEach(spot=>{
-  const circle = L.circleMarker([spot.lat, spot.lng], { radius:6, color:'#0bb07b', weight:2, fillColor:'#00c07b', fillOpacity:1 }).addTo(map);
-  circle.bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small><br><div style="margin-top:8px;"><button onclick="window.openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button></div>`);
-  spot.marker = circle;
-  circle.on('click', ()=>{ map.setView([spot.lat, spot.lng], 14); circle.openPopup(); });
-});
+// Escape helpers
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeJs(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
 
-function setUserMarker(lat,lng){
-  if(userMarker) map.removeLayer(userMarker);
-  userMarker = L.circleMarker([lat,lng], { radius:8, color:'#ffffff', weight:3, fillColor:'#007AFF', fillOpacity:1 }).addTo(map).bindPopup("Din position");
-}
-
-function renderSpots(lat=userLat,lng=userLng){
-  const list=document.getElementById('parkingList');
-  list.innerHTML='';
-  const nearby=parkingSpots.map(s=>({...s,dist:distance(lat,lng,s.lat,s.lng)})).sort((a,b)=>a.dist-b.dist).slice(0,5);
-  nearby.forEach(spot=>{
-    const li=document.createElement('li');
-    const infoBtn=document.createElement('button');
-    infoBtn.textContent="Se info";
-    infoBtn.addEventListener('click',()=>openInfoModal(spot));
-    li.innerHTML=`${spot.name} - ${spot.address} (${spot.dist.toFixed(1)} km) `;
-    li.appendChild(infoBtn);
-    li.addEventListener('click',()=>{map.setView([spot.lat,spot.lng],15);});
-    list.appendChild(li);
-    if(!spot.marker) spot.marker=L.marker([spot.lat,spot.lng]).addTo(map).bindPopup(spot.name);
-  });
-}
-
+// Modal
 function openInfoModal(spot){
-  document.getElementById('infoTitle').textContent=spot.name;
-  document.getElementById('infoAddress').textContent="Adresse: "+spot.address;
-  document.getElementById('infoNote').textContent="Info: "+spot.note;
+  document.getElementById('infoTitle').textContent = spot.name;
+  document.getElementById('infoAddress').textContent = "Adresse: " + spot.address;
+  document.getElementById('infoNote').textContent = "Info: " + spot.note;
   document.getElementById('infoModal').classList.remove('hidden');
 }
-document.getElementById('closeInfoBtn').addEventListener('click',()=>document.getElementById('infoModal').classList.add('hidden'));
-
+document.getElementById('closeInfoBtn').addEventListener('click', ()=> document.getElementById('infoModal').classList.add('hidden'));
 window.openInfoFromMarker = function(name){
-  const spot = parkingSpots.find(s => s.name === name);
+  const spot = parkingSpots.find(s=>s.name===name);
   if(spot) openInfoModal(spot);
 };
 
+// Add markers
+parkingSpots.forEach(spot=>{
+  const circle = L.circleMarker([spot.lat, spot.lng], { radius:6, color:'#0bb07b', weight:2, fillColor:'#00c07b', fillOpacity:1 }).addTo(map);
+  spot.marker = circle;
+  circle.on('click', ()=>{ map.setView([spot.lat, spot.lng],14); circle.openPopup(); });
+  circle.bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.address)}<br><button onclick="window.openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;color:white;border:none;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600;margin-top:4px;">Se info</button>`);
+});
+
+// User marker
+function setUserMarker(lat,lng){
+  if(userMarker) map.removeLayer(userMarker);
+  userMarker = L.circleMarker([lat,lng], { radius:8, color:'#fff', weight:3, fillColor:'#007AFF', fillOpacity:1 }).addTo(map).bindPopup("Din position");
+}
+
+// Render nearby
+function renderSpots(lat=userLat,lng=userLng){
+  const list = document.getElementById('parkingList');
+  list.innerHTML = '';
+  parkingSpots.map(s=>({...s,dist:distance(lat,lng,s.lat,s.lng)})).sort((a,b)=>a.dist-b.dist).slice(0,5).forEach(spot=>{
+    const li=document.createElement('li');
+    li.innerHTML = `<strong>${escapeHtml(spot.name)}</strong><div>${escapeHtml(spot.address)} • ${spot.dist.toFixed(1)} km</div>`;
+    const btn=document.createElement('button');
+    btn.textContent='Se info';
+    btn.addEventListener('click', ()=> openInfoModal(spot));
+    li.appendChild(btn);
+    li.addEventListener('click', ()=> map.setView([spot.lat,spot.lng],14));
+    list.appendChild(li);
+  });
+}
+
+// Init geolocation
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+    setUserMarker(userLat,userLng); map.setView([userLat,userLng],12); renderSpots();
+  }, ()=>{ renderSpots(); });
+}else{ renderSpots(); }
+
+// Search
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
-searchInput.addEventListener('input', (e) => {
+searchInput.addEventListener('input', e=>{
   const q = e.target.value.trim().toLowerCase();
   if(!q){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
-  const matches = parkingSpots.filter(s => s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q));
-  if(matches.length === 0){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
-  searchResults.innerHTML = '';
-  matches.forEach(spot => {
-    const row = document.createElement('div');
-    row.className = 'result';
-    row.innerHTML = `<div><strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small></div><div><small>${distance(userLat,userLng,spot.lat,spot.lng).toFixed(1)} km</small></div>`;
-    row.addEventListener('click', () => {
-      map.setView([spot.lat, spot.lng], 14);
+  const matches = parkingSpots.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q));
+  if(matches.length===0){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
+  searchResults.innerHTML='';
+  matches.forEach(spot=>{
+    const row=document.createElement('div'); row.className='result';
+    row.innerHTML=`<div><strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small></div><div><small>${distance(userLat,userLng,spot.lat,spot.lng).toFixed(1)} km</small></div>`;
+    row.addEventListener('click', ()=>{
+      map.setView([spot.lat,spot.lng],14);
       if(spot.marker) spot.marker.openPopup();
       openInfoModal(spot);
-      searchResults.classList.add('hidden'); searchResults.innerHTML='';
-      searchInput.value='';
+      searchResults.classList.add('hidden'); searchResults.innerHTML=''; searchInput.value='';
     });
     searchResults.appendChild(row);
   });
   searchResults.classList.remove('hidden');
-});
-
-document.getElementById('useMyLocationBtn').addEventListener('click', () => {
-  if(!navigator.geolocation){ alert('Din browser understøtter ikke geolokation'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-    setUserMarker(userLat,userLng);
-    map.setView([userLat,userLng],12);
-    renderSpots();
-  }, ()=> alert('Kunne ikke hente din lokation'));
-});
-
-document.getElementById('useMyLocationAddBtn').addEventListener('click', () => {
-  if(!navigator.geolocation){ alert('Din browser understøtter ikke geolokation'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-    document.getElementById('spotAddress').value=`${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
-    alert('Din lokation er sat i adressefeltet. Tryk Gem for at gemme spotet her.');
-  }, ()=> alert('Kunne ikke hente din lokation'));
-});
-
-document.getElementById('toggleAddBtn').addEventListener('click',()=> document.getElementById('addSpotBox').classList.toggle('hidden'));
-document.getElementById('cancelAddBtn').addEventListener('click',()=> document.getElementById('addSpotBox').classList.add('hidden'));
-
-document.getElementById('addSpotBtn').addEventListener('click',()=>{
-  const name=document.getElementById('spotName').value.trim();
-  const address=document.getElementById('spotAddress').value.trim();
-  if(!name || !address){ alert('Udfyld navn og adresse'); return; }
-
-  const coordMatch = address.match(/^\s*([-+]?\d+\.\d+)\s*,\s*([-+]?\d+\.\d+)\s*$/);
-  if(coordMatch){ const lat=parseFloat(coordMatch[1]), lng=parseFloat(coordMatch[2]); pushNewSpot(name,address,lat,lng); return; }
-
-  axios.get('https://nominatim.openstreetmap.org/search', { params:{q:address, format:'json', limit:1}})
-       .then(resp=>{ if(!resp.data || resp.data.length===0){alert('Adresse ikke fundet'); return;}
-         const lat=parseFloat(resp.data[0].lat), lng=parseFloat(resp.data[0].lon);
-         pushNewSpot(name,address,lat,lng);
-       }).catch(()=>alert('Fejl ved geokodning'));
-});
-
-function pushNewSpot(name,address,lat,lng){
-  const spot={name,address,lat,lng,note:'Bruger-tilføjet'};
-  parkingSpots.push(spot);
-  spot.marker=L.circleMarker([lat,lng],{radius:6,color:'#0bb07b',weight:2,fillColor:'#00c07b',fillOpacity:1}).addTo(map);
-  spot.marker.bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small><br><div style="margin-top:8px;"><button onclick="window.openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#007AFF;border:none;color:white;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button></div>`);
-  document.getElementById('spotName').value=''; document.getElementById('spotAddress').value='';
-  document.getElementById('addSpotBox').classList.add('hidden');
-  renderSpots();
-}
-
-if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(pos=>{userLat=pos.coords.latitude; userLng=pos.coords.longitude; setUserMarker(userLat,userLng); map.setView([userLat,userLng],12); renderSpots();}, ()=>{renderSpots();});
-}else{renderSpots();}
-
-function escapeHtml(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function escapeJs(s){return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"');}
-
 });
