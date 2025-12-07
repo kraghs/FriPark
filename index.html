@@ -6,29 +6,33 @@
   <title>FreePark</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
   <header>
     <h1>FreePark</h1>
-    <p>Gratis parkering i Danmark</p>
+    <p>Gratis parkering i København og Aarhus</p>
   </header>
 
   <div id="map"></div>
 
   <section>
-    <h2>Parkeringspladser i nærheden</h2>
+    <h2>De 5 tætteste parkeringspladser</h2>
+    <input type="text" id="searchInput" placeholder="Søg efter adresse...">
     <ul id="parkingList"></ul>
   </section>
 
   <section>
-    <h2>Tilføj ny gratis parkering</h2>
-    <input type="text" id="spotName" placeholder="Navn på plads">
-    <input type="text" id="spotAddress" placeholder="Adresse">
-    <button id="addSpotBtn">+</button>
+    <button id="toggleAddBtn">+ Tilføj parkering</button>
+    <div id="addSpotBox" class="hidden">
+      <input type="text" id="spotName" placeholder="Navn på plads">
+      <input type="text" id="spotAddress" placeholder="Adresse">
+      <button id="addSpotBtn">Tilføj</button>
+    </div>
   </section>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <script src="script.js"></script>
 </body>
 </html>
