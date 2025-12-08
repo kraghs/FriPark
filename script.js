@@ -1,29 +1,47 @@
-/* FreePark – DK-only gratis parkering
-   - Apple-agtig oplevelse
-   - DK-area søgning, 5 nærmeste, tilføj med reverse geocoding
+/* FreePark – ren implementering der virker
+   - Leaflet med OSM tiles
+   - DK-only søgning og reverse geocoding via Nominatim
+   - 5 nærmeste, + tilføj med "Brug min lokation"
 */
 
-// Nominatim endpoints (OpenStreetMap)
 const NOMINATIM_SEARCH = "https://nominatim.openstreetmap.org/search";
 const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
 
-// State
-let map, userMarker, userLatLng = null;
-let parkingData = [];          // Merged base + user-added
-let baseParkingData = [];      // Seed dataset (replace/extend from real sources)
-let markersLayer = null;
-let areaBBox = null;           // Current area bounding box (if search)
+let map, markersLayer, userMarker, accuracyCircle;
+let userLatLng = null;
+let areaBBox = null; // [minLon, minLat, maxLon, maxLat]
+
+let parkingData = [];
+let baseParkingData = [];
+
+// Seed-data (erstattes senere med din kuraterede fulde liste)
+baseParkingData = [
+  {
+    id: "kbh-vanlose-st",
+    name: "Vanløse Station (3 timers gratis)",
+    address: "Vanløse Allé 40, 2720 Vanløse",
+    lat: 55.6909, lon: 12.4920,
+    info: "3 timers gratis hverdage; tjek skiltning."
+  },
+  {
+    id: "roskilde-st",
+    name: "Roskilde Station – gratis i perioder",
+    address: "Jernbanegade, 4000 Roskilde",
+    lat: 55.6410, lon: 12.0876,
+    info: "Gratis ved udvalgte tider; tjek skiltning."
+  }
+];
 
 // Utils
 function kmDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // km
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat/2)**2 +
             Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
             Math.sin(dLon/2)**2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return Math.round((R * c + Number.EPSILON) * 100) / 100; // 2 decimals
+  return Math.round((R * c + Number.EPSILON) * 100) / 100;
 }
 
 function createUserLocationIcon() {
@@ -35,11 +53,10 @@ function createUserLocationIcon() {
 
 function isInsideBBox(lat, lon, bbox) {
   if (!bbox) return true;
-  const [minLon, minLat, maxLon, maxLat] = bbox; // Nominatim format
+  const [minLon, minLat, maxLon, maxLat] = bbox;
   return lon >= minLon && lon <= maxLon && lat >= minLat && lat <= maxLat;
 }
 
-// LocalStorage for user-added places
 const LS_KEY = "freepark_user_places";
 function loadUserPlaces() {
   try {
@@ -55,32 +72,42 @@ function saveUserPlace(place) {
   localStorage.setItem(LS_KEY, JSON.stringify(list));
 }
 
+// Data build
+function buildData() {
+  parkingData = [...baseParkingData, ...loadUserPlaces()];
+}
+
 // Map init
 function initMap() {
+  // Sikr map-container har højde
+  const mapEl = document.getElementById('map');
+  if (!mapEl || mapEl.clientHeight < 50) {
+    mapEl.style.height = '80vh';
+  }
+
   map = L.map('map', {
     zoomControl: true,
     attributionControl: false
-  }).setView([55.6761, 12.5683], 12); // København default
+  }).setView([55.6761, 12.5683], 12); // København standard
 
-  // Light basemap
-  L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    { maxZoom: 19 }
-  ).addTo(map);
+  // Stabil standard-tilelayer (OSM)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
 
-  L.control.attribution({prefix: ''}).addAttribution('© OpenStreetMap, © CARTO');
+  L.control.attribution({prefix: ''}).addTo(map);
 
   markersLayer = L.layerGroup().addTo(map);
 
-  // Get location
+  // Geolocation (kræver HTTPS eller localhost)
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((pos) => {
       userLatLng = [pos.coords.latitude, pos.coords.longitude];
       map.setView(userLatLng, 14);
-      userMarker = L.marker(userLatLng, { icon: createUserLocationIcon(), interactive: false }).addTo(map);
+      addUserLocationMarker(userLatLng, pos.coords.accuracy || 50);
       refreshNearest();
     }, () => {
-      // If blocked, still render with default city
       refreshNearest();
     }, { enableHighAccuracy: true, timeout: 8000 });
   } else {
@@ -88,45 +115,19 @@ function initMap() {
   }
 }
 
-// Seed data – replace/extend from curated sources
-// Schema: { id, name, address, lat, lon, info }
-baseParkingData = [
-  // København eksempler (tidsbegrænset/forhold; verificer lokalt)
-  {
-    id: "kbh-fisketorvet",
-    name: "Gratis parkering ved Fisketorvet",
-    address: "Havneholmen 5, 2450 København SV",
-    lat: 55.6617, lon: 12.5574,
-    info: "Gratis i udvalgte perioder; tjek skiltning på stedet."
-  },
-  {
-    id: "kbh-kastellet",
-    name: "Gratis parkering ved Kastellet",
-    address: "Gl. Hovedvagt, 2100 København Ø",
-    lat: 55.6933, lon: 12.5971,
-    info: "Ofte gratis/tidsbegrænset; respektér zoneregler og tider."
-  },
-  {
-    id: "kbh-vanlose-st",
-    name: "Vanløse Station (3 timers gratis)",
-    address: "Vanløse Allé 40, 2720 Vanløse",
-    lat: 55.6909, lon: 12.4920,
-    info: "3 timers gratis hverdage; se lokal skiltning."
-  },
-  // Roskilde eksempel
-  {
-    id: "roskilde-station",
-    name: "Roskilde Station – gratis i perioder",
-    address: "Jernbanegade, 4000 Roskilde",
-    lat: 55.6410, lon: 12.0876,
-    info: "Gratis ved udvalgte tider/ordninger; tjek lokal skiltning."
-  }
-];
+function addUserLocationMarker(latlng, accuracyMeters) {
+  if (userMarker) map.removeLayer(userMarker);
+  if (accuracyCircle) map.removeLayer(accuracyCircle);
 
-// Merge with user places
-function buildData() {
-  const userPlaces = loadUserPlaces();
-  parkingData = [...baseParkingData, ...userPlaces];
+  userMarker = L.marker(latlng, { icon: createUserLocationIcon(), interactive: false }).addTo(map);
+  accuracyCircle = L.circle(latlng, {
+    radius: accuracyMeters,
+    color: '#0a84ff',
+    weight: 2,
+    opacity: 0.4,
+    fillColor: '#0a84ff',
+    fillOpacity: 0.1
+  }).addTo(map);
 }
 
 // Render markers
@@ -134,22 +135,13 @@ function renderMarkers() {
   markersLayer.clearLayers();
   parkingData.forEach(p => {
     if (!isInsideBBox(p.lat, p.lon, areaBBox)) return;
-    const marker = L.marker([p.lat, p.lon], {
-      icon: L.icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        iconSize: [25,41],
-        iconAnchor: [12,41],
-        popupAnchor: [1,-34],
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        shadowSize: [41,41]
-      })
-    });
+    const marker = L.marker([p.lat, p.lon]);
     const html = `
       <div class="popup">
         <div class="title">${p.name}</div>
         <div class="addr">${p.address}</div>
-        <div class="row" style="margin-top:8px; display:flex; gap:8px;">
-          <button class="btn btn-outline" data-id="${p.id}" onclick="openInfo('${p.id}')">Vis info</button>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button class="btn btn-outline" onclick="openInfo('${p.id}')">Vis info</button>
         </div>
       </div>
     `;
@@ -162,29 +154,25 @@ function renderMarkers() {
 function refreshNearest() {
   buildData();
   renderMarkers();
+
   const label = document.getElementById('contextLabel');
-  let refPoint = null;
+  let refPoint;
 
   if (userLatLng) {
     refPoint = userLatLng;
     label.textContent = "Ud fra din lokation";
   } else if (areaBBox) {
     const [minLon, minLat, maxLon, maxLat] = areaBBox;
-    const centerLat = (minLat + maxLat) / 2;
-    const centerLon = (minLon + maxLon) / 2;
-    refPoint = [centerLat, centerLon];
+    refPoint = [(minLat + maxLat) / 2, (minLon + maxLon) / 2];
     label.textContent = "Ud fra valgt område";
   } else {
-    refPoint = [55.6761, 12.5683]; // København
+    refPoint = [55.6761, 12.5683];
     label.textContent = "Ud fra København (standard)";
   }
 
   const withinArea = parkingData.filter(p => isInsideBBox(p.lat, p.lon, areaBBox));
   const ranked = withinArea
-    .map(p => ({
-      ...p,
-      distanceKm: kmDistance(refPoint[0], refPoint[1], p.lat, p.lon)
-    }))
+    .map(p => ({ ...p, distanceKm: kmDistance(refPoint[0], refPoint[1], p.lat, p.lon) }))
     .sort((a, b) => a.distanceKm - b.distanceKm)
     .slice(0, 5);
 
@@ -200,7 +188,7 @@ function refreshNearest() {
   `).join('');
 }
 
-// Open info modal
+// Info modal
 window.openInfo = function(id) {
   const p = parkingData.find(x => x.id === id);
   if (!p) return;
@@ -216,16 +204,17 @@ window.openInfo = function(id) {
   toggleModal('infoModal', true);
 };
 
-// Modal toggles
+// Modals
 function toggleModal(id, open) {
   const m = document.getElementById(id);
+  if (!m) return;
   m.setAttribute('aria-hidden', open ? 'false' : 'true');
 }
 
-// Add modal handlers
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
 
+  // Add modal
   document.getElementById('addBtn').addEventListener('click', () => toggleModal('addModal', true));
   document.getElementById('closeModal').addEventListener('click', () => toggleModal('addModal', false));
   document.getElementById('closeInfoModal').addEventListener('click', () => toggleModal('infoModal', false));
@@ -257,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
       name, address,
       lat: coords.lat,
       lon: coords.lon,
-      info: "Tilføjet af bruger. Verificér lokale skiltning."
+      info: "Tilføjet af bruger. Tjek lokal skiltning."
     };
     saveUserPlace(newPlace);
     toggleModal('addModal', false);
@@ -265,52 +254,72 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMarkers();
   });
 
+  // Søgning
+  const doAreaSearch = async () => {
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) return;
+    try {
+      const url = `${NOMINATIM_SEARCH}?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=1&countrycodes=dk`;
+      const res = await fetch(url, {
+        headers: {
+          'Accept-Language': 'da'
+        }
+      });
+      if (!res.ok) throw new Error('Søgning mislykkedes');
+      const data = await res.json();
+      if (!data.length) {
+        alert('Ingen danske resultater for området.');
+        return;
+      }
+      const item = data[0];
+      // boundingbox: [south, north, west, east] som strings
+      const bb = item.boundingbox;
+      areaBBox = [parseFloat(bb[2]), parseFloat(bb[0]), parseFloat(bb[3]), parseFloat(bb[1])];
+      const lat = parseFloat(item.lat), lon = parseFloat(item.lon);
+      map.setView([lat, lon], 12);
+      refreshNearest();
+      renderMarkers();
+    } catch (e) {
+      alert('Kunne ikke søge området. Prøv igen.');
+      console.error(e);
+    }
+  };
+
   document.getElementById('searchBtn').addEventListener('click', doAreaSearch);
   document.getElementById('searchInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') doAreaSearch();
   });
 });
 
-// Geocode area in DK
-async function doAreaSearch() {
-  const q = document.getElementById('searchInput').value.trim();
-  if (!q) return;
-  const url = `${NOMINATIM_SEARCH}?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=1&countrycodes=dk`;
-  const res = await fetch(url, { headers: { 'Accept-Language': 'da' } });
-  if (!res.ok) { alert('Søgning mislykkedes.'); return; }
-  const data = await res.json();
-  if (!data.length) { alert('Ingen danske resultater for området.'); return; }
-  const item = data[0];
-  areaBBox = item.boundingbox ? [item.boundingbox[2], item.boundingbox[0], item.boundingbox[3], item.boundingbox[1]] : null;
-  const lat = parseFloat(item.lat), lon = parseFloat(item.lon);
-  map.setView([lat, lon], 12);
-  refreshNearest();
-  renderMarkers();
-}
-
-// DK geocode address → coords
+// Geocode DK address → coords
 async function geocodeDK(address) {
-  const url = `${NOMINATIM_SEARCH}?q=${encodeURIComponent(address)}&format=json&addressdetails=1&limit=1&countrycodes=dk`;
-  const res = await fetch(url, { headers: { 'Accept-Language': 'da' } });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data.length) return null;
-  return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  try {
+    const url = `${NOMINATIM_SEARCH}?q=${encodeURIComponent(address)}&format=json&addressdetails=1&limit=1&countrycodes=dk`;
+    const res = await fetch(url, { headers: { 'Accept-Language': 'da' } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.length) return null;
+    return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  } catch {
+    return null;
+  }
 }
 
-// DK reverse geocode coords → address
+// Reverse geocode coords → DK address
 async function reverseGeocodeDK(lat, lon) {
-  const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&addressdetails=1&zoom=18`;
-  const res = await fetch(url, { headers: { 'Accept-Language': 'da' } });
-  if (!res.ok) return null;
-  const data = await res.json();
-  const a = data.address || {};
-  // Build human-readable Danish address
-  const parts = [
-    a.road, a.house_number,
-    a.postcode, a.city || a.town || a.village
-  ].filter(Boolean);
-  // Enforce Denmark only
-  if ((a.country_code || '').toLowerCase() !== 'dk') return null;
-  return parts.join(' ');
+  try {
+    const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&addressdetails=1&zoom=18`;
+    const res = await fetch(url, { headers: { 'Accept-Language': 'da' } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const a = data.address || {};
+    if ((a.country_code || '').toLowerCase() !== 'dk') return null;
+    const parts = [
+      a.road, a.house_number,
+      a.postcode, a.city || a.town || a.village
+    ].filter(Boolean);
+    return parts.join(' ');
+  } catch {
+    return null;
+  }
 }
