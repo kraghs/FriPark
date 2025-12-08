@@ -186,6 +186,7 @@ window.openInfo = function(id) {
   document.getElementById('infoContent').innerHTML = info;
   toggleModal('infoModal', true);
 };
+};
 
 function toggleModal(id, open) {
   const m = document.getElementById(id);
