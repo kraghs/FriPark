@@ -111,6 +111,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Info modal
   function openInfoModal(spot){
+  const list = document.getElementById('parkingList');
+
+  // Tøm listen
+  list.innerHTML = '';
+
+  // Første element = detaljeret info
+  const infoLi = document.createElement('li');
+  infoLi.style.background = '#eef6ff';
+  infoLi.innerHTML = `
+    <div>
+      <strong>${escapeHtml(spot.name)}</strong>
+      <div class="meta">${escapeHtml(spot.address)}</div>
+      <div style="margin-top:6px;color:#555;">${escapeHtml(spot.note || 'Ingen ekstra info')}</div>
+    </div>
+  `;
+  list.appendChild(infoLi);
+
+  // Scroll listen i fokus
+  document.querySelector('.listWrap').scrollIntoView({ behavior: 'smooth' });
+
+  // Derefter de nærmeste 4 andre
+  const arr = parkingSpots
+    .filter(s => s !== spot)
+    .map(s => ({...s, dist: distanceKm(userLat, userLng, s.lat, s.lng)}));
+  arr.sort((a,b)=> a.dist - b.dist);
+
+  arr.slice(0,4).forEach(other => {
+    const li = document.createElement('li');
+    li.innerHTML = `<div><strong>${escapeHtml(other.name)}</strong>
+      <div class="meta">${escapeHtml(other.address)} • ${other.dist.toFixed(1)} km</div></div>`;
+    const btn = document.createElement('button');
+    btn.textContent = 'Se info';
+    btn.addEventListener('click', (e)=> { e.stopPropagation(); openInfoModal(other); });
+    li.appendChild(btn);
+    li.addEventListener('click', ()=> {
+      map.setView([other.lat, other.lng], 14);
+      if(other.marker) other.marker.openPopup();
+    });
+    list.appendChild(li);
+  });
+}
+
     document.getElementById('infoTitle').textContent = spot.name;
     document.getElementById('infoAddress').textContent = 'Adresse: ' + spot.address;
     document.getElementById('infoNote').textContent = (spot.note || 'Ingen ekstra info') + ' — Husk at tjekke skilte.';
