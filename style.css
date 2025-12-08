@@ -1,14 +1,68 @@
-html, body {
+body, html {
   margin: 0;
   height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.app-header {
+  background: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-wrapper {
+  display: flex;
+  gap: 8px;
 }
 
 #map {
-  height: 100%;   /* fylder hele skærmen */
+  height: 60vh;
   width: 100%;
 }
 
-/* Blå dot med hvid ring */
+.floating-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-section {
+  padding: 16px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.nearest-list li {
+  background: #f9f9f9;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+}
+
 .user-dot {
   width: 18px;
   height: 18px;
