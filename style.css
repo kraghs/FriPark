@@ -1,4 +1,4 @@
-/* Base: Apple-inspired calm, crisp UI */
+/* Apple-inspireret, rolig og præcis UI */
 
 :root {
   color-scheme: light dark;
@@ -8,12 +8,10 @@
   --text-dim: #6b6b6b;
   --border: rgba(0,0,0,0.08);
   --shadow: 0 8px 24px rgba(0,0,0,0.08);
-  --primary: #0a84ff; /* iOS system blue */
+  --primary: #0a84ff;
   --primary-ink: #ffffff;
-  --accent: #34c759;  /* iOS system green */
-  --danger: #ff3b30;
+  --accent: #34c759;
 
-  /* spacing scale */
   --s-1: 4px;
   --s-2: 8px;
   --s-3: 12px;
@@ -21,7 +19,6 @@
   --s-5: 20px;
   --s-6: 24px;
   --radius: 16px;
-  --radius-sm: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -141,7 +138,7 @@ html, body {
   inset: 0;
 }
 
-/* Leaflet base overrides: make it calmer */
+/* Leaflet calm */
 .leaflet-container {
   font: inherit;
   outline: none;
@@ -157,7 +154,7 @@ html, body {
   padding: 4px 8px;
 }
 
-/* Custom markers: subtle shadow, minimal look */
+/* Markers */
 .marker-dot {
   width: 20px;
   height: 20px;
@@ -167,7 +164,7 @@ html, body {
   border: 2px solid var(--bg);
 }
 
-/* Inline card (above the map) */
+/* Inline card */
 .inline-card {
   position: absolute;
   z-index: 12;
@@ -319,7 +316,7 @@ html, body {
   justify-content: flex-end;
 }
 
-/* Accessibility focus */
+/* Focus */
 :focus-visible {
   outline: 3px solid color-mix(in oklab, var(--primary) 40%, transparent);
   outline-offset: 2px;
