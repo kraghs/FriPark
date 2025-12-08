@@ -1,83 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="da">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FreePark – Gratis parkering i Danmark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Gratis Parkering DK</title>
 
+  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#f8f8f8" />
-  <link rel="icon" href="icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
-  <!-- Leaflet CSS (ingen integrity/crossorigin for maximal kompatibilitet) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- iOS add to home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+  <meta name="apple-mobile-web-app-title" content="Parkering">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Leaflet CSS (lightweight, reliable) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-pMpr2fGZ2G6lVGIh6W8zvYQeMcA4CwLrYvCfpF2bY3s="
+    crossorigin=""
+  />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="search-container">
-      <input id="searchInput" type="search" placeholder="Søg område (fx København, Roskilde)" aria-label="Søg område" />
-      <button id="searchBtn" class="btn">Søg</button>
+  <header class="app-header">
+    <div class="brand">
+      <div class="dot"></div>
+      <span class="title">Gratis Parkering</span>
+      <span class="subtitle">Danmark</span>
     </div>
+    <button class="ui-button ghost" id="aboutButton" aria-label="Om appen">Om</button>
   </header>
 
-  <main>
-    <div id="map" role="application" aria-label="Kort over gratis parkering i Danmark"></div>
-
-    <button id="addBtn" class="fab" aria-label="Tilføj gratis parkeringsplads">+</button>
-
-    <section class="bottomsheet" aria-label="Nærmeste gratis parkeringspladser">
-      <div class="sheet-header">
-        <h2>Nærmeste gratis pladser</h2>
-        <span id="contextLabel" class="context-label">Ud fra din lokation</span>
-      </div>
-      <ul id="nearestList" class="nearest-list"></ul>
+  <main id="app">
+    <section class="map-wrap">
+      <div id="map" role="application" aria-label="Kort over parkeringssteder"></div>
     </section>
+
+    <!-- Inline, compact popup card (custom, Apple-like) -->
+    <div id="inlineCard" class="inline-card" hidden aria-live="polite">
+      <div class="card-line">
+        <div class="name" id="cardName"></div>
+        <span class="badge" id="cardBadge" hidden>Verificeret</span>
+      </div>
+      <div class="address" id="cardAddress"></div>
+      <div class="card-actions">
+        <button class="ui-button primary" id="infoButton">Vis info</button>
+        <button class="ui-button" id="closeCard">Luk</button>
+      </div>
+    </div>
+
+    <!-- Bottom sheet for detailed info -->
+    <div id="sheet" class="sheet" aria-modal="true" role="dialog" hidden>
+      <div class="sheet-backdrop" id="sheetBackdrop" tabindex="-1" aria-hidden="true"></div>
+      <div class="sheet-content" role="document" aria-labelledby="sheetTitle">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="sheet-header">
+          <div class="sheet-title-wrap">
+            <h2 id="sheetTitle" class="sheet-title">Navn på sted</h2>
+            <span class="badge" id="sheetBadge" hidden>Verificeret</span>
+          </div>
+          <p id="sheetAddress" class="sheet-address">Adresse</p>
+        </div>
+        <div class="sheet-body">
+          <ul id="sheetFacts" class="fact-list"></ul>
+          <div id="sheetNotes" class="notes" hidden></div>
+        </div>
+        <div class="sheet-footer">
+          <button class="ui-button" id="closeSheet">Luk</button>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <!-- Tilføj modal -->
-  <div id="addModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="addTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="addTitle">Tilføj gratis parkeringsplads</h3>
-        <button id="closeModal" class="icon-btn" aria-label="Luk">✕</button>
-      </div>
-      <div class="modal-body">
-        <label class="field">
-          <span>Navn</span>
-          <input id="placeName" type="text" placeholder="Fx Gratis parkering v. station" />
-        </label>
-        <label class="field">
-          <span>Adresse</span>
-          <div class="address-row">
-            <input id="placeAddress" type="text" placeholder="Adresse" />
-            <button id="useMyLocation" class="btn btn-outline">Brug min lokation</button>
-          </div>
-        </label>
-        <div class="row">
-          <button id="savePlace" class="btn btn-primary">Gem</button>
-        </div>
-        <p class="helper">Kun danske adresser. Vi finder koordinater automatisk.</p>
-      </div>
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span class="foot-text">Data skal være faktuelt og opdateret for hvert sted.</span>
+      <span class="foot-text dim">Koordinater vises aldrig til brugeren.</span>
     </div>
-  </div>
-
-  <!-- Info modal -->
-  <div id="infoModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="infoTitle">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="infoTitle">Info om plads</h3>
-        <button id="closeInfoModal" class="icon-btn" aria-label="Luk">✕</button>
-      </div>
-      <div class="modal-body">
-        <div id="infoContent"></div>
-      </div>
-    </div>
-  </div>
+  </footer>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-VuZ4G2NQxZ2hZrY6d5nQDJvVfZksp7nGgZ7Z1Cj8qMo="
+    crossorigin=""
+  ></script>
+
   <script src="script.js"></script>
 </body>
 </html>
