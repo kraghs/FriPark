@@ -75,7 +75,7 @@ html, body {
   width: 100%;
 }
 
-/* Apple-like user location marker */
+/* Apple-like user location marker (divIcon) */
 .user-location-dot {
   width: 18px;
   height: 18px;
@@ -83,6 +83,13 @@ html, body {
   border: 3px solid #ffffff;
   border-radius: 50%;
   box-shadow: 0 2px 12px rgba(10,132,255,0.6);
+}
+
+/* Accuracy circle */
+.accuracy-circle {
+  border: 2px solid rgba(10,132,255,0.4);
+  background: rgba(10,132,255,0.1);
+  border-radius: 9999px;
 }
 
 /* Floating add button */
