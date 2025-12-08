@@ -10,12 +10,12 @@
   <link rel="manifest" href="manifest.json" />
 
   <!-- iOS add to home screen -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
-  <meta name="apple-mobile-web-app-title" content="Parkering">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Parkering" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
-  <!-- Leaflet CSS (lightweight, reliable) -->
+  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -40,7 +40,7 @@
       <div id="map" role="application" aria-label="Kort over parkeringssteder"></div>
     </section>
 
-    <!-- Inline, compact popup card (custom, Apple-like) -->
+    <!-- Inline card -->
     <div id="inlineCard" class="inline-card" hidden aria-live="polite">
       <div class="card-line">
         <div class="name" id="cardName"></div>
@@ -53,8 +53,8 @@
       </div>
     </div>
 
-    <!-- Bottom sheet for detailed info -->
-    <div id="sheet" class="sheet" aria-modal="true" role="dialog" hidden>
+    <!-- Bottom sheet -->
+    <div id="sheet" class="sheet" hidden aria-modal="true" role="dialog">
       <div class="sheet-backdrop" id="sheetBackdrop" tabindex="-1" aria-hidden="true"></div>
       <div class="sheet-content" role="document" aria-labelledby="sheetTitle">
         <div class="sheet-handle" aria-hidden="true"></div>
@@ -78,8 +78,8 @@
 
   <footer class="app-footer">
     <div class="footer-inner">
-      <span class="foot-text">Data skal være faktuelt og opdateret for hvert sted.</span>
-      <span class="foot-text dim">Koordinater vises aldrig til brugeren.</span>
+      <span class="foot-text">Fakta skal være verificeret pr. sted.</span>
+      <span class="foot-text dim">Koordinater bruges kun internt og vises aldrig.</span>
     </div>
   </footer>
 
