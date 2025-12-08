@@ -153,15 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 }
 
-    document.getElementById('infoTitle').textContent = spot.name;
-    document.getElementById('infoAddress').textContent = 'Adresse: ' + spot.address;
-    document.getElementById('infoNote').textContent = (spot.note || 'Ingen ekstra info') + ' — Husk at tjekke skilte.';
-    document.getElementById('infoModal').classList.remove('hidden');
-  }
-  document.getElementById('closeInfoBtn').addEventListener('click', ()=> {
-    document.getElementById('infoModal').classList.add('hidden');
-  });
-
   // Search
   const searchInput = document.getElementById('searchInput');
   const searchResults = document.getElementById('searchResults');
