@@ -2,103 +2,18 @@
 <html lang="da">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>FreePark – Gratis parkering i Danmark</title>
+  <title>FreePark – Simpel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <span class="brand-text">FreePark</span>
-    </div>
-    <div class="search-wrapper">
-      <input id="searchInput" type="text" placeholder="Søg område, f.eks. København eller Roskilde" aria-label="Søg område">
-      <button id="searchBtn" class="btn btn-primary">Søg</button>
-    </div>
-  </header>
+  <h1>FreePark</h1>
+  <div id="map"></div>
 
-  <main class="content">
-    <section class="map-section">
-      <div id="map" class="map"></div>
-
-      <div class="floating-controls">
-        <button id="locateBtn" class="icon-btn" title="Brug min lokation" aria-label="Brug min lokation">
-          <span class="icon-location"></span>
-        </button>
-        <button id="addBtn" class="icon-btn" title="Tilføj parkeringsplads" aria-label="Tilføj parkeringsplads">
-          <span class="icon-plus"></span>
-        </button>
-      </div>
-    </section>
-
-    <section class="list-section">
-      <h2 class="section-title">Nærmeste gratis parkeringspladser</h2>
-      <ul id="nearestList" class="nearest-list" aria-live="polite"></ul>
-    </section>
-  </main>
-
-  <!-- Add place modal -->
-  <div id="addModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="addTitle">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="addTitle">Tilføj parkeringsplads</h3>
-        <button class="icon-btn close-btn" id="addCloseBtn" aria-label="Luk">
-          <span class="icon-close"></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="addForm">
-          <div class="form-group">
-            <label for="placeName">Navn</label>
-            <input id="placeName" name="placeName" type="text" placeholder="F.eks. Amager Strand P-plads" required>
-          </div>
-
-          <div class="form-group">
-            <label for="placeAddress">Adresse</label>
-            <div class="address-row">
-              <input id="placeAddress" name="placeAddress" type="text" placeholder="F.eks. Amager Strandvej 100, 2300 København S" required>
-              <button type="button" id="useMyLocationBtn" class="btn btn-secondary">Brug min lokation</button>
-            </div>
-            <p class="hint">Adresse hentes automatisk fra din lokation ved tryk.</p>
-          </div>
-
-          <div class="form-group">
-            <label for="placeInfo">Info</label>
-            <input id="placeInfo" name="placeInfo" type="text" placeholder="F.eks. 3 timer gratis, fri efter kl. 18" required>
-          </div>
-
-          <div class="modal-actions">
-            <button type="submit" class="btn btn-primary">Tilføj</button>
-            <button type="button" class="btn btn-ghost" id="addCancelBtn">Annuller</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Info modal -->
-  <div id="infoModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="infoTitle">Detaljer</h3>
-        <button class="icon-btn close-btn" id="infoCloseBtn" aria-label="Luk">
-          <span class="icon-close"></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="infoContent"></div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="app-footer">
-    <p>FreePark viser gratis parkeringsmuligheder i Danmark. Oplysninger kan ændre sig – tjek altid skiltning på stedet.</p>
-  </footer>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-p4Qn8rPjGStqV38xNkJQ9jwQ1C0C4YQY1jLQx4Ck0zY=" crossorigin=""></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
