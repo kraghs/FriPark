@@ -1,51 +1,52 @@
+/* script.js - FreePark app
+   Clean apple-like UI, Danish language strings.
+   Uses Leaflet (tiles: Carto Voyager) + Nominatim for geocoding.
+*/
 document.addEventListener('DOMContentLoaded', () => {
 
 /* =========================
-   DATA: spots (København, Aarhus, Helsingør, Amager m.fl.)
-   NOTE: Jeg har samlet mange eksempler. Tjek skilte i virkeligheden.
+   DATA: initial sample of gratis parkeringspladser i Danmark
+   NOTE: Jeg har samlet mange relevante spots for København, Aarhus, Helsingør, Roskilde, Odense osv.
+   Disse notes indeholder kommunale/vejledende oplysninger; brug altid skilte i virkeligheden.
+   (Kommune-kilder brugt: Københavns Kommune, Aarhus Kommune, Helsingør, Roskilde, Odense parkeringsinfo). 
    ========================= */
 const parkingSpots = [
-  // AARHUS
-  {name:"Tangkrogen", address:"Marselisborg Havnevej 4, 8000 Aarhus", lat:56.1520, lng:10.2030, note:"Stor p-plads, ofte ledig om aftenen. Gratis."},
-  {name:"Ceres Park", address:"Stadion Allé 70, 8000 Aarhus", lat:56.1515, lng:10.2050, note:"Gratis i weekender. Tæt på stadion."},
-  {name:"Donbækhaven", address:"Oddervej 6, 8000 Aarhus", lat:56.1440, lng:10.2100, note:"Gadeparkering, tjek skilte."},
-  {name:"Marselisborg Strand", address:"Strandvejen 23, 8000 Aarhus", lat:56.1470, lng:10.2055, note:"Mindre p-plads ved strand, ofte gratis udenfor sæson."},
+  // KØBENHAVN - udvalgte steder / eksempler
+  { name:"Vanløse Station - P", address:"Vanløse Station, 2720 Vanløse", lat:55.6970, lng:12.4890, note:"Stationsparkering; check stationens regler og skilte." },
+  { name:"Hellerup Stationsplads", address:"Hellerup St., 2900 Hellerup", lat:55.7387, lng:12.5785, note:"Stationsparkering; ofte tidsbegrænset. Tjek skilte." },
+  { name:"Valby Syd P", address:"Valbyparken, 2500 Valby", lat:55.6560, lng:12.4995, note:"Større p-plads ved Valby, ofte gratis i visse områder. Tjek skilte." },
+  { name:"Amager Strand P", address:"Strandvejen, 2300 København S", lat:55.6469, lng:12.5950, note:"P-pladser ved stranden; tidsbegrænsning kan gælde i højsæson." },
+  { name:"Ørestad P", address:"Ørestads Boulevard, 2300 København S", lat:55.6356, lng:12.5868, note:"Større p-pladser i Ørestad; tjek lokalt om gratis zoner." },
 
-  // KØBENHAVN (udvalg + Amager)
-  {name:"Amager Strand", address:"Strandvejen 3, 2300 København S", lat:55.6469, lng:12.5950, note:"Større p-pladser ved stranden. Tjek skilte for zoner."},
-  {name:"Amagerbrogade", address:"Amagerbrogade, 2300 København S", lat:55.6600, lng:12.5900, note:"Gadeparkering i dele af Amager - tidsbegrænset."},
-  {name:"Ørestad P", address:"Ørestads Boulevard, 2300 København S", lat:55.6356, lng:12.5868, note:"Store p-pladser, ofte gratis i ydre områder."},
-  {name:"Valby Langgade", address:"Valby Langgade, 2500 Valby", lat:55.6575, lng:12.4960, note:"Gadeparkering, tjek p-skiltning."},
-  {name:"Vesterbro / Sønder Boulevard", address:"Sønder Boulevard, 1720 København", lat:55.6670, lng:12.5650, note:"Gratis efter visse tidspunkter - se skiltning."},
-  {name:"Nørrebrogade (NV)", address:"Nørrebrogade, 2200 København", lat:55.6920, lng:12.5660, note:"Nørrebro gader - nogle steder tidsbegrænset/gratis i weekender."},
-  {name:"Østerbro (sidegader)", address:"Østerbro, København", lat:55.7030, lng:12.5850, note:"Sidegader har ofte gratis pladser - tjek skilte."},
-  {name:"Frederiksberg / Smallegade", address:"Smallegade, Frederiksberg", lat:55.6760, lng:12.5230, note:"Gratis tidlig morgen/visse områder - tjek lokalt."},
-  {name:"Christianshavn / Torvegade", address:"Torvegade, 1400 København K", lat:55.6760, lng:12.5930, note:"Sidegader kan have gratis pladser."},
+  // AARHUS - udvalgte steder
+  { name:"Tangkrogen P", address:"Marselisborg Havnevej 4, 8000 Aarhus", lat:56.1520, lng:10.2030, note:"Stor p-plads ved kysten. I Aarhus findes 2 timers gratis i nogle zoner (se kommunens regler)." },
+  { name:"Ceres Park P", address:"Stadion Allé, 8000 Aarhus", lat:56.1515, lng:10.2050, note:"Parkeringsområder ved stadion - ofte tidsbegrænset/afhængig af arrangement." },
 
   // HELSINGØR
-  {name:"Jernbanevej P-plads", address:"Jernbanevej, 3000 Helsingør", lat:56.0390, lng:12.6130, note:"P-plads nær station. Tjek skilte for tid."},
-  {name:"Stationens P-plads", address:"Stationspladsen, 3000 Helsingør", lat:56.0395, lng:12.6065, note:"Korttidsparkering ved stationen."},
-  {name:"Nordhavnen / Mole", address:"Nordhavnsvej, 3000 Helsingør", lat:56.0425, lng:12.6080, note:"Kystnær p-plads, ofte gratis."},
+  { name:"Helsingør Station P", address:"Stationspladsen, 3000 Helsingør", lat:56.0395, lng:12.6065, note:"Kommunalt p-hus & pladser med tidsbegrænsning; Helsingør har mange gratis/tidsbegrænsede pladser (tjek kommunens info)." },
+  { name:"Jernbanevej P", address:"Jernbanevej, 3000 Helsingør", lat:56.0390, lng:12.6130, note:"Kystnær p-plads, ofte gratis uden for spidsbelastning; tjek skilte." },
 
-  // Ekstra spots (fyld op med flere i København/Amager)
-  {name:"Vanløse (stationsområde)", address:"Vanløse, København", lat:55.6970, lng:12.4890, note:"Stationsnær parkering, tjek lokalt."},
-  {name:"Hellerup område", address:"Hellerup, Gentofte", lat:55.7390, lng:12.5740, note:"Visse gader/tidszoner gratis uden for peak."},
-  {name:"Amager Vest (ydre)", address:"Amager Vest, København", lat:55.6450, lng:12.5700, note:"Ydre Amager: flere gratis p-pladser."},
-  {name:"Valby Syd P", address:"Valbyparken, Valby", lat:55.6560, lng:12.4995, note:"Større p-plads tæt ved park."},
-  {name:"Ørestad P2", address:"Arne Jacobsens Allé, Ørestad", lat:55.6366, lng:12.5902, note:"Parkeringspladser i Ørestad, ofte med gratis zoner."}
+  // ROSKILDE (eksempel)
+  { name:"Roskilde Bymidte P", address:"Roskilde Bymidte, 4000 Roskilde", lat:55.6412, lng:12.0804, note:"I Roskilde: typisk 2 timers gratis parkering når registreret via p-automater eller app." },
+
+  // ODENSE (eksempel)
+  { name:"Parkering Syd (Odense)", address:"Tarup Centret / Parkering Syd, Odense", lat:55.4011, lng:10.3470, note:"Større parkeringspladser ved handelsområder - ofte gratis for kunder. Se Odense kommunes parkeringskort for detaljer." },
+
+  // Ekstra spots (brug disse eksempler til at fylde kortet)
+  { name:"Frederiksberg (Smallegade)", address:"Smallegade, Frederiksberg", lat:55.6760, lng:12.5230, note:"Små gadepladser med tidsbegrænsning - tjek skiltning." }
 ];
 
 /* =========================
    App state
    ========================= */
-let userLat = 55.6761;
+let userLat = 55.6761;   // default: København centre
 let userLng = 12.5683;
 let map, userMarker;
 
 /* =========================
-   Init map (Carto Voyager - neutral, lighter than dark_all)
+   Init map (Carto Voyager tile for neutral clean look)
    ========================= */
-map = L.map('map', { preferCanvas: true }).setView([userLat, userLng], 6);
+map = L.map('map', { preferCanvas: true }).setView([userLat, userLng], 11);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap & CARTO',
@@ -56,123 +57,147 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 /* =========================
    Utility functions
    ========================= */
-function toRad(x){return x*Math.PI/180}
-function distance(lat1,lng1,lat2,lng2){
-  const R=6371;
-  const dLat=toRad(lat2-lat1);
-  const dLng=toRad(lng2-lng1);
-  const a=Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
-  return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+function toRad(x){ return x * Math.PI / 180; }
+function distanceKm(lat1, lon1, lat2, lon2){
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
 }
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 /* =========================
-   Markers: add all spots to map as small circleMarkers
-   and keep reference in spot.marker
+   Add markers for existing spots
    ========================= */
-parkingSpots.forEach(spot=>{
-  // create small clean marker
-  const circle = L.circleMarker([spot.lat, spot.lng], {
-    radius: 6,
-    color: '#0bb07b',
-    weight: 2,
-    fillColor: '#00c07b',
-    fillOpacity: 1
+function addSpotMarker(spot){
+  const marker = L.circleMarker([spot.lat, spot.lng], {
+    radius:6,
+    color:'#0bb07b',
+    weight:2,
+    fillColor:'#00c07b',
+    fillOpacity:1
   }).addTo(map);
 
-  // bind popup with Se info button that calls global function
-  circle.bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small><br><div style="margin-top:8px;"><button onclick="openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#00c07b;border:none;color:#111;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button></div>`);
-  // store marker on spot
-  spot.marker = circle;
+  // popup with simple info + "Se info" button that opens modal with richer info
+  marker.bindPopup(`
+    <strong>${escapeHtml(spot.name)}</strong><br>
+    <small>${escapeHtml(spot.address)}</small><br>
+    <div style="margin-top:8px;">
+      <button class="popupInfoBtn" data-name="${escapeHtml(spot.name)}" style="background:#0a84ff;border:none;color:white;padding:6px 8px;border-radius:8px;cursor:pointer">Se info</button>
+    </div>`);
 
-  // click on marker centers and opens popup
-  circle.on('click', () => {
-    map.setView([spot.lat, spot.lng], 14);
-    circle.openPopup();
+  // store marker reference
+  spot.marker = marker;
+
+  marker.on('popupopen', ()=> {
+    // When popup opens, attach click to button inside popup
+    const btn = document.querySelector('.popupInfoBtn[data-name="'+escapeHtml(spot.name)+'"]');
+    if(btn){
+      btn.addEventListener('click', (e)=> {
+        openInfoModal(spot);
+      });
+    }
   });
-});
+
+  marker.on('click', ()=>{
+    map.setView([spot.lat, spot.lng], 14);
+  });
+}
+
+/* add all initial markers */
+parkingSpots.forEach(s => addSpotMarker(s));
 
 /* =========================
-   User marker function
+   User marker (blue circle with white border like Apple Maps)
    ========================= */
 function setUserMarker(lat,lng){
   if(userMarker) map.removeLayer(userMarker);
-  userMarker = L.circleMarker([lat,lng], {
-    radius:7,
-    color:'#ff4757',
-    weight:2,
-    fillColor:'#ff6b6b',
-    fillOpacity:1
-  }).addTo(map).bindPopup("Du er her");
+  userMarker = L.circleMarker([lat, lng], {
+    radius:9,
+    weight:3,
+    color:'#ffffff',   // white border
+    fillColor:'#0a84ff', // blue fill
+    fillOpacity:1,
+    pane: 'markerPane'
+  }).addTo(map);
+  userMarker.bindPopup('Din position');
 }
 
 /* =========================
-   Render 5 nearest in list
+   Render the 5 nearest spots in the list
    ========================= */
-function renderNearby(centerLat=userLat, centerLng=userLng){
+function renderNearby(centerLat = userLat, centerLng = userLng){
   const list = document.getElementById('parkingList');
   list.innerHTML = '';
-  parkingSpots
-    .map(s => ({...s, dist: distance(centerLat, centerLng, s.lat, s.lng)}))
-    .sort((a,b) => a.dist - b.dist)
-    .slice(0,5)
-    .forEach(spot => {
-      const li = document.createElement('li');
-      const text = document.createElement('div');
-      text.innerHTML = `<strong>${escapeHtml(spot.name)}</strong><div class="meta">${escapeHtml(spot.address)} • ${spot.dist.toFixed(1)} km</div>`;
-      const btn = document.createElement('button');
-      btn.textContent = 'Se info';
-      btn.addEventListener('click', (e)=> { e.stopPropagation(); openInfoModal(spot); });
-      li.appendChild(text);
-      li.appendChild(btn);
-      li.addEventListener('click', ()=> {
-        map.setView([spot.lat, spot.lng], 14);
-        if(spot.marker) spot.marker.openPopup();
-      });
-      list.appendChild(li);
+
+  // compute distances
+  const withDist = parkingSpots.map(s => {
+    return Object.assign({}, s, { dist: distanceKm(centerLat, centerLng, s.lat, s.lng) });
+  });
+
+  withDist.sort((a,b)=> a.dist - b.dist);
+  const nearest = withDist.slice(0,5);
+
+  nearest.forEach(spot => {
+    const li = document.createElement('li');
+    li.innerHTML = `<div>
+                      <strong>${escapeHtml(spot.name)}</strong>
+                      <div class="meta">${escapeHtml(spot.address)} • ${spot.dist.toFixed(1)} km</div>
+                    </div>`;
+    const btn = document.createElement('button');
+    btn.textContent = 'Se info';
+    btn.addEventListener('click', (ev) => { ev.stopPropagation(); openInfoModal(spot); });
+    li.appendChild(btn);
+    li.addEventListener('click', ()=> {
+      map.setView([spot.lat, spot.lng], 14);
+      if(spot.marker) spot.marker.openPopup();
     });
+    list.appendChild(li);
+  });
 }
 
 /* =========================
-   Info modal functions
+   Info modal: show details for a single spot
    ========================= */
 function openInfoModal(spot){
   document.getElementById('infoTitle').textContent = spot.name;
-  document.getElementById('infoAddress').textContent = "Adresse: " + spot.address;
-  document.getElementById('infoNote').textContent = "Info: " + (spot.note || 'Ingen ekstra info');
+  document.getElementById('infoAddress').textContent = 'Adresse: ' + spot.address;
+  // Add clear info text and hint to check signage
+  document.getElementById('infoNote').textContent = (spot.note || 'Ingen ekstra info.') + ' — Husk altid at tjekke skilte og kommunale regler.';
   document.getElementById('infoModal').classList.remove('hidden');
 }
-document.getElementById('closeInfoBtn').addEventListener('click', ()=> document.getElementById('infoModal').classList.add('hidden'));
-
-// global helper used in popup button (popup uses inline onclick)
-window.openInfoFromMarker = function(name){
-  const spot = parkingSpots.find(s => s.name === name);
-  if(spot) openInfoModal(spot);
-};
+document.getElementById('closeInfoBtn').addEventListener('click', ()=> {
+  document.getElementById('infoModal').classList.add('hidden');
+});
 
 /* =========================
-   Search: show matching results under search field
+   Search (top input): filters by name or address substring
+   When user clicks a result: center map + open info modal
    ========================= */
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 
 searchInput.addEventListener('input', (e) => {
   const q = e.target.value.trim().toLowerCase();
-  if(!q){
-    searchResults.classList.add('hidden'); searchResults.innerHTML = ''; return;
-  }
+  if(!q){ searchResults.classList.add('hidden'); searchResults.innerHTML = ''; return; }
   const matches = parkingSpots.filter(s => s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q));
-  if(matches.length === 0){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
   searchResults.innerHTML = '';
-  matches.forEach(spot => {
+  if(matches.length === 0){ searchResults.classList.add('hidden'); return; }
+  matches.slice(0,30).forEach(spot => {
     const row = document.createElement('div');
     row.className = 'result';
-    row.innerHTML = `<div><strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small></div><div><small>${distance(userLat,userLng,spot.lat,spot.lng).toFixed(1)} km</small></div>`;
+    row.innerHTML = `<div><strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small></div>
+                     <div><small>${distanceKm(userLat,userLng,spot.lat,spot.lng).toFixed(1)} km</small></div>`;
     row.addEventListener('click', () => {
-      map.setView([spot.lat, spot.lng], 14);
+      map.setView([spot.lat, spot.lng], 13);
       if(spot.marker) spot.marker.openPopup();
       openInfoModal(spot);
-      // hide results after selecting
-      searchResults.classList.add('hidden'); searchResults.innerHTML='';
+      searchResults.classList.add('hidden');
+      searchResults.innerHTML = '';
       searchInput.value = '';
     });
     searchResults.appendChild(row);
@@ -181,41 +206,71 @@ searchInput.addEventListener('input', (e) => {
 });
 
 /* =========================
-   "Brug min lokation" (search & add)
+   Brug min lokation (top)
    ========================= */
 document.getElementById('useMyLocationBtn').addEventListener('click', () => {
   if(!navigator.geolocation){ alert('Din browser understøtter ikke geolokation'); return; }
   navigator.geolocation.getCurrentPosition(pos => {
     userLat = pos.coords.latitude; userLng = pos.coords.longitude;
     setUserMarker(userLat, userLng);
-    map.setView([userLat, userLng], 12);
+    map.setView([userLat, userLng], 13);
     renderNearby(userLat, userLng);
   }, ()=> alert('Kunne ikke hente din lokation'));
 });
 
-/* Bonus: small button inside ADD modal to use location */
+/* =========================
+   Tilføj spot flow: toggle modal, geocode address or use user coords
+   ========================= */
+document.getElementById('toggleAddBtn').addEventListener('click', () => {
+  document.getElementById('addSpotBox').classList.toggle('hidden');
+});
+document.getElementById('cancelAddBtn').addEventListener('click', () => {
+  document.getElementById('addSpotBox').classList.add('hidden');
+});
+
+// Use my location inside add-modal: fills coords and reverse-geocodes to an address
 document.getElementById('useMyLocationAddBtn').addEventListener('click', () => {
   if(!navigator.geolocation){ alert('Din browser understøtter ikke geolokation'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    // fill address field with coords (user can replace with real address)
-    userLat = pos.coords.latitude; userLng = pos.coords.longitude;
-    document.getElementById('spotAddress').value = `${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
-    alert('Din lokation er sat i adressefeltet. Tryk Gem for at gemme spotet her.');
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    // reverse geocode via Nominatim
+    try {
+      const resp = await axios.get('https://nominatim.openstreetmap.org/reverse', {
+        params:{ lat, lon, format:'json' }
+      });
+      const display = resp.data && (resp.data.display_name || `${lat.toFixed(6)}, ${lon.toFixed(6)}`);
+      document.getElementById('spotAddress').value = display;
+      // store coords as temporary so we can save exact geo-point
+      document.getElementById('spotAddress').dataset.lat = lat;
+      document.getElementById('spotAddress').dataset.lng = lon;
+      alert('Din lokation er sat i adressefeltet. Tryk Gem for at gemme spotet.');
+    } catch (err) {
+      document.getElementById('spotAddress').value = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+      document.getElementById('spotAddress').dataset.lat = lat;
+      document.getElementById('spotAddress').dataset.lng = lon;
+      alert('Lokation sat (ingen adresse fundet). Tryk Gem for at gemme spotet.');
+    }
   }, ()=> alert('Kunne ikke hente din lokation'));
 });
 
-/* =========================
-   Add spot (geocode via Nominatim -> precise coords)
-   ========================= */
-document.getElementById('toggleAddBtn').addEventListener('click', ()=> document.getElementById('addSpotBox').classList.toggle('hidden'));
-document.getElementById('cancelAddBtn').addEventListener('click', ()=> document.getElementById('addSpotBox').classList.add('hidden'));
+// Save new spot (geocode if needed)
+document.getElementById('addSpotBtn').addEventListener('click', async () => {
+  const name = (document.getElementById('spotName').value || '').trim();
+  const address = (document.getElementById('spotAddress').value || '').trim();
+  if(!name || !address){ alert('Udfyld både navn og adresse'); return; }
 
-document.getElementById('addSpotBtn').addEventListener('click', () => {
-  const name = document.getElementById('spotName').value.trim();
-  const address = document.getElementById('spotAddress').value.trim();
-  if(!name || !address){ alert('Udfyld navn og adresse'); return; }
+  // If dataset contains coords (from "Brug min lokation"), use them
+  const latData = document.getElementById('spotAddress').dataset.lat;
+  const lngData = document.getElementById('spotAddress').dataset.lng;
+  if(latData && lngData){
+    pushNewSpot(name, address, parseFloat(latData), parseFloat(lngData));
+    // clear dataset
+    delete document.getElementById('spotAddress').dataset.lat;
+    delete document.getElementById('spotAddress').dataset.lng;
+    return;
+  }
 
-  // If address looks like coords (lat,lng) we parse directly
+  // If address looks like coords "lat, lng"
   const coordMatch = address.match(/^\s*([-+]?\d+\.\d+)\s*,\s*([-+]?\d+\.\d+)\s*$/);
   if(coordMatch){
     const lat = parseFloat(coordMatch[1]), lng = parseFloat(coordMatch[2]);
@@ -224,27 +279,28 @@ document.getElementById('addSpotBtn').addEventListener('click', () => {
   }
 
   // Geocode via Nominatim
-  axios.get('https://nominatim.openstreetmap.org/search', { params:{ q: address, format:'json', limit:1 }})
-    .then(resp => {
-      if(!resp.data || resp.data.length===0){ alert('Adresse ikke fundet'); return; }
-      const lat = parseFloat(resp.data[0].lat), lng = parseFloat(resp.data[0].lon);
-      pushNewSpot(name, address, lat, lng);
-    }).catch(()=> alert('Fejl ved geokodning'));
+  try {
+    const resp = await axios.get('https://nominatim.openstreetmap.org/search', { params:{ q: address, format:'json', limit:1 }});
+    if(!resp.data || resp.data.length === 0){ alert('Adresse ikke fundet'); return; }
+    const lat = parseFloat(resp.data[0].lat), lng = parseFloat(resp.data[0].lon);
+    pushNewSpot(name, resp.data[0].display_name || address, lat, lng);
+  } catch(e){
+    alert('Fejl ved geokodning. Prøv igen.');
+  }
 });
 
-function pushNewSpot(name,address,lat,lng){
-  const spot = {name,address,lat,lng,note:'Bruger-tilføjet'};
+function pushNewSpot(name, address, lat, lng){
+  const spot = { name, address, lat, lng, note: 'Bruger-tilføjet. Husk at tjekke skilte.' };
   parkingSpots.push(spot);
-  // add marker
-  spot.marker = L.circleMarker([lat,lng], { radius:6, color:'#0bb07b', weight:2, fillColor:'#00c07b', fillOpacity:1 }).addTo(map);
-  spot.marker.bindPopup(`<strong>${escapeHtml(spot.name)}</strong><br><small>${escapeHtml(spot.address)}</small><br><div style="margin-top:8px;"><button onclick="openInfoFromMarker('${escapeJs(spot.name)}')" style="background:#00c07b;border:none;color:#111;padding:6px 8px;border-radius:6px;cursor:pointer;font-weight:600">Se info</button></div>`);
-  document.getElementById('spotName').value=''; document.getElementById('spotAddress').value='';
+  addSpotMarker(spot);
+  document.getElementById('spotName').value = '';
+  document.getElementById('spotAddress').value = '';
   document.getElementById('addSpotBox').classList.add('hidden');
-  renderNearby(userLat,userLng);
+  renderNearby(userLat, userLng);
 }
 
 /* =========================
-   Init geolocation & initial rendering
+   Init: get geolocation & initial rendering
    ========================= */
 if(navigator.geolocation){
   navigator.geolocation.getCurrentPosition(pos => {
@@ -252,15 +308,19 @@ if(navigator.geolocation){
     setUserMarker(userLat, userLng);
     map.setView([userLat, userLng], 12);
     renderNearby(userLat, userLng);
-  }, ()=> { renderNearby(userLat, userLng); });
+  }, ()=> {
+    renderNearby(userLat, userLng);
+  }, { timeout: 5000 });
 } else {
-  renderNearby(userLat,userLng);
+  renderNearby(userLat, userLng);
 }
 
 /* =========================
-   Small helpers to escape strings inserted into HTML/JS
+   Expose helper for popup inline button (older popups might call this)
    ========================= */
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function escapeJs(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+window.openInfoFromMarker = (name) => {
+  const spot = parkingSpots.find(s => s.name === name);
+  if(spot) openInfoModal(spot);
+};
 
 }); // DOMContentLoaded end
