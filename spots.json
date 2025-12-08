@@ -1,11 +1,21 @@
-let parkingSpots = [
-  // Aarhus
-  {name: "Tangkrogen", info: "Parkering ved strand/park — ofte gratis", lat: 56.1520, lng: 10.2030},
-  {name: "Aarhus – periferi / boliggader", info: "Muligt gratis gadeparkering (tjek skilte)", lat: 56.1620, lng: 10.2035},
-  {name: "Aarhus – kommunalt p‑hus (muligt billig/gratis udenfor peak)", info: "Se åbningstid og skilte", lat: 56.1510, lng: 10.1990},
-
-  // København (eksempel — kræver kontroll på skilte!)
-  {name: "København – tidsbegrænset zone (boligområde)", info: "Gratis med p‑skive — tjek skilte", lat: 55.6850, lng: 12.5650},
-  {name: "København – omegn / ydre zone", info: "Mulig billig/tidsbegrænset parkering", lat: 55.7000, lng: 12.4500},
-  {name: "København – alternativ park & ride zone", info: "Brug tog/bus fra her", lat: 55.7400, lng: 12.5000}
-];
+[
+  { "name":"Tangkrogen", "address":"Marselisborg Havnevej 4, 8000 Aarhus", "lat":56.1520, "lng":10.2030, "note":"Stor p-plads ved havnen, ofte gratis; tjek skilte." },
+  { "name":"Ceres Park", "address":"Stadion Allé 70, 8000 Aarhus", "lat":56.1515, "lng":10.2050, "note":"Gratis i weekender. Tæt på stadion." },
+  { "name":"Donbækhaven", "address":"Oddervej 6, 8000 Aarhus", "lat":56.1440, "lng":10.2100, "note":"Gadeparkering, tjek skilte." },
+  { "name":"Marselisborg Strand", "address":"Strandvejen 23, 8000 Aarhus", "lat":56.1470, "lng":10.2055, "note":"Mindre p-plads ved strand, ofte gratis udenfor sæson." },
+  
+  { "name":"Amager Strand", "address":"Strandvejen 3, 2300 København S", "lat":55.6469, "lng":12.5950, "note":"Større p-pladser ved stranden. Tjek skilte for zoner." },
+  { "name":"Amagerbrogade", "address":"Amagerbrogade, 2300 København S", "lat":55.6600, "lng":12.5900, "note":"Gadeparkering i dele af Amager - tidsbegrænset." },
+  { "name":"Ørestad P", "address":"Ørestads Boulevard, 2300 København S", "lat":55.6356, "lng":12.5868, "note":"Store p-pladser, ofte gratis i ydre områder." },
+  { "name":"Valby Langgade", "address":"Valby Langgade, 2500 Valby", "lat":55.6575, "lng":12.4960, "note":"Gadeparkering, tjek p-skiltning." },
+  { "name":"Vesterbro / Sønder Boulevard", "address":"Sønder Boulevard, 1720 København", "lat":55.6670, "lng":12.5650, "note":"Gratis efter visse tidspunkter - se skiltning." },
+  
+  { "name":"Nørrebrogade (NV)", "address":"Nørrebrogade, 2200 København", "lat":55.6920, "lng":12.5660, "note":"Nørrebro gader - nogle steder tidsbegrænset/gratis i weekender." },
+  { "name":"Østerbro (sidegader)", "address":"Østerbro, København", "lat":55.7030, "lng":12.5850, "note":"Sidegader har ofte gratis pladser - tjek skilte." },
+  { "name":"Frederiksberg / Smallegade", "address":"Smallegade, Frederiksberg", "lat":55.6760, "lng":12.5230, "note":"Gratis tidlig morgen/visse områder - tjek lokalt." },
+  { "name":"Christianshavn / Torvegade", "address":"Torvegade, 1400 København K", "lat":55.6760, "lng":12.5930, "note":"Sidegader kan have gratis pladser." },
+  
+  { "name":"Jernbanevej P-plads", "address":"Jernbanevej, 3000 Helsingør", "lat":56.0390, "lng":12.6130, "note":"P-plads nær station. Tjek skilte for tid." },
+  { "name":"Stationens P-plads", "address":"Stationspladsen, 3000 Helsingør", "lat":56.0395, "lng":12.6065, "note":"Korttidsparkering ved stationen." },
+  { "name":"Nordhavnen / Mole", "address":"Nordhavnsvej, 3000 Helsingør", "lat":56.0425, "lng":12.6080, "note":"Kystnær p-plads, ofte gratis." }
+]
