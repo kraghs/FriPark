@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FreePark — Find gratis parkering i Danmark</title>
+  <title>FreePark — Gratis parkering DK</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2kX0k6a2s0qXG8Z6m/3dG2z6b6+eWlY4gkLkW3M=" crossorigin="" />
-  <!-- Use a nice system font stack -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <meta name="theme-color" content="#0a84ff" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">FreePark</div>
-    <div class="subtitle">Gratis parkering i Danmark — check skiltene</div>
+    <div class="subtitle">Gratis parkering i Danmark — tjek skiltene</div>
   </header>
 
   <main>
     <div class="searchWrap">
-      <input id="searchInput" placeholder="Søg by eller adresse (fx 'København', 'Roskilde')" autocomplete="off" />
+      <input id="searchInput" placeholder="Søg by eller adresse (fx 'København')" autocomplete="off" />
       <div id="searchResults" class="hidden"></div>
     </div>
 
@@ -36,12 +35,11 @@
     </section>
   </main>
 
-  <!-- Add Spot box -->
   <div id="addSpotBox" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modalInner">
       <h4>Tilføj gratis parkering</h4>
-      <label>Navn (f.eks. "Stationen P-plads")<input id="spotName" /></label>
-      <label>Adresse (vej, by) eller koordinator (lat, lng)<input id="spotAddress" placeholder="Skriv adresse eller tryk 'Brug min lokation'"/></label>
+      <label>Navn <input id="spotName" /></label>
+      <label>Adresse eller koordinater <input id="spotAddress" placeholder="Skriv adresse eller tryk 'Brug min lokation'"/></label>
       <div class="row">
         <button id="useMyLocationAddBtn" class="small">Brug min lokation</button>
         <div class="spacer"></div>
@@ -51,7 +49,6 @@
     </div>
   </div>
 
-  <!-- Info modal (viser detaljer for et spot) -->
   <div id="infoModal" class="infoModal hidden" role="dialog" aria-modal="true">
     <div class="infoContent">
       <h4 id="infoTitle">Navn</h4>
@@ -63,11 +60,9 @@
     </div>
   </div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-Vw7jz7wVb3+vY0Q6x0m2Jw0k8QZp0s0w6P4p+eY5G2w=" crossorigin=""></script>
-  <!-- axios for http requests -->
+  <!-- Leaflet & Axios scripts (Leaflet før script.js) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
   <script src="script.js"></script>
 </body>
 </html>
