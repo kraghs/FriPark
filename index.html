@@ -1,95 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="da">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>Gratis Parkering DK</title>
-
-  <!-- PWA manifest -->
-  <link rel="manifest" href="manifest.json" />
-
-  <!-- iOS add to home screen -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Parkering" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-pMpr2fGZ2G6lVGIh6W8zvYQeMcA4CwLrYvCfpF2bY3s="
-    crossorigin=""
-  />
-
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>FreePark – Gratis parkering i Danmark</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
 </head>
 <body>
   <header class="app-header">
     <div class="brand">
-      <div class="dot"></div>
-      <span class="title">Gratis Parkering</span>
-      <span class="subtitle">Danmark</span>
+      <span class="logo-dot"></span>
+      <span class="brand-text">FreePark</span>
     </div>
-    <button class="ui-button ghost" id="aboutButton" aria-label="Om appen">Om</button>
+    <div class="search-wrapper">
+      <input id="searchInput" type="text" placeholder="Søg område, f.eks. København eller Roskilde" aria-label="Søg område">
+      <button id="searchBtn" class="btn btn-primary">Søg</button>
+    </div>
   </header>
 
-  <main id="app">
-    <section class="map-wrap">
-      <div id="map" role="application" aria-label="Kort over parkeringssteder"></div>
+  <main class="content">
+    <section class="map-section">
+      <div id="map" class="map"></div>
+
+      <div class="floating-controls">
+        <button id="locateBtn" class="icon-btn" title="Brug min lokation" aria-label="Brug min lokation">
+          <span class="icon-location"></span>
+        </button>
+        <button id="addBtn" class="icon-btn" title="Tilføj parkeringsplads" aria-label="Tilføj parkeringsplads">
+          <span class="icon-plus"></span>
+        </button>
+      </div>
     </section>
 
-    <!-- Inline card -->
-    <div id="inlineCard" class="inline-card" hidden aria-live="polite">
-      <div class="card-line">
-        <div class="name" id="cardName"></div>
-        <span class="badge" id="cardBadge" hidden>Verificeret</span>
-      </div>
-      <div class="address" id="cardAddress"></div>
-      <div class="card-actions">
-        <button class="ui-button primary" id="infoButton">Vis info</button>
-        <button class="ui-button" id="closeCard">Luk</button>
-      </div>
-    </div>
-
-    <!-- Bottom sheet -->
-    <div id="sheet" class="sheet" hidden aria-modal="true" role="dialog">
-      <div class="sheet-backdrop" id="sheetBackdrop" tabindex="-1" aria-hidden="true"></div>
-      <div class="sheet-content" role="document" aria-labelledby="sheetTitle">
-        <div class="sheet-handle" aria-hidden="true"></div>
-        <div class="sheet-header">
-          <div class="sheet-title-wrap">
-            <h2 id="sheetTitle" class="sheet-title">Navn på sted</h2>
-            <span class="badge" id="sheetBadge" hidden>Verificeret</span>
-          </div>
-          <p id="sheetAddress" class="sheet-address">Adresse</p>
-        </div>
-        <div class="sheet-body">
-          <ul id="sheetFacts" class="fact-list"></ul>
-          <div id="sheetNotes" class="notes" hidden></div>
-        </div>
-        <div class="sheet-footer">
-          <button class="ui-button" id="closeSheet">Luk</button>
-        </div>
-      </div>
-    </div>
+    <section class="list-section">
+      <h2 class="section-title">Nærmeste gratis parkeringspladser</h2>
+      <ul id="nearestList" class="nearest-list" aria-live="polite"></ul>
+    </section>
   </main>
 
-  <footer class="app-footer">
-    <div class="footer-inner">
-      <span class="foot-text">Fakta skal være verificeret pr. sted.</span>
-      <span class="foot-text dim">Koordinater bruges kun internt og vises aldrig.</span>
+  <!-- Add place modal -->
+  <div id="addModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="addTitle">Tilføj parkeringsplads</h3>
+        <button class="icon-btn close-btn" id="addCloseBtn" aria-label="Luk">
+          <span class="icon-close"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addForm">
+          <div class="form-group">
+            <label for="placeName">Navn</label>
+            <input id="placeName" name="placeName" type="text" placeholder="F.eks. Amager Strand P-plads" required>
+          </div>
+
+          <div class="form-group">
+            <label for="placeAddress">Adresse</label>
+            <div class="address-row">
+              <input id="placeAddress" name="placeAddress" type="text" placeholder="F.eks. Amager Strandvej 100, 2300 København S" required>
+              <button type="button" id="useMyLocationBtn" class="btn btn-secondary">Brug min lokation</button>
+            </div>
+            <p class="hint">Adresse hentes automatisk fra din lokation ved tryk.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="placeInfo">Info</label>
+            <input id="placeInfo" name="placeInfo" type="text" placeholder="F.eks. 3 timer gratis, fri efter kl. 18" required>
+          </div>
+
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Tilføj</button>
+            <button type="button" class="btn btn-ghost" id="addCancelBtn">Annuller</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+
+  <!-- Info modal -->
+  <div id="infoModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="infoTitle">Detaljer</h3>
+        <button class="icon-btn close-btn" id="infoCloseBtn" aria-label="Luk">
+          <span class="icon-close"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="infoContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <p>FreePark viser gratis parkeringsmuligheder i Danmark. Oplysninger kan ændre sig – tjek altid skiltning på stedet.</p>
   </footer>
 
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-VuZ4G2NQxZ2hZrY6d5nQDJvVfZksp7nGgZ7Z1Cj8qMo="
-    crossorigin=""
-  ></script>
-
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-p4Qn8rPjGStqV38xNkJQ9jwQ1C0C4YQY1jLQx4Ck0zY=" crossorigin=""></script>
   <script src="script.js"></script>
 </body>
 </html>
