@@ -1,16 +1,10 @@
-body {
+html, body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-h1 {
-  text-align: center;
-  font-weight: 600;
-  margin: 10px 0;
+  height: 100%;
 }
 
 #map {
-  height: 90vh;   /* simpelt: fylder næsten hele skærmen */
+  height: 100%;   /* fylder hele skærmen */
   width: 100%;
 }
 
