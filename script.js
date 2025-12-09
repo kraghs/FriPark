@@ -120,3 +120,47 @@ searchInput.addEventListener('input', () => {
 });
 
 });
+async function fetchParkingFromOSM(bbox=null) {
+  // Hvis du vil søge i hele Danmark:
+  // bbox = [8.080, 54.560, 15.180, 57.800]; // DK bounding box
+  // bbox = null; // så søges uden bbox
+
+  // Overpass query (leder efter parking = free eller permissive)
+  const query = `
+    [out:json][timeout:25];
+    ${bbox ? `(
+      node["amenity"="parking"]["parking:fee"="no"](${bbox[1]},${bbox[0]},${bbox[3]},${bbox[2]});
+      way["amenity"="parking"]["parking:fee"="no"](${bbox[1]},${bbox[0]},${bbox[3]},${bbox[2]});
+    );` :
+    `(
+      node["amenity"="parking"]["parking:fee"="no"];
+      way["amenity"="parking"]["parking:fee"="no"];
+    );
+    `}
+    out center;
+  `;
+
+  const url = "https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(query);
+
+  const response = await fetch(url);
+  const data = await response.json();
+  const elements = data.elements;
+
+  // formatter output
+  const parkings = elements.map(p => ({
+      name: p.tags.name || "Gratis parkering",
+      lat: p.lat || p.center?.lat,
+      lng: p.lon || p.center?.lon,
+      freeInfo: "Gratis ifølge OSM",
+      osmId: p.id
+  }));
+
+  return parkings;
+}
+
+// Eksempel på brug:
+fetchParkingFromOSM().then(parkings => {
+  console.log("Hentede parkeringer:", parkings);
+  // Her kan du markere dem på kortet
+});
+
