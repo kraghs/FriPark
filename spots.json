@@ -1,157 +1,737 @@
 [
-  {"name":"Amager Strandpark Syd P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Amager Strandpark Nord P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Ørestad Vest P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Ørestad Arena P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Bella Sky Hotel P (offentlig gadeparkering)","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Islands Brygge Syd P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"ITU Gadeparkering","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Sundby Idrætspark P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Lergravsparken P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Amagerbrogade Sidegader (flere gratis)","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Refshaleøen P","address":"1432 København K","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Lynetten (Refshalevej Slut)","address":"1432 København K","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Hal C Refshalevej P","address":"1432 København K","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Papirøen Gadeparkering (ude mod vand)","address":"1400 København K","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Grønnegade Gadeparkering (gratis efter 17)","address":"1107 København K","lat":null,"lng":null,"note":"Tjek lokale regler/perioder"},
-  {"name":"Torvegade Sidegader","address":"1400 København K","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Nordhavn Århusgadekvarter P","address":"2150 København","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Nordhavn Sydhavnstippen P","address":"2150 København","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Nordhavn Pier2 P","address":"2150 København","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Østerbro Sidegader (ikke zoner)","address":"2100 København Ø","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Fælledparken Nord P","address":"2100 København Ø","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Svanemøllen Fort P","address":"2100 København Ø","lat":null,"lng":null,"note":"Tjek lokale regler"},
-  {"name":"Ryparken Idrætspark P","address":"2100 København Ø","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Vesterbro Sønder Boulevard (gratis visse tider)","address":"1720 København V","lat":null,"lng":null,"note":"Tjek tidsregler på skiltene"},
-  {"name":"Carlsberg Byen Syd P","address":"1799 København V","lat":null,"lng":null,"note":"Tjek skilte; ofte private områder"},
-  {"name":"Carlsberg Station P","address":"1799 København V","lat":null,"lng":null,"note":"Station/ydre områder"},
-  {"name":"Enghave Brygge Syd P","address":"2450 København SV","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Fisketorvet Syd P (off. gader)","address":"1560 København V","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Kalvebod Brygge Syd Gadeparkering","address":"1560 København V","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Valbyparken P","address":"2500 Valby","lat":null,"lng":null,"note":"Større gratis parkeringsområde, tjek skilte"},
-  {"name":"Valby Idrætspark P","address":"2500 Valby","lat":null,"lng":null,"note":"Tjek skilte; geocode mangler"},
-  {"name":"Toftegårds Plads Sidegader","address":"2500 Valby","lat":null,"lng":null,"note":"Gadeparkering i udkanten"},
-  {"name":"Grønttorvet (udenfor betalingsområde)","address":"2500 Valby","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Utterslevparkens Nord P","address":"2700 Brønshøj","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Utterslevparkens Syd P","address":"2700 Brønshøj","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Brønshøj Torv P","address":"2700 Brønshøj","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Tingbjerg Idrætspark","address":"2700 Brønshøj","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Husum Torv P","address":"2700 Brønshøj","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Vanløse Station P","address":"2720 Vanløse","lat":null,"lng":null,"note":"Stationsparkering; tjek skilte"},
-  {"name":"Jyllingevej Gadepark","address":"2720 Vanløse","lat":null,"lng":null,"note":"Gadeparkering; tjek skilte"},
-  {"name":"Flintholm sidegader (uden zone)","address":"2720 Vanløse","lat":null,"lng":null,"note":"Gadeparkering i udkanten"},
-  {"name":"Rødovrehallen P","address":"2610 Rødovre","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Rødovre Centrum Udkant","address":"2610 Rødovre","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Hvidovre Bibliotek P","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Kettegård Allé Sidegader","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Gadeparkering; tjek skilte"},
-  {"name":"Friheden Station P","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Stationsparkering; tjek skilte"},
-  {"name":"Avedøre Station P","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Stationsparkering; tjek skilte"},
-  {"name":"Brøndby Stadion P Syd","address":"2605 Brøndby","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Brøndby Strand Center P","address":"2660 Brøndby Strand","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Glostrup Bypark P","address":"2600 Glostrup","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Glostrup Station Nord P","address":"2600 Glostrup","lat":null,"lng":null,"note":"Stationsparkering"},
-  {"name":"Albertslund Stadion P","address":"2620 Albertslund","lat":null,"lng":null,"note":"Idrætspark; tjek skilte"},
-  {"name":"Albertslund Center P","address":"2620 Albertslund","lat":null,"lng":null,"note":"Centrum P"},
-  {"name":"Vallensbæk Idrætscenter P","address":"2625 Vallensbæk","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Helsingør Station Syd P","address":"3000 Helsingør","lat":null,"lng":null,"note":"Stationsparkering"},
-  {"name":"Nordhavnen Helsingør","address":"3000 Helsingør","lat":null,"lng":null,"note":"Kystnær P"},
-  {"name":"Toldkammer Helsingør P","address":"3000 Helsingør","lat":null,"lng":null,"note":"Havn/centrum P"},
-  {"name":"Kronborg Syd P","address":"3000 Helsingør","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Helsingør Kulturværft P","address":"3000 Helsingør","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Espergærde Station P","address":"3060 Espergærde","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Snekkersten Station P","address":"3070 Snekkersten","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Humlebæk Station P","address":"3050 Humlebæk","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Nivå Station P","address":"2990 Nivå","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Holte Station P","address":"2840 Holte","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Birkerød Idrætscenter P","address":"3460 Birkerød","lat":null,"lng":null,"note":"Idrætspark"},
-  {"name":"Birkerød Station P","address":"3460 Birkerød","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Allerød Station P","address":"3450 Allerød","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Allerød Idrætscenter P","address":"3450 Allerød","lat":null,"lng":null,"note":"Idrætspark"},
-  {"name":"Hillerød Arena P","address":"3400 Hillerød","lat":null,"lng":null,"note":"Arena P"},
-  {"name":"Fredensborg Station Syd P","address":"3480 Fredensborg","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Hørsholm Rådhus P","address":"2970 Hørsholm","lat":null,"lng":null,"note":"Centrum P"},
-  {"name":"Hørsholm Skole P","address":"2970 Hørsholm","lat":null,"lng":null,"note":"Skole/idræts P"},
-  {"name":"Rungsted Station P","address":"2960 Rungsted","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Roskilde Station Vest","address":"4000 Roskilde","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Musicon Syd","address":"4000 Roskilde","lat":null,"lng":null,"note":"Musicon område P"},
-  {"name":"Rabalderstræde (gratis gader)","address":"4000 Roskilde","lat":null,"lng":null,"note":"Gadeparkering"},
-  {"name":"Ros Torv (ydre områder)","address":"4000 Roskilde","lat":null,"lng":null,"note":"Centrum/ydre områder"},
-  {"name":"Svogerslev Idrætspark","address":"4000 Roskilde","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Himmelev Skov P","address":"4000 Roskilde","lat":null,"lng":null,"note":"Skov/naturoplevelse P"},
-  {"name":"Viby Sjælland Station","address":"4130 Viby Sj.","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Glumsø Station","address":"4171 Glumsø","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Tølløse Station","address":"4340 Tølløse","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Køge Stadion P","address":"4600 Køge","lat":null,"lng":null,"note":"Stadion P"},
-  {"name":"Køge Nord Station P","address":"4600 Køge","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Køge havnefront gratis","address":"4600 Køge","lat":null,"lng":null,"note":"Havn/marina P"},
-  {"name":"Greve Idrætscenter P","address":"2670 Greve","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Solrød Strand Station P","address":"2680 Solrød","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Slagelse Idrætscenter P","address":"4200 Slagelse","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Slagelse Station Syd P","address":"4200 Slagelse","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Korsør Station P","address":"4220 Korsør","lat":null,"lng":null,"note":"Station P"},
-  {"name":"Korsør Kulturhus P","address":"4220 Korsør","lat":null,"lng":null,"note":"Kulturhus/center P"},
-  {"name":"Holbæk Havn Syd P","address":"4300 Holbæk","lat":null,"lng":null,"note":"Havn P"},
-  {"name":"Kløvermarken P Syd","address":"2300 København S","lat":null,"lng":null,"note":"Stor plads; tjek skilte"},
-  {"name":"Kløvermarken P Nord","address":"2300 København S","lat":null,"lng":null,"note":"Stor plads; tjek skilte"},
-  {"name":"DR Byen Syd (sportshal)","address":"2300 København S","lat":null,"lng":null,"note":"Gratis aften/weekend; tjek skilte"},
-  {"name":"Holmen Kanonbådsvej P","address":"1437 København K","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Artillerivej Syd P","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Grønjordsvej Udgang (ITU syd)","address":"2300 København S","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Kalvebod Bølge Syd P","address":"1560 København V","lat":null,"lng":null,"note":"Havn/strandside P"},
-  {"name":"Kalvebod Brygge Havnefront (udenfor zone)","address":"1560 København V","lat":null,"lng":null,"note":"Havn/ydre P"},
-  {"name":"Bryggens Kajakklub Område","address":"2300 København S","lat":null,"lng":null,"note":"Havn/klub P"},
-  {"name":"Enghavevej Syd P","address":"1674 København V","lat":null,"lng":null,"note":"Gadeparkering"},
-  {"name":"Bådehavnsgade Syd P","address":"2450 København SV","lat":null,"lng":null,"note":"Havn/ydre P"},
-  {"name":"Teglholmen Syd P","address":"2450 København SV","lat":null,"lng":null,"note":"Tjek skilte"},
-  {"name":"Sydhavnen Tippen P","address":"2450 København SV","lat":null,"lng":null,"note":"Natur/ydre P"},
-  {"name":"H.C. Ørsteds Vej Sidegader (uden zone)","address":"1870 Frederiksberg","lat":null,"lng":null,"note":"Gadeparkering"},
-  {"name":"Søndermarken Parkering","address":"Frederiksberg","lat":null,"lng":null,"note":"Park P"},
-  {"name":"Zoologisk Have Syd (Grønt område gadepark)","address":"Frederiksberg","lat":null,"lng":null,"note":"Gadeparkering; tjek skilte"},
-  {"name":"Fasanvej station syd gader","address":"Frederiksberg","lat":null,"lng":null,"note":"Gadeparkering"},
-  {"name":"Idrætsvej Syd (Frydendal)","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Strandmarksvej Øst","address":"2650 Hvidovre","lat":null,"lng":null,"note":"Gadeparkering/ydre P"},
-  {"name":"Brøndby Strand Strandpark Syd","address":"2660 Brøndby Strand","lat":null,"lng":null,"note":"Strandparkering"},
-  {"name":"Brøndby Strand Strandpark Nord","address":"2660 Brøndby Strand","lat":null,"lng":null,"note":"Strandparkering"},
-  {"name":"Ishøj Strandpark Syd","address":"2635 Ishøj","lat":null,"lng":null,"note":"Strandparkering"},
-  {"name":"Ishøj Dyrepark P","address":"2635 Ishøj","lat":null,"lng":null,"note":"Parkering ved attractions"},
-  {"name":"Vallensbæk Strand Idrætspark Syd","address":"2665 Vallensbæk Strand","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Vallensbæk Landsby Syd Gadepark","address":"2625 Vallensbæk","lat":null,"lng":null,"note":"Gadeparkering"},
-  {"name":"Charlottenlund Fort P","address":"2920 Charlottenlund","lat":null,"lng":null,"note":"Strand/park P"},
-  {"name":"Charlottenlund Strandpark Syd","address":"2920 Charlottenlund","lat":null,"lng":null,"note":"Strand P"},
-  {"name":"Skovshoved Havn Syd","address":"2920 Skovshoved","lat":null,"lng":null,"note":"Havn P"},
-  {"name":"Gentofte Sø Syd P","address":"2820 Gentofte","lat":null,"lng":null,"note":"Park P"},
-  {"name":"Gentofte Sø Nord P","address":"2820 Gentofte","lat":null,"lng":null,"note":"Park P"},
-  {"name":"Lyngby Storcenter Yderområde","address":"2800 Lyngby","lat":null,"lng":null,"note":"Centrum/ydre P"},
-  {"name":"DTU Park Syd","address":"2800 Lyngby","lat":null,"lng":null,"note":"Campus P"},
-  {"name":"Sorgenfri Slotshave P","address":"2800 Lyngby","lat":null,"lng":null,"note":"Park/slot P"},
-  {"name":"Jægersborg Dyrehave Syd P","address":"2800 Lyngby","lat":null,"lng":null,"note":"Dyrehave/park P"},
-  {"name":"Frederiksborg Slot Syd P","address":"3400 Hillerød","lat":null,"lng":null,"note":"Slot/park P"},
-  {"name":"Frederiksborg Slot Nord P","address":"3400 Hillerød","lat":null,"lng":null,"note":"Slot/park P"},
-  {"name":"Slotsarkaderne udkant (yder zoner)","address":"3400 Hillerød","lat":null,"lng":null,"note":"Centrum/ydre P"},
-  {"name":"Fredensborg Slot Syd","address":"3480 Fredensborg","lat":null,"lng":null,"note":"Slot/park P"},
-  {"name":"Fredensborg Slot Nord","address":"3480 Fredensborg","lat":null,"lng":null,"note":"Slot/park P"},
-  {"name":"Louisianas yderparkering","address":"3050 Humlebæk","lat":null,"lng":null,"note":"Museumsparkering; tjek regler"},
-  {"name":"Nivå Havn Gadepark","address":"2990 Nivå","lat":null,"lng":null,"note":"Havn/gadeparkering"},
-  {"name":"Roskilde Domkirke gader (gratis aftener)","address":"4000 Roskilde","lat":null,"lng":null,"note":"Gadeparkering; tjek tidsregler"},
-  {"name":"Roskilde Havn sideveje","address":"4000 Roskilde","lat":null,"lng":null,"note":"Havn P"},
-  {"name":"Himmelev Skole P (aften/weekend)","address":"4000 Roskilde","lat":null,"lng":null,"note":"Skoleparkering; tjek regler"},
-  {"name":"Himmelev Strandpark Syd","address":"4000 Roskilde","lat":null,"lng":null,"note":"Strandparkering"},
-  {"name":"Boserup Skov P","address":"4000 Roskilde","lat":null,"lng":null,"note":"Skovparkering"},
-  {"name":"Hedeland Arena","address":"2640 Hedehusene","lat":null,"lng":null,"note":"Arena/park P"},
-  {"name":"Reerslev Idrætscenter","address":"2640 Hedehusene","lat":null,"lng":null,"note":"Idrætspark P"},
-  {"name":"Holbæk Fjord P","address":"4300 Holbæk","lat":null,"lng":null,"note":"Fjord/havn P"},
-  {"name":"Holbæk Museum P","address":"4300 Holbæk","lat":null,"lng":null,"note":"Centrum P"},
-  {"name":"Nykøbing Sjælland Havn Syd","address":"4500 Nykøbing Sj.","lat":null,"lng":null,"note":"Havn P"},
-  {"name":"Nykøbing Sj. Strandvejen","address":"4500 Nykøbing Sj.","lat":null,"lng":null,"note":"Strand/gadeparkering"},
-  {"name":"Rørvig Havn Syd","address":"4581 Rørvig","lat":null,"lng":null,"note":"Havn P"},
-  {"name":"Køge Syd Strandpark","address":"4600 Køge","lat":null,"lng":null,"note":"Strandparkering"},
-  {"name":"Køge Marina P","address":"4600 Køge","lat":null,"lng":null,"note":"Marina/havn P"},
-  {"name":"Stevns Klint Syd (naturparkering)","address":"4660 Store Heddinge","lat":null,"lng":null,"note":"Naturparkering; tjek skiltning"},
-  {"name":"Stevns Klint Nord","address":"4660 Store Heddinge","lat":null,"lng":null,"note":"Naturparkering; tjek skiltning"},
-  {"name":"Haslev Stadion P","address":"4690 Haslev","lat":null,"lng":null,"note":"Stadion P"},
-  {"name":"Slagelse Idéhus P","address":"4200 Slagelse","lat":null,"lng":null,"note":"Centrum/idræts P"},
-  {"name":"Slagelse Skovvej P","address":"4200 Slagelse","lat":null,"lng":null,"note":"Skov/ydre P"},
-  {"name":"Korsør Strandpark","address":"4220 Korsør","lat":null,"lng":null,"note":"Strand/havn P"},
-  {"name":"Korsør Nordstrand","address":"4220 Korsør","lat":null,"lng":null,"note":"Strand P"},
-  {"name":"Sorø Sø Syd","address":"4180 Sorø","lat":null,"lng":null,"note":"Sø/parkering"}
+  {
+    "name": "Amager Strandpark Syd P",
+    "address": "Amager Strandvej 110, 2300 København S",
+    "lat": 55.6585,
+    "lng": 12.629,
+    "note": "Amager Strandpark Syd"
+  },
+  {
+    "name": "Amager Strandpark Nord P",
+    "address": "Øresundsvej 15, 2300 København S",
+    "lat": 55.6585,
+    "lng": 12.641,
+    "note": "Amager Strandpark Nord"
+  },
+  {
+    "name": "Refshaleøen P",
+    "address": "Refshalevej 173A, 1432 København K",
+    "lat": 55.6931,
+    "lng": 12.6167,
+    "note": "Refshaleøen"
+  },
+  {
+    "name": "Lynetten (Refshalevej Slut)",
+    "address": "Refshalevej 200, 1432 København K",
+    "lat": 55.6925,
+    "lng": 12.633,
+    "note": "Lynetten"
+  },
+  {
+    "name": "Papirøen Gadeparkering (ude mod vand)",
+    "address": "Christiansholm (Papirøen), Trangravsvej 1, 1400 København K",
+    "lat": 55.6792,
+    "lng": 12.5986,
+    "note": "Christiansholm/Papirøen"
+  },
+  {
+    "name": "Grønnegade Gadeparkering (gratis efter 17)",
+    "address": "Grønnegade 27, 1107 København K",
+    "lat": 55.6811,
+    "lng": 12.5828,
+    "note": "Grønnegade"
+  },
+  {
+    "name": "Torvegade Sidegader",
+    "address": "Torvegade 1, 1400 København K",
+    "lat": 55.673,
+    "lng": 12.596,
+    "note": "Torvegade sidegader"
+  },
+  {
+    "name": "Nordhavn Århusgadekvarter P",
+    "address": "Århusgade 131, 2150 København",
+    "lat": 55.7075,
+    "lng": 12.5953,
+    "note": "Århusgadekvarteret"
+  },
+  {
+    "name": "P-hus Orient Plads",
+    "address": "Orientkaj 2A, 2150 Nordhavn",
+    "lat": 55.715,
+    "lng": 12.6,
+    "note": "P-hus Orient Plads"
+  },
+  {
+    "name": "P-plads Levantkaj",
+    "address": "Levantkaj 6, 2150 Nordhavn",
+    "lat": 55.7135,
+    "lng": 12.6025,
+    "note": "Levantkaj"
+  },
+  {
+    "name": "Østerbro Sidegader (ikke zoner)",
+    "address": "Østerbrogade 150, 2100 København Ø",
+    "lat": 55.7089,
+    "lng": 12.5772,
+    "note": "Østerbro sidegader"
+  },
+  {
+    "name": "Fælledparken Nord P",
+    "address": "Øster Allé 50, 2100 København Ø",
+    "lat": 55.702,
+    "lng": 12.572,
+    "note": "Fælledparken Nord"
+  },
+  {
+    "name": "Vesterbro Sønder Boulevard (gratis visse tider)",
+    "address": "Sønder Boulevard 72, 1720 København V",
+    "lat": 55.6664,
+    "lng": 12.5522,
+    "note": "Sønder Boulevard"
+  },
+  {
+    "name": "Carlsberg Byen Syd P",
+    "address": "Bag Elefanterne, 1799 København V",
+    "lat": 55.667,
+    "lng": 12.538,
+    "note": "Carlsberg Byen Syd"
+  },
+  {
+    "name": "Carlsberg Station P",
+    "address": "Pasteursvej 3, 1799 København V",
+    "lat": 55.6675,
+    "lng": 12.536,
+    "note": "Carlsberg Station"
+  },
+  {
+    "name": "Enghave Brygge Syd P",
+    "address": "Nelson Mandelas Allé 1, 2450 København SV",
+    "lat": 55.6553,
+    "lng": 12.5575,
+    "note": "Enghave Brygge Syd"
+  },
+  {
+    "name": "Fisketorvet Syd P (off. gader)",
+    "address": "Kalvebod Brygge 59, 1560 København V",
+    "lat": 55.6622,
+    "lng": 12.5622,
+    "note": "Fisketorvet Syd"
+  },
+  {
+    "name": "Valbyparken P",
+    "address": "Hammelstrupvej 100, 2500 Valby",
+    "lat": 55.6425,
+    "lng": 12.505,
+    "note": "Større gratis parkeringsområde"
+  },
+  {
+    "name": "Utterslevparkens Nord P",
+    "address": "Hvedevej 85, 2700 Brønshøj",
+    "lat": 55.7152,
+    "lng": 12.4955,
+    "note": "Gratis parkering ved Utterslevparken"
+  },
+  {
+    "name": "Utterslevparkens Syd P",
+    "address": "Hvedevej 20, 2700 Brønshøj",
+    "lat": 55.71,
+    "lng": 12.495,
+    "note": "Utterslevparken Syd"
+  },
+  {
+    "name": "Vanløse Station P",
+    "address": "Jernbane Allé 108, 2720 Vanløse",
+    "lat": 55.687,
+    "lng": 12.4875,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Jyllingevej Gadepark",
+    "address": "Jyllingevej 100, 2720 Vanløse",
+    "lat": 55.6875,
+    "lng": 12.47,
+    "note": "Jyllingevej gadeparkering"
+  },
+  {
+    "name": "Rødovrehallen P",
+    "address": "Rødovre Parkvej 425, 2610 Rødovre",
+    "lat": 55.6808,
+    "lng": 12.4536,
+    "note": "Idrætsanlæg med gratis P"
+  },
+  {
+    "name": "Rødovre Centrum Udkant",
+    "address": "Rødovrevej 157, 2610 Rødovre",
+    "lat": 55.68,
+    "lng": 12.453,
+    "note": "Rødovre Centrum udkant"
+  },
+  {
+    "name": "Hvidovre Bibliotek P",
+    "address": "Hvidovrevej 280, 2650 Hvidovre",
+    "lat": 55.6575,
+    "lng": 12.475,
+    "note": "Biblioteksparkering"
+  },
+  {
+    "name": "Kettegård Allé Sidegader",
+    "address": "Kettegård Allé 30, 2650 Hvidovre",
+    "lat": 55.65,
+    "lng": 12.48,
+    "note": "Kettegård Allé sidegader"
+  },
+  {
+    "name": "Brøndby Stadion P Syd",
+    "address": "Brøndby Stadion 1, 2605 Brøndby",
+    "lat": 55.6486,
+    "lng": 12.4172,
+    "note": "Stadionparkering"
+  },
+  {
+    "name": "Brøndby Strand Center P",
+    "address": "Strandparken 1, 2660 Brøndby Strand",
+    "lat": 55.6245,
+    "lng": 12.389,
+    "note": "Centrumparkering"
+  },
+  {
+    "name": "Glostrup Bypark P",
+    "address": "Stationsparken 1, 2600 Glostrup",
+    "lat": 55.666,
+    "lng": 12.401,
+    "note": "Bypark parkering"
+  },
+  {
+    "name": "Glostrup Station Nord P",
+    "address": "Stationsvej 1, 2600 Glostrup",
+    "lat": 55.666,
+    "lng": 12.401,
+    "note": "Glostrup Station Nord"
+  },
+  {
+    "name": "Albertslund Stadion P",
+    "address": "Skolevænget 1, 2620 Albertslund",
+    "lat": 55.6565,
+    "lng": 12.348,
+    "note": "Idrætspark"
+  },
+  {
+    "name": "Albertslund Center P",
+    "address": "Bytorvet 1, 2620 Albertslund",
+    "lat": 55.656,
+    "lng": 12.35,
+    "note": "Albertslund Center"
+  },
+  {
+    "name": "Vallensbæk Idrætscenter P",
+    "address": "Idræts Allé 1, 2625 Vallensbæk",
+    "lat": 55.633,
+    "lng": 12.3865,
+    "note": "Idrætscenter parkering"
+  },
+  {
+    "name": "Helsingør Station Syd P",
+    "address": "Jernbanevej 5, 3000 Helsingør",
+    "lat": 56.0365,
+    "lng": 12.613,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Nordhavnen Helsingør",
+    "address": "Havnepladsen 1, 3000 Helsingør",
+    "lat": 56.036,
+    "lng": 12.613,
+    "note": "Nordhavnen Helsingør"
+  },
+  {
+    "name": "Espergærde Station P",
+    "address": "Stationsvej 4, 3060 Espergærde",
+    "lat": 55.994,
+    "lng": 12.5565,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Snekkersten Station P",
+    "address": "Stationsvej 10, 3070 Snekkersten",
+    "lat": 56.0005,
+    "lng": 12.58,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Humlebæk Station P",
+    "address": "Gl. Strandvej 2, 3050 Humlebæk",
+    "lat": 55.962,
+    "lng": 12.532,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Nivå Station P",
+    "address": "Stationsvej 1, 2990 Nivå",
+    "lat": 55.9335,
+    "lng": 12.5025,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Holte Station P",
+    "address": "Stationsvej 1, 2840 Holte",
+    "lat": 55.816,
+    "lng": 12.473,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Birkerød Idrætscenter P",
+    "address": "Bistrupvej 1, 3460 Birkerød",
+    "lat": 55.8475,
+    "lng": 12.427,
+    "note": "Idrætscenter parkering"
+  },
+  {
+    "name": "Birkerød Station P",
+    "address": "Stationsvej 1, 3460 Birkerød",
+    "lat": 55.847,
+    "lng": 12.427,
+    "note": "Birkerød Station"
+  },
+  {
+    "name": "Allerød Station P",
+    "address": "Stationsvej 1, 3450 Allerød",
+    "lat": 55.87,
+    "lng": 12.356,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Allerød Idrætscenter P",
+    "address": "Skolevej 5, 3450 Allerød",
+    "lat": 55.87,
+    "lng": 12.356,
+    "note": "Allerød Idrætscenter"
+  },
+  {
+    "name": "Hillerød Arena P",
+    "address": "Frederiksborgvej 5, 3400 Hillerød",
+    "lat": 55.927,
+    "lng": 12.31,
+    "note": "Arena parkering"
+  },
+  {
+    "name": "Fredensborg Station Syd P",
+    "address": "Stationsvej 2, 3480 Fredensborg",
+    "lat": 55.974,
+    "lng": 12.4,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Hørsholm Rådhus P",
+    "address": "Usserød Kongevej 18, 2970 Hørsholm",
+    "lat": 55.8805,
+    "lng": 12.503,
+    "note": "Centrum parkering ved rådhuset"
+  },
+  {
+    "name": "Hørsholm Skole P",
+    "address": "Usserød Kongevej 80, 2970 Hørsholm",
+    "lat": 55.88,
+    "lng": 12.503,
+    "note": "Hørsholm Skole"
+  },
+  {
+    "name": "Rungsted Station P",
+    "address": "Stationsvej 1, 2960 Rungsted Kyst",
+    "lat": 55.884,
+    "lng": 12.541,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Roskilde Station Vest",
+    "address": "Jernbanegade 1, 4000 Roskilde",
+    "lat": 55.641,
+    "lng": 12.08,
+    "note": "Stationsparkering vestside"
+  },
+  {
+    "name": "Musicon Syd",
+    "address": "Rabalderstræde 20, 4000 Roskilde",
+    "lat": 55.629,
+    "lng": 12.08,
+    "note": "Musicon Syd"
+  },
+  {
+    "name": "Viby Sjælland Station",
+    "address": "Stationsvej 2, 4130 Viby Sjælland",
+    "lat": 55.548,
+    "lng": 11.969,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Glumsø Station",
+    "address": "Stationsvej 1, 4171 Glumsø",
+    "lat": 55.364,
+    "lng": 11.671,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Tølløse Station",
+    "address": "Stationsvej 1, 4340 Tølløse",
+    "lat": 55.617,
+    "lng": 11.768,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Køge Stadion P",
+    "address": "Ved Stadion 4, 4600 Køge",
+    "lat": 55.456,
+    "lng": 12.182,
+    "note": "Stadionparkering"
+  },
+  {
+    "name": "Køge Nord Station P",
+    "address": "Stationsvej 10, 4600 Køge",
+    "lat": 55.489,
+    "lng": 12.18,
+    "note": "Køge Nord Station"
+  },
+  {
+    "name": "Greve Idrætscenter P",
+    "address": "Mosedevej 20, 2670 Greve",
+    "lat": 55.583,
+    "lng": 12.3,
+    "note": "Idrætscenter parkering"
+  },
+  {
+    "name": "Solrød Strand Station P",
+    "address": "Stationsvej 1, 2680 Solrød Strand",
+    "lat": 55.532,
+    "lng": 12.22,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Slagelse Idrætscenter P",
+    "address": "Parkvej 1, 4200 Slagelse",
+    "lat": 55.402,
+    "lng": 11.354,
+    "note": "Idrætscenter parkering"
+  },
+  {
+    "name": "Slagelse Station Syd P",
+    "address": "Stationsvej 2, 4200 Slagelse",
+    "lat": 55.402,
+    "lng": 11.354,
+    "note": "Slagelse Station Syd"
+  },
+  {
+    "name": "Korsør Station P",
+    "address": "Stationsvej 1, 4220 Korsør",
+    "lat": 55.329,
+    "lng": 11.138,
+    "note": "Stationsparkering"
+  },
+  {
+    "name": "Korsør Kulturhus P",
+    "address": "Skolegade 1, 4220 Korsør",
+    "lat": 55.329,
+    "lng": 11.138,
+    "note": "Korsør Kulturhus"
+  },
+  {
+    "name": "Holbæk Havn Syd P",
+    "address": "Havnevej 1, 4300 Holbæk",
+    "lat": 55.717,
+    "lng": 11.711,
+    "note": "Havneparkering"
+  },
+  {
+    "name": "DR Byen Syd (sportshal)",
+    "address": "Emil Holms Kanal 14, 2300 København S",
+    "lat": 55.658,
+    "lng": 12.585,
+    "note": "Gratis aften/weekend; tjek skilte"
+  },
+  {
+    "name": "Holmen Kanonbådsvej P",
+    "address": "Kanonbådsvej 8, 1437 København K",
+    "lat": 55.6755,
+    "lng": 12.6005,
+    "note": "Parkering ved Holmen"
+  },
+  {
+    "name": "Artillerivej Syd P",
+    "address": "Artillerivej 130, 2300 København S",
+    "lat": 55.654,
+    "lng": 12.565,
+    "note": "Tjek skilte"
+  },
+  {
+    "name": "Grønjordsvej Udgang (ITU syd)",
+    "address": "Grønjordsvej 10, 2300 København S",
+    "lat": 55.657,
+    "lng": 12.588,
+    "note": "Tjek skilte"
+  },
+  {
+    "name": "Kalvebod Bølge Syd P",
+    "address": "Kalvebod Brygge 94, 1560 København V",
+    "lat": 55.66,
+    "lng": 12.57,
+    "note": "Havn/strandside P"
+  },
+  {
+    "name": "Kalvebod Brygge Havnefront (udenfor zone)",
+    "address": "Kalvebod Brygge 50, 1560 København V",
+    "lat": 55.662,
+    "lng": 12.564,
+    "note": "Havn/ydre P"
+  },
+  {
+    "name": "Bryggens Kajakklub Område",
+    "address": "Mygindshusvej 2, 2300 København S",
+    "lat": 55.659,
+    "lng": 12.568,
+    "note": "Havn/klub P"
+  },
+  {
+    "name": "Enghavevej Syd P",
+    "address": "Enghavevej 90, 1674 København V",
+    "lat": 55.6645,
+    "lng": 12.543,
+    "note": "Gadeparkering"
+  },
+  {
+    "name": "Bådehavnsgade Syd P",
+    "address": "Bådehavnsgade 42, 2450 København SV",
+    "lat": 55.648,
+    "lng": 12.55,
+    "note": "Havn/ydre P"
+  },
+  {
+    "name": "Teglholmen Syd P",
+    "address": "Teglholm Tværvej 16, 2450 København SV",
+    "lat": 55.647,
+    "lng": 12.543,
+    "note": "Tjek skilte"
+  },
+  {
+    "name": "Sydhavnen Tippen P",
+    "address": "Tippen 1, 2450 København SV",
+    "lat": 55.641,
+    "lng": 12.535,
+    "note": "Natur/ydre P"
+  },
+  {
+    "name": "H.C. Ørsteds Vej Sidegader (uden zone)",
+    "address": "H.C. Ørsteds Vej 50, 1870 Frederiksberg",
+    "lat": 55.68,
+    "lng": 12.538,
+    "note": "Sidegadeparkering"
+  },
+  {
+    "name": "Søndermarken Parkering",
+    "address": "Roskildevej 54, 2000 Frederiksberg",
+    "lat": 55.6715,
+    "lng": 12.525,
+    "note": "Parkering ved Søndermarken"
+  },
+  {
+    "name": "Zoologisk Have Syd (Grønt område gadepark)",
+    "address": "Roskildevej 32, 2000 Frederiksberg",
+    "lat": 55.676,
+    "lng": 12.52,
+    "note": "Gadeparkering; tjek skilte"
+  },
+  {
+    "name": "Fasanvej station syd gader",
+    "address": "Fasanvej 2, 2000 Frederiksberg",
+    "lat": 55.682,
+    "lng": 12.52,
+    "note": "Gadeparkering"
+  },
+  {
+    "name": "Idrætsvej Syd (Frydendal)",
+    "address": "Idrætsvej 3, 2650 Hvidovre",
+    "lat": 55.65,
+    "lng": 12.47,
+    "note": "Idrætspark P"
+  },
+  {
+    "name": "Strandmarksvej Øst",
+    "address": "Strandmarksvej 20, 2650 Hvidovre",
+    "lat": 55.645,
+    "lng": 12.48,
+    "note": "Gadeparkering/ydre P"
+  },
+  {
+    "name": "Brøndby Strand Strandpark Syd",
+    "address": "Strandvejen 3, 2660 Brøndby Strand",
+    "lat": 55.618,
+    "lng": 12.39,
+    "note": "Strandparkering"
+  },
+  {
+    "name": "Brøndby Strand Strandpark Nord",
+    "address": "Strandvejen 1, 2660 Brøndby Strand",
+    "lat": 55.62,
+    "lng": 12.392,
+    "note": "Strandparkering"
+  },
+  {
+    "name": "Ishøj Strandpark Syd",
+    "address": "Strandgade 1, 2635 Ishøj",
+    "lat": 55.615,
+    "lng": 12.356,
+    "note": "Strandpark parkering"
+  },
+  {
+    "name": "Ishøj Dyrepark P",
+    "address": "Ishøj Bygade 75, 2635 Ishøj",
+    "lat": 55.63,
+    "lng": 12.35,
+    "note": "Parkering ved attractions"
+  },
+  {
+    "name": "Vallensbæk Strand Idrætspark Syd",
+    "address": "Idrætsvej 1, 2665 Vallensbæk Strand",
+    "lat": 55.622,
+    "lng": 12.37,
+    "note": "Idrætspark parkering"
+  },
+  {
+    "name": "Vallensbæk Landsby Syd Gadepark",
+    "address": "Vallensbækvej 1, 2625 Vallensbæk",
+    "lat": 55.625,
+    "lng": 12.375,
+    "note": "Gadeparkering"
+  },
+  {
+    "name": "Charlottenlund Fort P",
+    "address": "Strandvejen 150, 2920 Charlottenlund",
+    "lat": 55.75,
+    "lng": 12.575,
+    "note": "Fortparkering"
+  },
+  {
+    "name": "Skovshoved Havn Syd",
+    "address": "Strandvejen 150, 2920 Skovshoved",
+    "lat": 55.765,
+    "lng": 12.575,
+    "note": "Havneparkering"
+  },
+  {
+    "name": "Gentofte Sø Syd P",
+    "address": "Baunegårdsvej 1, 2820 Gentofte",
+    "lat": 55.7505,
+    "lng": 12.525,
+    "note": "Parkering ved Gentofte Sø"
+  },
+  {
+    "name": "Gentofte Sø Nord P",
+    "address": "Søfronten 1, 2820 Gentofte",
+    "lat": 55.752,
+    "lng": 12.528,
+    "note": "Park P"
+  },
+  {
+    "name": "Lyngby Storcenter Yderområde",
+    "address": "Klampenborgvej 215, 2800 Kongens Lyngby",
+    "lat": 55.77,
+    "lng": 12.503,
+    "note": "Storcenter parkering"
+  },
+  {
+    "name": "DTU Park Syd",
+    "address": "Anker Engelunds Vej 1, 2800 Lyngby",
+    "lat": 55.785,
+    "lng": 12.518,
+    "note": "Campus P"
+  },
+  {
+    "name": "Sorgenfri Slotshave P",
+    "address": "Sorgenfri Slotsvej 1, 2800 Kongens Lyngby",
+    "lat": 55.77,
+    "lng": 12.503,
+    "note": "Sorgenfri Slotshave"
+  },
+  {
+    "name": "Frederiksborg Slot Syd P",
+    "address": "Frederiksborg Slot, 3400 Hillerød",
+    "lat": 55.933,
+    "lng": 12.3,
+    "note": "Frederiksborg Slot Syd"
+  },
+  {
+    "name": "Fredensborg Slot Syd",
+    "address": "Slotsgade 1, 3480 Fredensborg",
+    "lat": 55.974,
+    "lng": 12.4,
+    "note": "Fredensborg Slot Syd"
+  },
+  {
+    "name": "Louisianas yderparkering",
+    "address": "Gl. Strandvej 13, 3050 Humlebæk",
+    "lat": 55.962,
+    "lng": 12.532,
+    "note": "Louisiana Museum yderparkering"
+  },
+  {
+    "name": "Nivå Havn Gadepark",
+    "address": "Havnevej 1, 2990 Nivå",
+    "lat": 55.9335,
+    "lng": 12.5025,
+    "note": "Nivå Havn"
+  },
+  {
+    "name": "Hedeland Arena",
+    "address": "Tranemosevej 1, 2640 Hedehusene",
+    "lat": 55.65,
+    "lng": 12.2,
+    "note": "Arena parkering"
+  },
+  {
+    "name": "Reerslev Idrætscenter",
+    "address": "Reerslevvej 50, 2640 Hedehusene",
+    "lat": 55.65,
+    "lng": 12.2,
+    "note": "Reerslev Idrætscenter"
+  },
+  {
+    "name": "Holbæk Fjord P",
+    "address": "Havnevej 10, 4300 Holbæk",
+    "lat": 55.717,
+    "lng": 11.711,
+    "note": "Fjord/havn P"
+  },
+  {
+    "name": "Nykøbing Sjælland Havn Syd",
+    "address": "Havnevej 1, 4500 Nykøbing Sjælland",
+    "lat": 55.92,
+    "lng": 11.67,
+    "note": "Havneparkering"
+  },
+  {
+    "name": "Rørvig Havn Syd",
+    "address": "Havnevej 20, 4581 Rørvig",
+    "lat": 55.95,
+    "lng": 11.75,
+    "note": "Havneparkering"
+  },
+  {
+    "name": "Stevns Klint Syd (naturparkering)",
+    "address": "Klintvej 39, 4660 Store Heddinge",
+    "lat": 55.285,
+    "lng": 12.425,
+    "note": "Naturparkering ved Stevns Klint"
+  },
+  {
+    "name": "Haslev Stadion P",
+    "address": "Skolegade 25, 4690 Haslev",
+    "lat": 55.323,
+    "lng": 11.964,
+    "note": "Stadionparkering"
+  },
+  {
+    "name": "Sorø Sø Syd",
+    "address": "Ingemannsvej 1, 4180 Sorø",
+    "lat": 55.431,
+    "lng": 11.555,
+    "note": "Parkering ved Sorø Sø"
+  }
 ]
