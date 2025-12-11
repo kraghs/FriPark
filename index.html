@@ -37,14 +37,18 @@
   <div id="addSpotBox" class="modal hidden">
     <div class="modalInner">
       <h4>Tilføj gratis parkering</h4>
+
       <label>Navn <input id="spotName" placeholder="F.eks. Parkering ved stationen"/></label>
+
       <label>Adresse
         <div class="inputWithButton">
           <input id="spotAddress" placeholder="Skriv adresse eller tryk '📍'"/>
           <button id="useMyLocationAddBtn" class="tiny">📍</button>
         </div>
       </label>
+
       <label>Info <input id="spotInfo" placeholder="F.eks. gratis i 2 timer eller efter 17"/></label>
+
       <div class="row">
         <button id="cancelAddBtn" class="small">Annuller</button>
         <button id="addSpotBtn" class="small primary">Gem spot</button>
@@ -60,17 +64,20 @@
       <div id="infoNote" class="note">Info</div>
       <div class="row">
         <button id="closeInfoBtn" class="small">Luk</button>
+        <button class="small reportSpotBtn" id="reportSpotBtn">Rapporter et problem</button>
       </div>
     </div>
   </div>
 
-  <!-- Rapportér problem modal -->
+  <!-- Rapport modal -->
   <div id="reportModal" class="modal hidden">
     <div class="modalInner">
-      <h4>Rapporter et problem</h4>
+      <h4>Rapporter problem</h4>
       <label>Navn <input id="reportName" placeholder="Dit navn"/></label>
-      <label>Email <input id="reportEmail" placeholder="Din email"/></label>
-      <label>Problem <textarea id="reportMessage" placeholder="Beskriv problemet"></textarea></label>
+      <label>Email <input id="reportEmail" placeholder="Din e-mail"/></label>
+      <label>Beskrivelse
+        <textarea id="reportMessage" placeholder="Beskriv problemet"></textarea>
+      </label>
       <div class="row">
         <button id="cancelReportBtn" class="small">Annuller</button>
         <button id="sendReportBtn" class="small primary">Send rapport</button>
@@ -78,8 +85,8 @@
     </div>
   </div>
 
-  <!-- Rød fejlknap for hjemmesiden -->
-  <button id="siteReportBtn" class="reportBtn">!</button>
+  <!-- Fejl på hjemmesiden knap -->
+  <button id="reportSiteBtn" class="reportSiteBtn">Rapporter fejl</button>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
