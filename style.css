@@ -52,4 +52,36 @@ main{max-width:980px;margin:16px auto;padding:0 12px}
   .searchWrap input{font-size:14px}
   #map{height:58vh}
   .modal{min-width:90%}
+
+  /* Blå brugerposition cirkel med hvid kant */
+.userMarker {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #0a84ff;
+  width: 18px;
+  height: 18px;
+}
+
+/* Tilføj spot input med lille knap */
+.inputWithButton{
+  position: relative;
+}
+.inputWithButton input{
+  width:100%;
+  padding-right:36px;
+}
+.inputWithButton button.tiny{
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  border:none;
+  background:var(--accent);
+  color:white;
+  border-radius:8px;
+  padding:4px 8px;
+  cursor:pointer;
+  font-size:12px;
+}
+
 }
