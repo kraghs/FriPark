@@ -74,28 +74,166 @@ document.addEventListener('DOMContentLoaded', () => {
       renderNearby(userLat,userLng);
     }, ()=>alert('Kunne ikke hente lokation'));
   });
-// =========================
-// Søg
-// =========================
-const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
+// ================================
+// NY SØGEFUNKTION — KOMPLET
+// ================================
 
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLowerCase();
-  searchResults.innerHTML = '';
-  if (!q) {
-    searchResults.classList.add('hidden');
-    return;
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+
+// Geo-søgning fra Nominatim (by, område, adresse)
+async function geoSearch(query) {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=dk&limit=8&q=${encodeURIComponent(query)}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "FriPark/1.0 (fri-parkering)"
+      }
+    });
+    return await res.json();
+  } catch (e) {
+    console.error("GeoSearch fejl:", e);
+    return [];
   }
+}
 
-  const matches = parkingSpots.filter(s => 
-    s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q)
+// Filtrér spots i et område (bounding box)
+function filterSpotsInBBox(bbox) {
+  const [minLon, minLat, maxLon, maxLat] = bbox.map(Number);
+
+  return parkingSpots.filter(s =>
+    s.lat >= minLat &&
+    s.lat <= maxLat &&
+    s.lng >= minLon &&
+    s.lng <= maxLon
   );
+}
 
-  if (matches.length === 0) {
-    searchResults.classList.add('hidden');
+// Render resultater (kombineret geo + spots)
+function renderSearchResults(geoResults, spotResults) {
+  searchResults.innerHTML = "";
+
+  // Hvis ingen resultater
+  if (geoResults.length === 0 && spotResults.length === 0) {
+    searchResults.classList.add("hidden");
     return;
   }
+
+  // GEO RESULTATER
+  geoResults.forEach(g => {
+    const row = document.createElement("div");
+    row.className = "result";
+    row.innerHTML = `
+      <div>
+        <strong>${g.display_name.split(",")[0]}</strong><br>
+        <small>${g.display_name}</small>
+      </div>
+    `;
+    row.addEventListener("click", () => {
+      searchInput.value = "";
+      searchResults.classList.add("hidden");
+
+      const lat = Number(g.lat);
+      const lon = Number(g.lon);
+
+      // Zoom til område
+      map.setView([lat, lon], 13);
+
+      // Hent spots i område
+      const matches = filterSpotsInBBox(g.boundingbox);
+
+      // Udskift nærmeste liste med område-spots
+      const list = document.getElementById("parkingList");
+      list.innerHTML = "";
+
+      matches.forEach(spot => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div><strong>${spot.name}</strong>
+          <div class="meta">${spot.address}</div></div>
+        `;
+        const btn = document.createElement("button");
+        btn.textContent = "Se info";
+        btn.addEventListener("click", e => {
+          e.stopPropagation();
+          openInfoModal(spot);
+        });
+        li.appendChild(btn);
+
+        li.addEventListener("click", () => {
+          map.setView([spot.lat, spot.lng], 14);
+          if (spot.marker) spot.marker.openPopup();
+        });
+
+        list.appendChild(li);
+      });
+    });
+
+    searchResults.appendChild(row);
+  });
+
+  // SPOT MATCHES
+  spotResults.forEach(s => {
+    const row = document.createElement("div");
+    row.className = "result";
+    row.innerHTML = `
+      <div>
+        <strong>${s.name}</strong><br>
+        <small>${s.address}</small>
+      </div>
+    `;
+    row.addEventListener("click", () => {
+      map.setView([s.lat, s.lng], 14);
+      if (s.marker) s.marker.openPopup();
+      openInfoModal(s);
+      searchResults.classList.add("hidden");
+      searchInput.value = "";
+    });
+
+    searchResults.appendChild(row);
+  });
+
+  searchResults.classList.remove("hidden");
+}
+
+// Input-handler
+let searchTimeout = null;
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.trim().toLowerCase();
+  searchResults.innerHTML = "";
+
+  if (!q) {
+    searchResults.classList.add("hidden");
+    return;
+  }
+
+  // De-bounce
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(async () => {
+    // 1) GEO SØGNING
+    const geoResults = await geoSearch(q);
+
+    // 2) SPOT MATCHES
+    const spotResults = parkingSpots.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.address.toLowerCase().includes(q)
+    );
+
+    // 3) RENDER ALT
+    renderSearchResults(geoResults, spotResults);
+
+  }, 220);
+});
+
+// Klik udenfor → luk
+document.addEventListener("click", (e) => {
+  if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+    searchResults.classList.add("hidden");
+  }
+});
+
 
   matches.forEach(spot => {
     const row = document.createElement('div');
