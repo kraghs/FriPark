@@ -50,4 +50,15 @@ main{max-width:980px;margin:16px auto;padding:0 12px}
   .searchWrap input{font-size:14px}
   #map{height:58vh}
   .modal{min-width:90%}
+
+  #map {
+    position: relative;
+    z-index: 1;
+}
+
+#searchResults {
+    z-index: 9999 !important;
+    position: absolute;
+}
+
 }
