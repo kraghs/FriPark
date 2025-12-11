@@ -33,10 +33,158 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // --- UI elementer
-  const parkingListEl = document.getElementById('parkingList');
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
+// -----------------------------
+// Search: Nominatim + lokal match
+// Erstat din gamle search-blok med denne.
+// -----------------------------
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+// Helper: show/hide results
+function hideSearchResults() {
+  searchResults.innerHTML = '';
+  searchResults.classList.remove('visible');
+  searchResults.classList.add('hidden');
+}
+function showSearchResults() {
+  searchResults.classList.remove('hidden');
+  searchResults.classList.add('visible');
+}
+
+// Ensure initial hidden state
+hideSearchResults();
+
+let searchTimeout = null;
+
+// Safe geo-search (no custom headers)
+async function geoSearch(query) {
+  if (!query) return [];
+  const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=dk&limit=8&q=${encodeURIComponent(query)}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error('[FriPark] geoSearch fejl:', err);
+    return [];
+  }
+}
+
+// filter spots inside bounding box (Nominatim boundingbox = [south, north, west, east])
+function filterSpotsInBBox(bbox) {
+  if (!bbox || bbox.length < 4) return [];
+  const south = Number(bbox[0]), north = Number(bbox[1]), west = Number(bbox[2]), east = Number(bbox[3]);
+  return parkingSpots.filter(s => typeof s.lat === 'number' && typeof s.lng === 'number' &&
+    s.lat >= south && s.lat <= north && s.lng >= west && s.lng <= east
+  );
+}
+
+// render combined geo results + local spot matches
+function renderSearchResults(geoResults, spotResults) {
+  searchResults.innerHTML = '';
+
+  // If nothing, hide and return
+  if ((!geoResults || geoResults.length === 0) && (!spotResults || spotResults.length === 0)) {
+    hideSearchResults();
+    return;
+  }
+
+  // GEO results first
+  if (geoResults && geoResults.length) {
+    geoResults.forEach(g => {
+      const title = (g.display_name || '').split(',')[0] || 'Område';
+      const row = document.createElement('div');
+      row.className = 'result';
+      row.innerHTML = `<div><strong>${escapeHtml(title)}</strong><br><small>${escapeHtml(g.display_name || '')}</small></div>`;
+      row.addEventListener('click', () => {
+        // clear input + results
+        searchInput.value = '';
+        hideSearchResults();
+
+        // zoom to selected area
+        const lat = Number(g.lat), lon = Number(g.lon);
+        map.setView([lat, lon], 12);
+
+        // show only spots inside bbox in the main list
+        const matches = filterSpotsInBBox(g.boundingbox);
+        parkingListEl.innerHTML = '';
+        if (!matches.length) {
+          const li = document.createElement('li');
+          li.textContent = 'Ingen registrerede gratis parkeringspladser i dette område.';
+          parkingListEl.appendChild(li);
+        } else {
+          matches.forEach(spot => {
+            const li = document.createElement('li');
+            li.innerHTML = `<div><strong>${escapeHtml(spot.name)}</strong><div class="meta">${escapeHtml(spot.address || '')}</div></div>`;
+            const btn = document.createElement('button');
+            btn.textContent = 'Se info';
+            btn.addEventListener('click', e => { e.stopPropagation(); openInfoModal(spot); });
+            li.appendChild(btn);
+            li.addEventListener('click', () => { if (spot.marker) { spot.marker.openPopup(); map.setView([spot.lat, spot.lng], 14); } });
+            parkingListEl.appendChild(li);
+          });
+        }
+      });
+      searchResults.appendChild(row);
+    });
+  }
+
+  // Local spot matches (name/address/city)
+  if (spotResults && spotResults.length) {
+    spotResults.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'result';
+      row.innerHTML = `<div><strong>${escapeHtml(s.name)}</strong><br><small>${escapeHtml(s.address || '')}</small></div>`;
+      row.addEventListener('click', () => {
+        searchInput.value = '';
+        hideSearchResults();
+        if (s.marker) s.marker.openPopup();
+        map.setView([s.lat, s.lng], 14);
+        openInfoModal(s);
+      });
+      searchResults.appendChild(row);
+    });
+  }
+
+  showSearchResults();
+}
+
+// Input handler with debounce and strict empty handling
+searchInput.addEventListener('input', () => {
+  const raw = (searchInput.value || '').trim();
+  if (!raw) { // if input empty => ensure results hidden and cleared
+    hideSearchResults();
+    return;
+  }
+
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(async () => {
+    // local text matches
+    const lower = raw.toLowerCase();
+    const localMatches = parkingSpots.filter(s =>
+      (s.name||'').toLowerCase().includes(lower) ||
+      (s.address||'').toLowerCase().includes(lower) ||
+      (s.city||'').toLowerCase().includes(lower)
+    );
+
+    // geo suggestions
+    const geo = await geoSearch(raw);
+
+    renderSearchResults(geo, localMatches);
+  }, 220);
+});
+
+// click outside closes results and clears if input empty
+document.addEventListener('click', (e) => {
+  const target = e.target;
+  const insideSearch = searchInput.contains(target) || searchResults.contains(target);
+  if (!insideSearch) {
+    hideSearchResults();
+  }
+});
+
+  
 
   // --- Indlæs spots (spots.json)
   async function loadSpots(){
