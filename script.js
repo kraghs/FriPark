@@ -36,27 +36,43 @@ axios.get('spots.json').then(resp=>{
 }).catch(console.error);
 
 // Marker
-function addSpotMarker(spot){
-  const marker=L.circleMarker([spot.lat,spot.lng],{radius:6,color:'#0bb07b',weight:2,fillColor:'#00c07b',fillOpacity:1}).addTo(map);
-  const popupHtml=`<strong>${escapeHtml(spot.name)}</strong><br>${escapeHtml(spot.address)}<br>
-      <div style="margin-top:6px"><button class="popupInfoBtn" data-name="${escapeHtml(spot.name)}">Se info</button></div>`;
-  marker.bindPopup(popupHtml);
-  spot.marker=marker;
-  marker.on('popupopen',()=>{
-    const btn=document.querySelector(`.popupInfoBtn[data-name="${escapeHtml(spot.name)}"]`);
-    if(btn) btn.addEventListener('click',()=>openInfoModal(spot));
-    
-    const links = generateMapLinks(spot.lat, spot.lng);
+function addSpotMarker(spot) {
+  const marker = L.circleMarker([spot.lat, spot.lng], {
+    radius: 6,
+    color: '#0bb07b',
+    weight: 2,
+    fillColor: '#00c07b',
+    fillOpacity: 1
+  }).addTo(map);
 
-marker.bindPopup(`
-    <strong>${spot.name}</strong><br>
-    ${spot.address}<br><br>
-    <button class="infoBtn" data-id="${i}">Vis info</button><br><br>
-    <a href="${links.apple}" target="_blank" class="mapBtn">Åbn i Apple Maps</a><br>
-    <a href="${links.google}" target="_blank" class="mapBtn">Åbn i Google Maps</a>
-`);
+  const appleLink = `https://maps.apple.com/?ll=${spot.lat},${spot.lng}&q=${encodeURIComponent(spot.name)}`;
+  const googleLink = `https://www.google.com/maps/search/?api=1&query=${spot.lat},${spot.lng}`;
+
+  const popupHtml =
+    '<strong>' + escapeHtml(spot.name) + '</strong><br>' +
+    escapeHtml(spot.address) + '<br>' +
+    '<div style="margin-top:6px">' +
+      '<button class="popupInfoBtn" data-spot="' + escapeHtml(spot.name) + '">Se info</button>' +
+    '</div>' +
+    '<div style="margin-top:8px">' +
+      '<a href="' + appleLink + '" target="_blank" class="mapBtn">Åbn i Apple Maps</a><br>' +
+      '<a href="' + googleLink + '" target="_blank" class="mapBtn" style="margin-top:4px;">Åbn i Google Maps</a>' +
+    '</div>';
+
+  marker.bindPopup(popupHtml);
+  spot.marker = marker;
+
+  marker.on('popupopen', () => {
+
+    const btn = document.querySelector('.popupInfoBtn[data-spot="' + spot.name + '"]');
+
+    if (btn) {
+      btn.addEventListener('click', () => openInfoModal(spot));
+    }
 
   });
+}
+
 }
 
 // Render nearby
