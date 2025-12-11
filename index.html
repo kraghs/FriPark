@@ -25,6 +25,7 @@
     <div class="controls">
       <button id="toggleAddBtn" class="small primary">➕ Tilføj spot</button>
       <button id="useMyLocationBtn" class="small">Brug min lokation</button>
+      <button id="reportSiteBtn" class="small danger">Rapporter fejl på siden</button>
     </div>
 
     <section class="listWrap">
@@ -63,8 +64,9 @@
       <div id="infoAddress">Adresse</div>
       <div id="infoNote" class="note">Info</div>
       <div class="row">
+        <button id="reportSpotBtn" class="small danger">Rapporter problem</button>
+        <div class="spacer"></div>
         <button id="closeInfoBtn" class="small">Luk</button>
-        <button id="reportSpotBtn" class="small danger" style="margin-left:auto;">Rapporter et problem</button>
       </div>
     </div>
   </div>
@@ -75,7 +77,9 @@
       <h4>Rapporter et problem</h4>
       <label>Navn <input id="reportName" placeholder="Dit navn"/></label>
       <label>Email <input id="reportEmail" placeholder="Din email"/></label>
-      <label>Problem <textarea id="reportProblem" placeholder="Beskriv problemet" rows="3"></textarea></label>
+      <label>Problem
+        <textarea id="reportMessage" placeholder="Beskriv problemet"></textarea>
+      </label>
       <div class="row">
         <button id="cancelReportBtn" class="small">Annuller</button>
         <button id="sendReportBtn" class="small primary">Send rapport</button>
@@ -83,12 +87,9 @@
     </div>
   </div>
 
-  <!-- Fejl på siden knap -->
-  <button id="reportSiteBtn" class="floatingReportBtn">!</button>
-
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser/dist/email.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
