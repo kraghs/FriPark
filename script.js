@@ -45,6 +45,17 @@ function addSpotMarker(spot){
   marker.on('popupopen',()=>{
     const btn=document.querySelector(`.popupInfoBtn[data-name="${escapeHtml(spot.name)}"]`);
     if(btn) btn.addEventListener('click',()=>openInfoModal(spot));
+    
+    const links = generateMapLinks(spot.lat, spot.lng);
+
+marker.bindPopup(`
+    <strong>${spot.name}</strong><br>
+    ${spot.address}<br><br>
+    <button class="infoBtn" data-id="${i}">Vis info</button><br><br>
+    <a href="${links.apple}" target="_blank" class="mapBtn">Åbn i Apple Maps</a><br>
+    <a href="${links.google}" target="_blank" class="mapBtn">Åbn i Google Maps</a>
+`);
+
   });
 }
 
