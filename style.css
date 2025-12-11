@@ -4,8 +4,8 @@
   --muted:#8a8f98;
   --accent:#0a84ff;
   --success:#00c07b;
-  --shadow: 0 6px 20px rgba(10,10,10,0.08);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --shadow:0 6px 20px rgba(10,10,10,0.08);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:#111;-webkit-font-smoothing:antialiased}
@@ -16,11 +16,11 @@ body{margin:0;background:var(--bg);color:#111;-webkit-font-smoothing:antialiased
 main{max-width:980px;margin:16px auto;padding:0 12px}
 .searchWrap{position:relative;margin-bottom:10px}
 .searchWrap input{width:100%;padding:12px 14px;border-radius:12px;border:none;background:white;box-shadow:var(--shadow);font-size:15px}
-#searchResults{position:absolute;left:0;right:0;top:48px;background:white;border-radius:10px;box-shadow:var(--shadow);max-height:260px;overflow:auto;display:none;z-index:9999}
-#searchResults .result{padding:10px;border-bottom:1px solid #f1f4fb;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+#searchResults{position:absolute;left:0;right:0;top:48px;background:white;border-radius:10px;box-shadow:var(--shadow);z-index:999;max-height:260px;overflow:auto;display:none}
+#searchResults .result{padding:10px;border-bottom:1px solid #f1f4fb;display:flex;justify-content:space-between;align-items:center}
 #searchResults .result small{color:var(--muted)}
 
-#map{width:100%;height:56vh;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(10,10,10,0.03);position:relative;z-index:1;}
+#map{width:100%;height:56vh;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(10,10,10,0.03);z-index:1;}
 
 .controls{display:flex;gap:10px;margin:10px 0}
 .small{padding:8px 10px;border-radius:10px;border:1px solid rgba(10,10,10,0.06);background:white;cursor:pointer;font-size:14px}
@@ -37,39 +37,9 @@ main{max-width:980px;margin:16px auto;padding:0 12px}
 .modal.hidden{display:none}
 .modalInner label{display:block;margin-bottom:8px;font-size:13px;color:#333}
 .modalInner input{width:100%;padding:10px;border-radius:8px;border:1px solid #eef4ff;margin-top:6px}
+
 .inputWithButton{position:relative;}
-.inputWithButton button.tiny{position:absolute;top:50%;right:8px;transform:translateY(-50%);padding:6px 8px;border:none;background:var(--accent);color:white;border-radius:8px;cursor:pointer;font-size:12px;}
-
-.infoModal{position:fixed;left:12px;right:12px;bottom:14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);z-index:200;padding:12px}
-.infoModal.hidden{display:none}
-.infoContent h4{margin:0 0 6px 0}
-.infoContent .note{margin-top:8px;color:var(--muted);font-size:14px}
-.row{display:flex;gap:10px;align-items:center;margin-top:10px}
-.spacer{flex:1}
-
-@media (max-width:600px){
-  .topbar{padding:12px}
-  .searchWrap input{font-size:14px}
-  #map{height:58vh}
-  .modal{min-width:90%}
-
-  /* Blå brugerposition cirkel med hvid kant */
-.userMarker {
-  border: 3px solid #fff;
-  border-radius: 50%;
-  background: #0a84ff;
-  width: 18px;
-  height: 18px;
-}
-
-/* Tilføj spot input med lille knap */
-.inputWithButton{
-  position: relative;
-}
-.inputWithButton input{
-  width:100%;
-  padding-right:36px;
-}
+.inputWithButton input{width:100%;padding-right:36px;}
 .inputWithButton button.tiny{
   position:absolute;
   right:6px;
@@ -84,4 +54,16 @@ main{max-width:980px;margin:16px auto;padding:0 12px}
   font-size:12px;
 }
 
+.infoModal{position:fixed;left:12px;right:12px;bottom:14px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);z-index:200;padding:12px}
+.infoModal.hidden{display:none}
+.infoContent h4{margin:0 0 6px 0}
+.infoContent .note{margin-top:8px;color:var(--muted);font-size:14px}
+.row{display:flex;gap:10px;align-items:center;margin-top:10px}
+.spacer{flex:1}
+
+@media(max-width:600px){
+  .topbar{padding:12px}
+  .searchWrap input{font-size:14px}
+  #map{height:58vh}
+  .modal{min-width:90%}
 }
