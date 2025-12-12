@@ -80,18 +80,4 @@ button.danger:hover{background:#e3342f}
   .modal{min-width:92%}
   .infoModal{left:8px;right:8px}
 
-.logoSmall {
-  height: 18px;      /* lille og diskret */
-  width: auto;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 6px; /* lille mellemrum til teksten */
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-}
-
-
 }
