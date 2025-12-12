@@ -305,6 +305,20 @@ if (navigator.geolocation) {
     spotAddressInput.value = '';
     spotInfoInput.value = '';
     addSpotBox.classList.add('hidden');
+    function saveSpots() {
+  localStorage.setItem("spots", JSON.stringify(spots));
+}
+
+function loadSpotsFromStorage() {
+  const data = localStorage.getItem("spots");
+  if (data) {
+    spots = JSON.parse(data);
+    renderList();
+    renderMarkers();
+  loadSpotsFromStorage();
+    spots.push(spot);
+saveSpots();
+}
   });
 
   // ----------------------
