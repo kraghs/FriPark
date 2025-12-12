@@ -733,8 +733,8 @@
     "lat": 55.431,
     "lng": 11.555,
     "note": "Parkering ved Sorø Sø"
-  }
-  [
+  },
+  {
   {"name":"Ballerup Idrætspark P","address":"Skovvej 1, 2750 Ballerup","lat":55.7300,"lng":12.3600,"note":"Gratis ved idrætsanlæg"},
   {"name":"Herlev Hallerne P","address":"Tvedvangen 198, 2730 Herlev","lat":55.7250,"lng":12.4400,"note":"Gratis hele dagen"},
   {"name":"Gladsaxe Rådhus P","address":"Rådhus Allé 7, 2860 Søborg","lat":55.7405,"lng":12.4805,"note":"Gratis efter kl. 17"},
@@ -777,5 +777,6 @@
   {"name":"Skanderborg Havn Syd P","address":"Havnevej 1, 8660 Skanderborg","lat":56.0396,"lng":9.9356,"note":"Gratis havneparkering"},
   {"name":"Aalborg Havn Syd P","address":"Havnevej 1, 9000 Aalborg","lat":57.048
 ]
+
 
 
