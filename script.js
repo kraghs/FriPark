@@ -1,26 +1,5 @@
 // script.js — fuld version (erstat din gamle file med denne)
 document.addEventListener('DOMContentLoaded', () => {
-  // Spørg om geolocation med det samme
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const { latitude, longitude } = pos.coords;
-      userLat = latitude;
-      userLng = longitude;
-      map.setView([latitude, longitude], 14);
-      showUserLocation(latitude, longitude);
-      renderNearby();
-    },
-    (err) => {
-      console.warn("Bruger afviste eller fejl i geolocation", err);
-    }
-  );
-}
-  document.addEventListener("DOMContentLoaded", () => {
-  loadSpots();   // henter gemte spots fra localStorage
-
-});
-});
   // ----------------------
   // EmailJS config (fra dig)
   // ----------------------
@@ -310,9 +289,6 @@ if (navigator.geolocation) {
     spotAddressInput.value = '';
     spotInfoInput.value = '';
     addSpotBox.classList.add('hidden');
-
-    spots.push(spot);
-saveSpots();
   });
 
   // ----------------------
@@ -487,19 +463,3 @@ saveSpots();
   loadSpots();
   window.__FriPark = { parkingSpots, map };
 });
-function saveSpots() {
-  localStorage.setItem("spots", JSON.stringify(spots));
-}
-
-function loadSpots() {
-  const data = localStorage.getItem("spots");
-  if (data) {
-    spots = JSON.parse(data);
-    renderList();
-    renderMarkers();
-    
-  function saveSpots() {
-  localStorage.setItem("spots", JSON.stringify(spots));
-}
-
-}
