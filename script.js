@@ -16,6 +16,10 @@ if (navigator.geolocation) {
     }
   );
 }
+  document.addEventListener("DOMContentLoaded", () => {
+  loadSpots();   // henter gemte spots fra localStorage
+ 
+});
   // ----------------------
   // EmailJS config (fra dig)
   // ----------------------
@@ -305,6 +309,9 @@ if (navigator.geolocation) {
     spotAddressInput.value = '';
     spotInfoInput.value = '';
     addSpotBox.classList.add('hidden');
+
+    spots.push(spot);
+saveSpots();
   });
 
   // ----------------------
@@ -479,3 +486,15 @@ if (navigator.geolocation) {
   loadSpots();
   window.__FriPark = { parkingSpots, map };
 });
+function saveSpots() {
+  localStorage.setItem("spots", JSON.stringify(spots));
+}
+
+function loadSpots() {
+  const data = localStorage.getItem("spots");
+  if (data) {
+    spots = JSON.parse(data);
+    renderList();
+    renderMarkers();
+  }
+}
